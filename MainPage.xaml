@@ -1,0 +1,127 @@
+﻿<Page
+    x:Class="r1.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:r1"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300*"/>
+            <ColumnDefinition Width="250*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border Background="#FF8FB1F6" Grid.Column="0" Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2.8*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2.8*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border Grid.Column="0" Background="#FFFAB7B7" >
+                    <StackPanel>
+                        <ListBox x:Name="ListBox1" Background="#FFFAB7B7"  Width="Auto" Height="Auto">
+                            <x:String>register ID</x:String>
+                            <x:String>%rax</x:String>
+                            <x:String>%rcx</x:String>
+                            <x:String>%rdx</x:String>
+                            <x:String>%rbx</x:String>
+                            <x:String>%rsp</x:String>
+                            <x:String>%rbp</x:String>
+                            <x:String>%rsi</x:String>
+
+                        </ListBox>
+                    </StackPanel>
+
+
+                </Border>
+                <Border  Grid.Column="1" Background="#FF9AFCF0" >
+                    <StackPanel>
+                        <TextBox Text="HEX" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Background="#FFFFFA97" >
+                    <StackPanel>
+                        <TextBox Text="DEC" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="3" Background="#FFFAB7B7" >
+                    <StackPanel>
+                        <ListBox x:Name="ListBox2" Background="#FFFAB7B7"  Width="Auto" Height="Auto">
+                            <x:String>%rdi</x:String>
+                            <x:String>%r8</x:String>
+                            <x:String>%r9</x:String>
+                            <x:String>%r10</x:String>
+                            <x:String>%r11</x:String>
+                            <x:String>%r12</x:String>
+                            <x:String>%r13</x:String>
+                            <x:String>%r14</x:String>
+
+
+                        </ListBox>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="4" Background="#FF9AFCF0" >
+                    <StackPanel>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                       
+
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="5" Background="#FFFFFA97" >
+                    <StackPanel>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+        <Border Grid.Row="0" Grid.Column="1" Background="#FFE7F89F" Margin="5,0,0,5"/>
+        <Border Grid.Row="1" Grid.Column="0" Background="#FFF09DF3" Margin="0,5,465,0" Grid.ColumnSpan="2"/>
+        <Border Grid.Row="1" Grid.Column="1" Background="#FF9DF39F" Margin="5,5,0,0"/>
+        <StackPanel Margin="0,0,465,5" Grid.ColumnSpan="2"/>
+    </Grid>
+</Page>
