@@ -49,28 +49,26 @@
                 <Border  Grid.Column="1" Background="#FF9AFCF0" >
                     <StackPanel>
                         <TextBox Text="HEX" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hrax" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hrcx" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hrdx" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hrbx" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hrsp" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hrbp" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hrsi" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
 
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="2" Background="#FFFFFA97" >
                     <StackPanel>
                         <TextBox Text="DEC" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Drax" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Drcx" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Drdx" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Drbx" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Drsp" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Drbp" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Drsi" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
 
                     </StackPanel>
                 </Border>
@@ -92,28 +90,28 @@
                 </Border>
                 <Border Grid.Column="4" Background="#FF9AFCF0" >
                     <StackPanel>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hrdi" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hr8" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hr9" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hr10" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hr11" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hr12" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hr13" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hr14" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
                        
 
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="5" Background="#FFFFFA97" >
                     <StackPanel>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Drdi" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Dr8" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Dr9" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Dr10" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Dr11" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Dr12" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Dr13" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Dr14" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
 
                     </StackPanel>
                 </Border>
