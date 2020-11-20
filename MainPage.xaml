@@ -13,8 +13,8 @@
             <ColumnDefinition Width="250*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2.08*"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="55.5*"/>
+            <RowDefinition Height="70*"/>
         </Grid.RowDefinitions>
         <Border Background="#FF8FB1F6" Grid.Column="0" Grid.Row="0" Margin="5,5,5,5">
             <Grid>
@@ -31,87 +31,80 @@
                 </Grid.RowDefinitions>
                 <Border Grid.Column="0" Background="#FFFAB7B7" >
                     <StackPanel>
-                        <ListBox x:Name="ListBox1" Background="#FFFAB7B7"  Width="Auto" Height="Auto">
-                            <x:String>register ID</x:String>
-                            <x:String>%rax</x:String>
-                            <x:String>%rcx</x:String>
-                            <x:String>%rdx</x:String>
-                            <x:String>%rbx</x:String>
-                            <x:String>%rsp</x:String>
-                            <x:String>%rbp</x:String>
-                            <x:String>%rsi</x:String>
-
-                        </ListBox>
+                        <TextBox Text="regesiter ID" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="%rax" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="%rcx" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="%rdx" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="%rbx" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="%rsp" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="%rbp" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="%rsi" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
                     </StackPanel>
 
 
                 </Border>
                 <Border  Grid.Column="1" Background="#FF9AFCF0" >
                     <StackPanel>
-                        <TextBox Text="HEX" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hrax" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hrcx" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hrdx" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hrbx" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hrsp" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hrbp" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hrsi" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="HEX" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hrax" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hrcx" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hrdx" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hrbx" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hrsp" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hrbp" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hrsi" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
 
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="2" Background="#FFFFFA97" >
                     <StackPanel>
-                        <TextBox Text="DEC" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Drax" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Drcx" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Drdx" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Drbx" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Drsp" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Drbp" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Drsi" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="DEC" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Drax" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Drcx" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Drdx" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Drbx" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Drsp" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Drbp" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Drsi" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
 
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="3" Background="#FFFAB7B7" >
                     <StackPanel>
-                        <ListBox x:Name="ListBox2" Background="#FFFAB7B7"  Width="Auto" Height="Auto">
-                            <x:String>%rdi</x:String>
-                            <x:String>%r8</x:String>
-                            <x:String>%r9</x:String>
-                            <x:String>%r10</x:String>
-                            <x:String>%r11</x:String>
-                            <x:String>%r12</x:String>
-                            <x:String>%r13</x:String>
-                            <x:String>%r14</x:String>
-
-
-                        </ListBox>
+                        <TextBox Text="%rdi" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="%r8" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="%r9" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="%r10" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="%r11" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="%r12" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="%r13" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox Text="%r14" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="4" Background="#FF9AFCF0" >
                     <StackPanel>
-                        <TextBox x:Name="Hrdi" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hr8" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hr9" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hr10" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hr11" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hr12" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hr13" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hr14" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hrdi" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hr8" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hr9" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hr10" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hr11" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hr12" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hr13" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Hr14" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
 
 
                     </StackPanel>
                 </Border>
                 <Border Grid.Column="5" Background="#FFFFFA97" >
                     <StackPanel>
-                        <TextBox x:Name="Drdi" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Dr8" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Dr9" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Dr10" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Dr11" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Dr12" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Dr13" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Dr14" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Drdi" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Dr8" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Dr9" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Dr10" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Dr11" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Dr12" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Dr13" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <TextBox x:Name="Dr14" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
 
                     </StackPanel>
                 </Border>
@@ -122,55 +115,306 @@
             <Grid>
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="3*"/>
                 </Grid.RowDefinitions>
                 <Border Grid.Row="0"  Background="#FF9EEA52">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="7*"/>
-                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="40*"/>
+                            <ColumnDefinition Width="21*"/>
                         </Grid.ColumnDefinitions>
                         <Border Grid.Column="0" Background="#FF48807A">
                             <Grid>
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="14*"/>
+                                    <ColumnDefinition Width="10*"/>
+                                    <ColumnDefinition Width="28*"/>
                                     <ColumnDefinition Width="20*"/>
-                                    <ColumnDefinition Width="11*"/>
-                                    <ColumnDefinition Width="28*"/>
-                                    <ColumnDefinition Width="28*"/>
-                                    <ColumnDefinition Width="11*"/>
+                                    <ColumnDefinition Width="10*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
+                                <Border Grid.Row="1" Grid.Column="0" Background="#FFD44848">
+                                    <TextBox Text="State" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="1" Background="#FFD44848">
+                                    <TextBox x:Name="Fstat" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="2" Background="#FFD44848">
+                                    <TextBox x:Name="FpredPC" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="3" Background="#FFD44848">
+                                    <TextBox x:Name="Finstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="4" Background="#FFD44848">
+                                    <TextBox x:Name="FCPI" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
                                 <Border Grid.Row="0" Grid.Column="0" Background="#FFD44848">
-                                    <TextBox Text="FECTH" TextWrapping="Wrap" IsReadOnly="True"/>
+                                    <TextBox Text="FECTH" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="0" Grid.Column="1" Background="#FFD44848">
-                                    <TextBox Text="stat" TextWrapping="Wrap" IsReadOnly="True"/>
+                                    <TextBox Text="stat" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="0" Grid.Column="2" Background="#FFD44848">
-                                    <TextBox Text="predPC" TextWrapping="Wrap" IsReadOnly="True"/>
+                                    <TextBox Text="predPC" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="0" Grid.Column="3" Background="#FFD44848">
-                                    <TextBox Text="instruction" TextWrapping="Wrap" IsReadOnly="True"/>
+                                    <TextBox Text="instr." TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="0" Grid.Column="4" Background="#FFD44848">
-                                    <TextBox Text="CPI" TextWrapping="Wrap" IsReadOnly="True"/>
+                                    <TextBox Text="CPI" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                             </Grid>
                         </Border>
-                        <Border Grid.Column="1" Background="#FF24F6DF"/>
+                        <Border Grid.Column="1" Background="#FF24F6DF" Margin="5,0,2,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1.6*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="0" Grid.Column="0" >
+                                    <TextBox Text="CLOCK" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="0" Grid.Column="1" >
+                                    <TextBox Text="ZF" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="0" Grid.Column="2" >
+                                    <TextBox Text="OF" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="0" Grid.Column="3" >
+                                    <TextBox Text="SF" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="0" >
+                                    <TextBox x:Name="CCLOCK" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="1" >
+                                    <TextBox x:Name="CZF" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="2" >
+                                    <TextBox x:Name="COF" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="3" >
+                                    <TextBox x:Name="CSF" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                            </Grid>
+                        </Border>
                     </Grid>
                 </Border>
-                <Border Grid.Row="1"  Background="#FFF64C4C"/>
-                <Border Grid.Row="2"  Background="#FFE4D63A"/>
+                <Border Grid.Row="1"  Background="#FFF64C4C" >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="290*"/>
+                            <ColumnDefinition Width="61*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Background="#FF5FCAB3" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60*"/>
+                                    <ColumnDefinition Width="45*"/>
+                                    <ColumnDefinition Width="75*"/>
+                                    <ColumnDefinition Width="45*"/>
+                                    <ColumnDefinition Width="45*"/>
+                                    <ColumnDefinition Width="100*"/>
+                                    <ColumnDefinition Width="100*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="0" Grid.Column="0" >
+                                    <TextBox Text="DECODE" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="0" Grid.Column="1" >
+                                    <TextBox Text="stat" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="0" Grid.Column="2" >
+                                    <TextBox Text="instr." TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="0" Grid.Column="3" >
+                                    <TextBox Text="rA" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="0" Grid.Column="4" >
+                                    <TextBox Text="rB" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="0" Grid.Column="5" >
+                                    <TextBox Text="valC" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="0" Grid.Column="6" >
+                                    <TextBox Text="valP" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="0" >
+                                    <TextBox Text="State" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="1" >
+                                    <TextBox x:Name="DSstat" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="2" >
+                                    <TextBox x:Name="DSinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="3" >
+                                    <TextBox x:Name="DSrA" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="4" >
+                                    <TextBox x:Name="DSrB" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="5" >
+                                    <TextBox x:Name="DSvalC" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="6" >
+                                    <TextBox x:Name="DSvalP" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="2" Grid.Column="0" >
+                                    <TextBox Text="Input" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="2" Grid.Column="1" >
+                                    <TextBox x:Name="DIstat" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="2" Grid.Column="2" >
+                                    <TextBox x:Name="DIinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="2" Grid.Column="3" >
+                                    <TextBox x:Name="DIrA" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="2" Grid.Column="4" >
+                                    <TextBox x:Name="DIrB" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="2" Grid.Column="5" >
+                                    <TextBox x:Name="DIvalC" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="2" Grid.Column="6" >
+                                    <TextBox x:Name="DIvalP" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Column="2"/>
+                    </Grid>
+                </Border>
+                <Border Grid.Row="2"  Background="#FFE4D63A"  >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*"/>
+                            <ColumnDefinition Width="40*"/>
+                            <ColumnDefinition Width="40*"/>
+                            <ColumnDefinition Width="50*"/>
+                            <ColumnDefinition Width="50*"/>
+                            <ColumnDefinition Width="40*"/>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="30*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" Grid.Column="0" >
+                            <TextBox Text="Execute" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="1" >
+                            <TextBox Text="stat" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="2">
+                            <TextBox Text="instr." TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="3"  >
+                            <TextBox Text="valC" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="4"  >
+                            <TextBox Text="valA" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="5" >
+                            <TextBox Text="valB" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="6"  >
+                            <TextBox Text="dstE" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="7"  >
+                            <TextBox Text="dstM" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="8"  >
+                            <TextBox Text="srcA" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="9" >
+                            <TextBox Text="srcB" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="0" >
+                            <TextBox Text="State" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="1" >
+                            <TextBox x:Name="ESstat" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="2"  >
+                            <TextBox x:Name="ESinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="3" >
+                            <TextBox x:Name="ESvalC" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="4"  >
+                            <TextBox x:Name="ESvalA" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="5" >
+                            <TextBox x:Name="ESvalB" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="6" >
+                            <TextBox x:Name="ESdstE" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="7" >
+                            <TextBox x:Name="ESdstM" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="8" >
+                            <TextBox x:Name="ESsrcA" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="9" >
+                            <TextBox x:Name="ESsrcB" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="0" >
+                            <TextBox Text="Input" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="1" >
+                            <TextBox x:Name="EIstat" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="2"  >
+                            <TextBox x:Name="EIinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="3" >
+                            <TextBox x:Name="EIvalC" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="4"  >
+                            <TextBox x:Name="EIvalA" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="5" >
+                            <TextBox x:Name="EIvalB" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="6" >
+                            <TextBox x:Name="EIdstE" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="7" >
+                            <TextBox x:Name="EIdstM" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="8" >
+                            <TextBox x:Name="EIsrcA" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="9" >
+                            <TextBox x:Name="EIsrcB" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                    </Grid>
+                </Border>
                 <Border Grid.Row="3"  Background="#FF72B8EB"/>
-                <Border Grid.Row="4"  Background="#FFB45BBE"/>
+                <Border Grid.Row="4"  Background="#FFB45BBE" />
             </Grid>
         </Border>
         <Border Grid.Row="1" Grid.Column="1" Background="#FF9DF39F" Margin="5,5,5,5"/>
