@@ -13,10 +13,10 @@
             <ColumnDefinition Width="250*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="2.08*"/>
+            <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
-        <Border Background="#FF8FB1F6" Grid.Column="0" Grid.Row="0">
+        <Border Background="#FF8FB1F6" Grid.Column="0" Grid.Row="0" Margin="5,5,5,5">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
@@ -98,7 +98,7 @@
                         <TextBox x:Name="Hr12" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
                         <TextBox x:Name="Hr13" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
                         <TextBox x:Name="Hr14" Text="" TextWrapping="Wrap" Height="40" IsReadOnly="True" TextAlignment="Center"/>
-                       
+
 
                     </StackPanel>
                 </Border>
@@ -117,9 +117,63 @@
                 </Border>
             </Grid>
         </Border>
-        <Border Grid.Row="0" Grid.Column="1" Background="#FFE7F89F" Margin="5,0,0,5"/>
-        <Border Grid.Row="1" Grid.Column="0" Background="#FFF09DF3" Margin="0,5,465,0" Grid.ColumnSpan="2"/>
-        <Border Grid.Row="1" Grid.Column="1" Background="#FF9DF39F" Margin="5,5,0,0"/>
+        <Border Grid.Row="0" Grid.Column="1" Background="#FFE7F89F" Margin="5,5,5,5"/>
+        <Border Grid.Row="1" Grid.Column="0" Background="#FFF09DF3" Margin="5,5,5,5" >
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0"  Background="#FF9EEA52">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="7*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Background="#FF48807A">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="20*"/>
+                                    <ColumnDefinition Width="11*"/>
+                                    <ColumnDefinition Width="28*"/>
+                                    <ColumnDefinition Width="28*"/>
+                                    <ColumnDefinition Width="11*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="0" Grid.Column="0" Background="#FFD44848">
+                                    <TextBox Text="FECTH" TextWrapping="Wrap" IsReadOnly="True"/>
+                                </Border>
+                                <Border Grid.Row="0" Grid.Column="1" Background="#FFD44848">
+                                    <TextBox Text="stat" TextWrapping="Wrap" IsReadOnly="True"/>
+                                </Border>
+                                <Border Grid.Row="0" Grid.Column="2" Background="#FFD44848">
+                                    <TextBox Text="predPC" TextWrapping="Wrap" IsReadOnly="True"/>
+                                </Border>
+                                <Border Grid.Row="0" Grid.Column="3" Background="#FFD44848">
+                                    <TextBox Text="instruction" TextWrapping="Wrap" IsReadOnly="True"/>
+                                </Border>
+                                <Border Grid.Row="0" Grid.Column="4" Background="#FFD44848">
+                                    <TextBox Text="CPI" TextWrapping="Wrap" IsReadOnly="True"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Column="1" Background="#FF24F6DF"/>
+                    </Grid>
+                </Border>
+                <Border Grid.Row="1"  Background="#FFF64C4C"/>
+                <Border Grid.Row="2"  Background="#FFE4D63A"/>
+                <Border Grid.Row="3"  Background="#FF72B8EB"/>
+                <Border Grid.Row="4"  Background="#FFB45BBE"/>
+            </Grid>
+        </Border>
+        <Border Grid.Row="1" Grid.Column="1" Background="#FF9DF39F" Margin="5,5,5,5"/>
         <StackPanel Margin="0,0,465,5" Grid.ColumnSpan="2"/>
     </Grid>
 </Page>
