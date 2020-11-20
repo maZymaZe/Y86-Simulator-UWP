@@ -130,8 +130,8 @@
                         <Border Grid.Column="0" Background="#FF48807A">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="14*"/>
-                                    <ColumnDefinition Width="10*"/>
+                                    <ColumnDefinition Width="12.5*"/>
+                                    <ColumnDefinition Width="8.5*"/>
                                     <ColumnDefinition Width="28*"/>
                                     <ColumnDefinition Width="20*"/>
                                     <ColumnDefinition Width="10*"/>
@@ -221,8 +221,8 @@
                         <Border Grid.Column="0" Background="#FF5FCAB3" >
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="60*"/>
-                                    <ColumnDefinition Width="45*"/>
+                                    <ColumnDefinition Width="58*"/>
+                                    <ColumnDefinition Width="41.5*"/>
                                     <ColumnDefinition Width="75*"/>
                                     <ColumnDefinition Width="45*"/>
                                     <ColumnDefinition Width="45*"/>
@@ -299,22 +299,39 @@
                                 </Border>
                             </Grid>
                         </Border>
-                        <Border Grid.Column="2"/>
+                        <Border Grid.Column="2">
+                            <Grid Margin="10,0,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="0"  Background="#FF95FF94">
+                                    <TextBox Text="Status" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="1" Background="#FF95FF94">
+                                    <TextBox x:Name="CStatus" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                </Border>
+                                <Border Grid.Row="2" Background="#FFEEFFDC">
+                                    <TextBox Text="by maZe and GeorgePlover" TextWrapping="Wrap" IsReadOnly="True" FontSize="3"/>
+                                </Border>
+                            </Grid>
+                        </Border>
                     </Grid>
                 </Border>
                 <Border Grid.Row="2"  Background="#FFE4D63A"  >
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50*"/>
                             <ColumnDefinition Width="40*"/>
-                            <ColumnDefinition Width="40*"/>
-                            <ColumnDefinition Width="50*"/>
-                            <ColumnDefinition Width="50*"/>
-                            <ColumnDefinition Width="40*"/>
+                            <ColumnDefinition Width="28*"/>
                             <ColumnDefinition Width="30*"/>
-                            <ColumnDefinition Width="30*"/>
-                            <ColumnDefinition Width="30*"/>
-                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="60*"/>
+                            <ColumnDefinition Width="60*"/>
+                            <ColumnDefinition Width="60*"/>
+                            <ColumnDefinition Width="27*"/>
+                            <ColumnDefinition Width="27*"/>
+                            <ColumnDefinition Width="27*"/>
+                            <ColumnDefinition Width="27*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -413,8 +430,187 @@
                         </Border>
                     </Grid>
                 </Border>
-                <Border Grid.Row="3"  Background="#FF72B8EB"/>
-                <Border Grid.Row="4"  Background="#FFB45BBE" />
+                <Border Grid.Row="3"  Background="#FF72B8EB">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="37.5*"/>
+                            <ColumnDefinition Width="27*"/>
+                            <ColumnDefinition Width="60*"/>
+                            <ColumnDefinition Width="60*"/>
+                            <ColumnDefinition Width="60*"/>
+                            <ColumnDefinition Width="60*"/>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="30*"/>
+
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" Grid.Column="0" >
+                            <TextBox Text="Memory" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="1" >
+                            <TextBox Text="stat" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="2">
+                            <TextBox Text="instr." TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="3"  >
+                            <TextBox Text="cnd" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="4"  >
+                            <TextBox Text="valE" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="5" >
+                            <TextBox Text="valA" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="6"  >
+                            <TextBox Text="dstE" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="7"  >
+                            <TextBox Text="dstM" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+                    
+                        <Border Grid.Row="1" Grid.Column="0" >
+                            <TextBox Text="State" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="1" >
+                            <TextBox x:Name="MSstat" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="2"  >
+                            <TextBox x:Name="MSinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="3" >
+                            <TextBox x:Name="MScnd" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="4"  >
+                            <TextBox x:Name="MSvalE" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="5" >
+                            <TextBox x:Name="MSvalA" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="6" >
+                            <TextBox x:Name="MSdstE" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="7" >
+                            <TextBox x:Name="MSdstM" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                    
+                        <Border Grid.Row="2" Grid.Column="0" >
+                            <TextBox Text="Input" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="1" >
+                            <TextBox x:Name="MIstat" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="2"  >
+                            <TextBox x:Name="MIinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="3" >
+                            <TextBox x:Name="MIcnd" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="4"  >
+                            <TextBox x:Name="MIvalE" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="5" >
+                            <TextBox x:Name="MIvalA" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="6" >
+                            <TextBox x:Name="MIdstE" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="7" >
+                            <TextBox x:Name="MIdstM" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+                     
+                    </Grid>
+                </Border>
+                <Border Grid.Row="4"  Background="#FFB45BBE" >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="21.5*"/>
+                            <ColumnDefinition Width="60*"/>
+                            <ColumnDefinition Width="60*"/>
+                            <ColumnDefinition Width="60*"/>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="30*"/>
+
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" Grid.Column="0" >
+                            <TextBox Text="Write Back" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="1" >
+                            <TextBox Text="stat" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="2">
+                            <TextBox Text="instr." TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="3"  >
+                            <TextBox Text="valE" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="4" >
+                            <TextBox Text="valM" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="5"  >
+                            <TextBox Text="dstE" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="6"  >
+                            <TextBox Text="dstM" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+
+                        <Border Grid.Row="1" Grid.Column="0" >
+                            <TextBox Text="State" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="1" >
+                            <TextBox x:Name="WSstat" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="2"  >
+                            <TextBox x:Name="WSinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="3"  >
+                            <TextBox x:Name="WSvalE" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="4" >
+                            <TextBox x:Name="WSvalM" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="5" >
+                            <TextBox x:Name="WSdstE" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="6" >
+                            <TextBox x:Name="WSdstM" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+
+                        <Border Grid.Row="2" Grid.Column="0" >
+                            <TextBox Text="Input" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="1" >
+                            <TextBox x:Name="WIstat" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="2"  >
+                            <TextBox x:Name="WIinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="3"  >
+                            <TextBox x:Name="WIvalE" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="4" >
+                            <TextBox x:Name="WIvalM" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="5" >
+                            <TextBox x:Name="WIdstE" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="6" >
+                            <TextBox x:Name="WIdstM" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                        </Border>
+
+                    </Grid>
+                    </Border>
+
             </Grid>
         </Border>
         <Border Grid.Row="1" Grid.Column="1" Background="#FF9DF39F" Margin="5,5,5,5"/>
