@@ -22,9 +22,23 @@ namespace r1
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        List<string> MemoryData = new List<string>();
+        string ZF = "0";
         public MainPage()
         {
             this.InitializeComponent();
+            DataContext = this;
+            this.Memory.ItemsSource = MemoryData;
+            MemoryData.Add("0000:00000000");
+            MemoryData.Add("0004:00000000");
+            MemoryData.Add("0008:00000000");
+            MemoryData.Add("000c:00000000");
+            MemoryData.Add("0010:00000000");
+            MemoryData.Add("0014:00000000"); 
+            MemoryData.Add("0018:00000000"); 
+            MemoryData.Add("001c:00000000"); 
+            MemoryData.Add("0020:00000000");
+            MemoryData.Add("0024:00000000");
         }
     }
 }

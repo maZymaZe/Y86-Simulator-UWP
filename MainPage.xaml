@@ -110,7 +110,32 @@
                 </Border>
             </Grid>
         </Border>
-        <Border Grid.Row="0" Grid.Column="1" Background="#FFE7F89F" Margin="5,5,5,5"/>
+        <Border Grid.Row="0" Grid.Column="1" Background="#FFE7F89F" Margin="5,5,5,5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70*"/>
+                    <ColumnDefinition Width="19*"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0"/>
+                <Border Grid.Column="1" Background="#FFFF9191">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="5*"/>
+                            <RowDefinition Height="34*"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0">
+                            <TextBox Text="MEMORY" TextWrapping="Wrap" IsReadOnly="True" TextAlignment="Center"/>
+                        </Border>
+                        <Border Grid.Row="1">
+                            <ListView x:Name="Memory"
+                                BorderThickness="1"
+                                BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                                HorizontalAlignment="Left"/>    
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
         <Border Grid.Row="1" Grid.Column="0" Background="#FFF09DF3" Margin="5,5,5,5" >
             <Grid>
 
@@ -200,7 +225,7 @@
                                     <TextBox x:Name="CCLOCK" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="1" >
-                                    <TextBox x:Name="CZF" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="CZF" Text="{x:Bind ZF}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" Height="25" VerticalAlignment="Top"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="2" >
                                     <TextBox x:Name="COF" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
@@ -472,7 +497,7 @@
                         <Border Grid.Row="0" Grid.Column="7"  >
                             <TextBox Text="dstM" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
                         </Border>
-                    
+
                         <Border Grid.Row="1" Grid.Column="0" >
                             <TextBox Text="State" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
@@ -497,7 +522,7 @@
                         <Border Grid.Row="1" Grid.Column="7" >
                             <TextBox x:Name="MSdstM" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
-                    
+
                         <Border Grid.Row="2" Grid.Column="0" >
                             <TextBox Text="Input" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
@@ -522,7 +547,7 @@
                         <Border Grid.Row="2" Grid.Column="7" >
                             <TextBox x:Name="MIdstM" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
                         </Border>
-                     
+
                     </Grid>
                 </Border>
                 <Border Grid.Row="4"  Background="#FFB45BBE" >
@@ -609,7 +634,7 @@
                         </Border>
 
                     </Grid>
-                    </Border>
+                </Border>
 
             </Grid>
         </Border>
