@@ -116,7 +116,46 @@
                     <ColumnDefinition Width="70*"/>
                     <ColumnDefinition Width="19*"/>
                 </Grid.ColumnDefinitions>
-                <Border Grid.Column="0"/>
+                <Border Grid.Column="0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="4*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0">
+                            <ListView x:Name="Source_Viewer" IsItemClickEnabled="True">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String" >
+                                        <Border Height="12">
+                                            <TextBlock Text="{x:Bind}"  FontSize="10" />    
+                                        </Border>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+
+                                <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                        <Setter Property="Height" Value="12"/>
+                                        <Setter Property="Margin" Value="-6"/>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </Border>
+                        <Border Grid.Row="1" Background="#FFCBCBCB">
+                            <StackPanel Orientation="Horizontal">
+                                <AppBarButton x:Name="OpenFileBottom" Icon="OpenFile"  Label="OpenFile" Click="OpenFileButton_Click"/>
+                                <AppBarButton x:Name="Reset" Icon="Redo" Label="Reset" Click="Reset_Click"/>
+                                <AppBarButton Icon="Previous" Label="Previous"/>
+                                <AppBarButton x:Name="PlayButtom" Icon="Play"  Label="Play"/>
+                                <AppBarButton Icon="Next" Label="Next"/>
+                                <Slider x:Name="SpeedSlider" Width="80" Minimum="1" Maximum="50" StepFrequency="1" Value="20" Header="Speed(Hz)" />
+
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
                 <Border Grid.Column="1" Background="#FFFF9191">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -130,7 +169,7 @@
                             <ListView x:Name="Memory"
                                 BorderThickness="1"
                                 BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
-                                HorizontalAlignment="Left"/>    
+                                HorizontalAlignment="Left"/>
                         </Border>
                     </Grid>
                 </Border>
@@ -638,7 +677,8 @@
 
             </Grid>
         </Border>
-        <Border Grid.Row="1" Grid.Column="1" Background="#FF9DF39F" Margin="5,5,5,5"/>
+        <Border Grid.Row="1" Grid.Column="1" Background="#FF9DF39F" Margin="5,5,5,5">
+        </Border>
         <StackPanel Margin="0,0,465,5" Grid.ColumnSpan="2"/>
     </Grid>
 </Page>

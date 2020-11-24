@@ -23,10 +23,15 @@ namespace r1
     public sealed partial class MainPage : Page
     {
         List<string> MemoryData = new List<string>();
+        List<string> SourceList = new List<string>();
+        string[] RealSourse;
         string ZF = "0";
+        Windows.Storage.StorageFile SourceFile;
+        string SourceText;
         public MainPage()
         {
             this.InitializeComponent();
+            SourceText = "NO INPUT YET";
             DataContext = this;
             this.Memory.ItemsSource = MemoryData;
             MemoryData.Add("0000:00000000");
@@ -39,6 +44,40 @@ namespace r1
             MemoryData.Add("001c:00000000"); 
             MemoryData.Add("0020:00000000");
             MemoryData.Add("0024:00000000");
+
+        }
+
+        private async void OpenFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+              //TODO:FIX THIS
+            picker.FileTypeFilter.Add(".txt");
+            picker.FileTypeFilter.Add(".yo");
+            picker.FileTypeFilter.Add(".cpp");
+            SourceFile = await picker.PickSingleFileAsync();
+            var stream = await SourceFile.OpenAsync(Windows.Storage.FileAccessMode.Read);
+            ulong size = stream.Size;
+            SourceList.Clear();
+            using (var dataReader = new Windows.Storage.Streams.DataReader(stream))
+            {
+                uint numBytesLoaded = await dataReader.LoadAsync((uint)size);
+                SourceText = dataReader.ReadString(numBytesLoaded);
+                RealSourse=SourceText.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                for(int i = 1; i <= RealSourse.Length; i++)
+                {
+                    SourceList.Add(i.ToString("D4")+"|    "+RealSourse[i-1]);
+                }
+            }
+            this.Source_Viewer.ItemsSource = SourceList;
+            this.Source_Viewer.SelectedIndex = 0;
+           
+        }
+
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+            SourceList.Add("???");
         }
     }
 }
