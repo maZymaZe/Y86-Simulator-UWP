@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System.Collections.ObjectModel;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -22,9 +23,9 @@ namespace r1
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        List<string> MemoryData = new List<string>();
-        List<string> SourceList = new List<string>();
-        string[] RealSourse;
+        ObservableCollection<string> SourceList = new ObservableCollection<string>();
+        ObservableCollection<string>MemoryList = new ObservableCollection<string>();
+        string[] RealSource;
         string ZF = "0";
         Windows.Storage.StorageFile SourceFile;
         string SourceText;
@@ -33,17 +34,19 @@ namespace r1
             this.InitializeComponent();
             SourceText = "NO INPUT YET";
             DataContext = this;
-            this.Memory.ItemsSource = MemoryData;
-            MemoryData.Add("0000:00000000");
-            MemoryData.Add("0004:00000000");
-            MemoryData.Add("0008:00000000");
-            MemoryData.Add("000c:00000000");
-            MemoryData.Add("0010:00000000");
-            MemoryData.Add("0014:00000000"); 
-            MemoryData.Add("0018:00000000"); 
-            MemoryData.Add("001c:00000000"); 
-            MemoryData.Add("0020:00000000");
-            MemoryData.Add("0024:00000000");
+            this.MemoryListView.ItemsSource = MemoryList;
+            this.SourceListView.ItemsSource = SourceList;
+            SourceList.Add("NO INPUT YET");
+            MemoryList.Add("0000:00000000");
+            MemoryList.Add("0004:00000000");
+            MemoryList.Add("0008:00000000");
+            MemoryList.Add("000c:00000000");
+            MemoryList.Add("0010:00000000");
+            MemoryList.Add("0014:00000000"); 
+            MemoryList.Add("0018:00000000"); 
+            MemoryList.Add("001c:00000000"); 
+            MemoryList.Add("0020:00000000");
+            MemoryList.Add("0024:00000000");
 
         }
 
@@ -64,20 +67,65 @@ namespace r1
             {
                 uint numBytesLoaded = await dataReader.LoadAsync((uint)size);
                 SourceText = dataReader.ReadString(numBytesLoaded);
-                RealSourse=SourceText.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-                for(int i = 1; i <= RealSourse.Length; i++)
+                RealSource=SourceText.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                for(int i = 1; i <= RealSource.Length; i++)
                 {
-                    SourceList.Add(i.ToString("D4")+"|    "+RealSourse[i-1]);
+                    SourceList.Add(i.ToString("D4")+"|    "+RealSource[i-1]);
                 }
             }
-            this.Source_Viewer.ItemsSource = SourceList;
-            this.Source_Viewer.SelectedIndex = 0;
+            this.SourceListView.SelectedIndex = 0;
+            WorkCompletedForSource();
            
+        }
+        private Deferral RefreshCompletionDeferralForSource
+        {
+            get;
+            set;
+        }
+        private Deferral RefreshCompletionDeferralForMemory
+        {
+            get;
+            set;
+        }
+        private void SourceViewer_RefreshRequested(RefreshContainer sender, RefreshRequestedEventArgs args)
+        {
+            //Do some work to show new Content! Once the work is done, call RefreshCompletionDeferral.Complete()
+            this.RefreshCompletionDeferralForSource = args.GetDeferral();
+           // this.DoWork();
+        }
+        private void MemoryViewer_RefreshRequested(RefreshContainer sender, RefreshRequestedEventArgs args)
+        {
+            //Do some work to show new Content! Once the work is done, call RefreshCompletionDeferral.Complete()
+            this.RefreshCompletionDeferralForMemory = args.GetDeferral();
+            // this.DoWork();
+        }
+
+        private void WorkCompletedForSource()
+        {
+            if (this.RefreshCompletionDeferralForSource != null)
+            {
+                this.RefreshCompletionDeferralForSource.Complete();
+                this.RefreshCompletionDeferralForSource.Dispose();
+                this.RefreshCompletionDeferralForSource = null;
+            }
+        }
+        private void WorkCompletedForMemory()
+        {
+            if (this.RefreshCompletionDeferralForMemory != null)
+            {
+                this.RefreshCompletionDeferralForMemory.Complete();
+                this.RefreshCompletionDeferralForMemory.Dispose();
+                this.RefreshCompletionDeferralForMemory = null;
+            }
         }
 
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
-            SourceList.Add("???");
+            SourceText = null;
+            SourceList.Clear();
+            RealSource = null;
+            WorkCompletedForSource();
+            WorkCompletedForMemory();
         }
     }
 }

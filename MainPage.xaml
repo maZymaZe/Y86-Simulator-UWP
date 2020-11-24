@@ -126,22 +126,10 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Border Grid.Row="0">
-                            <ListView x:Name="Source_Viewer" IsItemClickEnabled="True">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate x:DataType="x:String" >
-                                        <Border Height="12">
-                                            <TextBlock Text="{x:Bind}"  FontSize="10" />    
-                                        </Border>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-
-                                <ListView.ItemContainerStyle>
-                                        <Style TargetType="ListViewItem">
-                                        <Setter Property="Height" Value="12"/>
-                                        <Setter Property="Margin" Value="-6"/>
-                                    </Style>
-                                </ListView.ItemContainerStyle>
-                            </ListView>
+                            <RefreshContainer x:Name="SourceViewer" RefreshRequested="SourceViewer_RefreshRequested">
+                                <ListView x:Name="SourceListView"  BorderThickness="1" BorderBrush="Black"/>
+                            </RefreshContainer>
+                        
                         </Border>
                         <Border Grid.Row="1" Background="#FFCBCBCB">
                             <StackPanel Orientation="Horizontal">
@@ -166,10 +154,9 @@
                             <TextBox Text="MEMORY" TextWrapping="Wrap" IsReadOnly="True" TextAlignment="Center"/>
                         </Border>
                         <Border Grid.Row="1">
-                            <ListView x:Name="Memory"
-                                BorderThickness="1"
-                                BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
-                                HorizontalAlignment="Left"/>
+                            <RefreshContainer x:Name="MemoryViewer" RefreshRequested="MemoryViewer_RefreshRequested">
+                                <ListView x:Name="MemoryListView"  BorderThickness="1" BorderBrush="Black"/>
+                            </RefreshContainer>
                         </Border>
                     </Grid>
                 </Border>
