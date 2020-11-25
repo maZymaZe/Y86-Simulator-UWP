@@ -136,7 +136,7 @@
                                 <AppBarButton x:Name="OpenFileBottom" Icon="OpenFile"  Label="OpenFile" Click="OpenFileButton_Click"/>
                                 <AppBarButton x:Name="Reset" Icon="Redo" Label="Reset" Click="Reset_Click"/>
                                 <AppBarButton Icon="Previous" Label="Previous"/>
-                                <AppBarButton x:Name="PlayButtom" Icon="Play"  Label="Play"/>
+                                <AppBarButton x:Name="PlayButtom" Icon="Play"  Label="Play" Click="PlayButtom_Click"/>
                                 <AppBarButton Icon="Next" Label="Next"/>
                                 <Slider x:Name="SpeedSlider" Width="80" Minimum="1" Maximum="50" StepFrequency="1" Value="20" Header="Speed(Hz)" />
 

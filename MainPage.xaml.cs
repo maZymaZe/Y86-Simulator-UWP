@@ -25,7 +25,9 @@ namespace r1
     {
         ObservableCollection<string> SourceList = new ObservableCollection<string>();
         ObservableCollection<string>MemoryList = new ObservableCollection<string>();
+        bool IsPause=false;
         string[] RealSource;
+        string PlayButtomTag = "";
         string ZF = "0";
         Windows.Storage.StorageFile SourceFile;
         string SourceText;
@@ -75,7 +77,6 @@ namespace r1
             }
             this.SourceListView.SelectedIndex = 0;
             WorkCompletedForSource();
-           
         }
         private Deferral RefreshCompletionDeferralForSource
         {
@@ -126,6 +127,20 @@ namespace r1
             RealSource = null;
             WorkCompletedForSource();
             WorkCompletedForMemory();
+        }
+        private void PlayButtom_Click(object sender, RoutedEventArgs e)
+        {
+            IsPause = !IsPause;
+            if (!IsPause) { 
+            this.PlayButtom.Icon = new SymbolIcon((Symbol)57603);
+                this.PlayButtom.Label = "Pause";
+            }
+            else
+            {
+                this.PlayButtom.Icon = new SymbolIcon((Symbol)57602);
+                this.PlayButtom.Label = "Play";
+            }
+
         }
     }
 }
