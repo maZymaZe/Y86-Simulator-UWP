@@ -195,7 +195,7 @@
                                     <TextBox Text="State" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="1" Background="#FFD44848">
-                                    <TextBox x:Name="Fstat" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="Fstat" Text="{x:Bind F_stat}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="2" Background="#FFD44848">
                                     <TextBox x:Name="FpredPC" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>

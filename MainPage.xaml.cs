@@ -24,34 +24,72 @@ namespace r1
     public sealed partial class MainPage : Page
     {
         ObservableCollection<string> SourceList = new ObservableCollection<string>();
-        ObservableCollection<string>MemoryList = new ObservableCollection<string>();
-        bool IsPause=false;
+        ObservableCollection<string> MemoryList_s = new ObservableCollection<string>();
+        bool IsPause = false;
         string[] RealSource;
         string PlayButtomTag = "";
         string ZF = "0";
         Windows.Storage.StorageFile SourceFile;
         string SourceText;
+
+        //****************************************************************************
+        const int RAX = 0, RCX = 1, RDX = 2, RBX = 3, RSP = 4, RBP = 5, RSI = 6, RDI = 7, R8 = 8, R9 = 9, R10 = 10, R11 = 11, R12 = 12, R13 = 13, R14 = 14, None = 15;
+
+        int[] RegisterValue = new int[16];
+        int F_predPC;
+        string F_predPC_s, F_stat;
+        string[] StatCollection = new string[] {
+            "AOK", "HLT", "ADR","INS"
+        };
+        string[][] FunctionCollection=new string[][]{
+            new string[]{"halt"},
+            new string[] { "nop" },
+            new string[]{"rrmovq","cmovle","cmovl","cmove","cmovne","cmovge","cmovg"},
+            new string[] { "irmovq" },
+            new string[] { "rmmovq" },
+            new string[] { "mrmovq" },
+            new string[] { "addq","subq","andq","xorq" },
+            new string[] { "jmp","jle","jl","je","jne","jge","jg" },
+            new string[] { "call" },
+            new string[] { "ret" },
+             new string[] { "pushq" },
+            new string[] { "popq" }
+        };
+
+
+        //****************************************************************************
+
         public MainPage()
         {
             this.InitializeComponent();
-            SourceText = "NO INPUT YET";
-            DataContext = this;
-            this.MemoryListView.ItemsSource = MemoryList;
-            this.SourceListView.ItemsSource = SourceList;
-            SourceList.Add("NO INPUT YET");
-            MemoryList.Add("0000:00000000");
-            MemoryList.Add("0004:00000000");
-            MemoryList.Add("0008:00000000");
-            MemoryList.Add("000c:00000000");
-            MemoryList.Add("0010:00000000");
-            MemoryList.Add("0014:00000000"); 
-            MemoryList.Add("0018:00000000"); 
-            MemoryList.Add("001c:00000000"); 
-            MemoryList.Add("0020:00000000");
-            MemoryList.Add("0024:00000000");
+            preset();
+           
+          
+            
 
         }
-
+        private void preset()
+        {
+            StatCollection[0] = "AOK";
+            StatCollection[1] = "HLT";
+            StatCollection[2] = "ADR";
+            StatCollection[3] = "INS";
+            SourceText = "NO INPUT YET";
+            DataContext = this;
+            this.MemoryListView.ItemsSource = MemoryList_s;
+            this.SourceListView.ItemsSource = SourceList;
+            SourceList.Add("NO INPUT YET");
+            MemoryList_s.Add("0000:00000000");
+            MemoryList_s.Add("0004:00000000");
+            MemoryList_s.Add("0008:00000000");
+            MemoryList_s.Add("000c:00000000");
+            MemoryList_s.Add("0010:00000000");
+            MemoryList_s.Add("0014:00000000");
+            MemoryList_s.Add("0018:00000000");
+            MemoryList_s.Add("001c:00000000");
+            MemoryList_s.Add("0020:00000000");
+            MemoryList_s.Add("0024:00000000");
+        }
         private async void OpenFileButton_Click(object sender, RoutedEventArgs e)
         {
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
