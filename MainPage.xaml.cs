@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,14 +34,35 @@ namespace r1
         string SourceText;
 
         //****************************************************************************
-        const int RAX = 0, RCX = 1, RDX = 2, RBX = 3, RSP = 4, RBP = 5, RSI = 6, RDI = 7, R8 = 8, R9 = 9, R10 = 10, R11 = 11, R12 = 12, R13 = 13, R14 = 14, None = 15;
+        const int RAX = 0, RCX = 1, RDX = 2, RBX = 3, RSP = 4, RBP = 5, RSI = 6, RDI = 7, R8 = 8, R9 = 9,
+            R10 = 10, R11 = 11, R12 = 12, R13 = 13, R14 = 14, NONE = 15;
 
-        int[] RegisterValue = new int[16];
-        int F_predPC;
+        long[] RegisterValue = new long[16];
+
+        long F_predPC, f_SelectPC, f_pc, f_Split, f_icode, f_ifun, f_Align, f_imem_error, f_NeedvalC, f_Needregids, f_valP, f_valC, f_PredictPC;
         string F_predPC_s, F_stat;
+
+
+        string D_stat, d_stat, D_instr, d_instr,D_rA,d_rA,D_rB,d_rB;
+        long D_valC, d_valC, D_valP, d_valP, d_icode, d_ifun;
+        long d_rvalA, d_rvalB;
+
+        string E_stat, e_stat, E_instr, e_instr, E_dstE, e_dstE, E_dstM, e_dstM, E_srcA, e_srcA, E_srcB, e_srcB;
+        long E_valA, e_valA, E_valB, e_valB, E_valC, e_valC;
+
+        string M_stat, m_stat, M_instr, m_instr,M_dstE,M_dstM,m_dstE,m_dstM;
+        long M_valE, m_valE, M_valA, m_valA;
+
+        string W_stat, w_stat, W_instr, w_instr,W_dstE,W_dstM;
+        long W_icode, W_valE, W_valM;
+
         string[] StatCollection = new string[] {
             "AOK", "HLT", "ADR","INS"
         };
+        string[] RegisterCollection = new string[]
+       {
+            "RAX","RCX","RDX","RBX","RSP","RBP","RSI","RDI","R8","R9","R10","R11","R12","R13","R14","NONE"
+       };
         string[][] FunctionCollection=new string[][]{
             new string[]{"halt"},
             new string[] { "nop" },
@@ -56,9 +78,24 @@ namespace r1
             new string[] { "popq" }
         };
 
-
+        Hashtable RegisterHash = new Hashtable() {
+            {"RAX",0 },{"RCX",1},{"RDX",2},{"RBX",3},{"RSP",4},{"RBP",5},{"RSI",6},{"RDI",7},{"R8",8},{"R9",9},{"R10",10},{"R11",11},{"R12",12},{"R13",13},{"R14",14},{"NONE",15}
+        };
         //****************************************************************************
 
+        //****************************************************************************          REGISTER
+        private void ReadRegister()
+        {   
+            //TODO:None
+            d_rvalA = RegisterValue[(int)RegisterHash[d_rA]];
+            d_rvalB = RegisterValue[(int)RegisterHash[d_rB]];
+        }
+        private void WriteRegister()
+        {
+            if (W_dstM != "None") { RegisterValue[(int)RegisterHash[W_dstM]] = W_valM; }
+            if(W_dstE != "None"){ RegisterValue[(int)RegisterHash[W_dstE]] = W_valE; }
+        }
+        //****************************************************************************
         public MainPage()
         {
             this.InitializeComponent();

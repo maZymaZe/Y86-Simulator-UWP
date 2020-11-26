@@ -195,7 +195,7 @@
                                     <TextBox Text="State" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="1" Background="#FFD44848">
-                                    <TextBox x:Name="Fstat" Text="{x:Bind F_stat}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="Fstat" Text="{x:Bind F_stat,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="2" Background="#FFD44848">
                                     <TextBox x:Name="FpredPC" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
@@ -251,7 +251,7 @@
                                     <TextBox x:Name="CCLOCK" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="1" >
-                                    <TextBox x:Name="CZF" Text="{x:Bind ZF}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" Height="25" VerticalAlignment="Top"/>
+                                    <TextBox x:Name="CZF" Text="{x:Bind ZF,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" Height="25" VerticalAlignment="Top"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="2" >
                                     <TextBox x:Name="COF" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
