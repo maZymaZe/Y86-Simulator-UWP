@@ -26,10 +26,9 @@ namespace r1
     {
         ObservableCollection<string> SourceList = new ObservableCollection<string>();
         ObservableCollection<string> MemoryList_s = new ObservableCollection<string>();
-        bool IsPause = false;
+        bool IsPause = false,SourceIsLoaded=false;
         string[] RealSource;
         string PlayButtomTag = "";
-        string ZF = "0";
         Windows.Storage.StorageFile SourceFile;
         string SourceText;
 
@@ -48,10 +47,12 @@ namespace r1
         long d_rvalA, d_rvalB;
 
         string E_stat, e_stat, E_instr, e_instr, E_dstE, e_dstE, E_dstM, e_dstM, E_srcA, e_srcA, E_srcB, e_srcB;
-        long E_valA, e_valA, E_valB, e_valB, E_valC, e_valC;
+        long E_valA, e_valA, E_valB, e_valB, E_valC, e_valC, e_ALUfun, e_ALUA, e_ALUB, e_valE;
+        bool e_setCC, ZF, SF, OF, e_Cnd;
 
         string M_stat, m_stat, M_instr, m_instr,M_dstE,M_dstM,m_dstE,m_dstM;
-        long M_valE, m_valE, M_valA, m_valA;
+        long M_valE, m_valE, M_valA, m_valA, m_Addr;
+        bool m_dmem_error;
 
         string W_stat, w_stat, W_instr, w_instr,W_dstE,W_dstM;
         long W_icode, W_valE, W_valM;
@@ -81,6 +82,15 @@ namespace r1
         Hashtable RegisterHash = new Hashtable() {
             {"RAX",0 },{"RCX",1},{"RDX",2},{"RBX",3},{"RSP",4},{"RBP",5},{"RSI",6},{"RDI",7},{"R8",8},{"R9",9},{"R10",10},{"R11",11},{"R12",12},{"R13",13},{"R14",14},{"NONE",15}
         };
+        Hashtable HexHash = new Hashtable()
+        {
+            { '0',0},{'1',1 },{'2',2},{'3',3},{'4',4},{'5',5},{'6',6},{'7',7},{'8',8},{'9',9},{'A',10},{'a',10},{'b',11},{'B',11},{'C',12},{'c',12},{'D',13},{'d',13},{'E',14},{'e',14},{'F',15},{'f',15}
+        };
+
+        char[] MemoryBlock = new char[1 << 20];
+        char[] InstructionBlock = new char[1 << 20];
+        long InstrPointer=0;
+        long DataEntry, DataExit;
         //****************************************************************************
 
         //****************************************************************************          REGISTER
@@ -95,26 +105,127 @@ namespace r1
             if (W_dstM != "None") { RegisterValue[(int)RegisterHash[W_dstM]] = W_valM; }
             if(W_dstE != "None"){ RegisterValue[(int)RegisterHash[W_dstE]] = W_valE; }
         }
+
+        //****************************************************************************
+        //****************************************************************************         ALU
+
+        private void Alu()
+        {
+            switch (e_ALUfun) { 
+                case 0:
+                e_valE=e_ALUA+e_ALUB;
+                    break;
+                case 1:
+                e_valE =e_ALUA-e_ALUB;
+                    break;
+                case 2:
+                e_valE=e_ALUA&e_ALUB;
+                    break;
+                case 3:
+                e_valE=e_ALUA^e_ALUB;
+                    break;
+            }
+            if (e_setCC)
+            {
+                ZF = (e_valE == 0);
+                SF = (e_valE < 0);
+                if (e_ALUA >= 0 && e_ALUB >= 0 && e_valE < 0)
+                {
+                    OF = true;
+                }else if (e_ALUA < 0 && e_ALUB < 0 && e_valE >= 0)
+                {
+                    OF = true;
+                }
+                else
+                {
+                    OF = false;
+                }
+            }
+        }
+        //****************************************************************************
+        //****************************************************************************MEMORY
+        private bool AddrIsLigal(long addr)
+        {
+            if(addr+8>(1<<20) || addr<0)return false;
+            return true;
+        }
+        
+        private void MemoryRead()
+        {
+            if(!AddrIsLigal(m_Addr))
+            {
+                m_dmem_error=true;
+                return;
+            }
+            DataExit = Get8Bytes(m_Addr);
+        }
+        private void MemoryWrite()
+        {
+            if(!AddrIsLigal(m_Addr))
+            {
+                m_dmem_error=true;
+                return;
+            }
+            Write8Bytes(m_Addr);
+        }
+        private long Get8Bytes(long addr)
+        {
+            long ret = 0;
+            for(int i = 0; i < 8; i++)
+            {
+                ret = (ret << 8) + (long)MemoryBlock[addr + i];
+            }
+            return ret;
+        }
+        private void Write8Bytes(long addr)
+        {
+            long tmp = DataEntry;
+            for(int i = 7; i >= 0; i--)
+            {
+                MemoryBlock[addr + i] = (char)(tmp & 0xff);
+                tmp >>= 8;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
         //****************************************************************************
         public MainPage()
         {
             this.InitializeComponent();
-            preset();
-           
-          
-            
+            long TimeSinceLastUpdate = 0,Pretime;
+            Preset();
+            while (true)
+            {
+                Pretime = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
+                while (!IsPause&&SourceIsLoaded) {
+                    TimeSinceLastUpdate += (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000 - Pretime;
+                    Pretime = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
+                    while (TimeSinceLastUpdate > 1000 / this.SpeedSlider.Value)
+                    {
+                        TimeSinceLastUpdate -= (long)(1000 / this.SpeedSlider.Value);
 
+
+                    }
+                }
+            }
         }
-        private void preset()
+        private void Preset()
         {
-            StatCollection[0] = "AOK";
-            StatCollection[1] = "HLT";
-            StatCollection[2] = "ADR";
-            StatCollection[3] = "INS";
             SourceText = "NO INPUT YET";
             DataContext = this;
             this.MemoryListView.ItemsSource = MemoryList_s;
             this.SourceListView.ItemsSource = SourceList;
+            SourceIsLoaded = false;
             SourceList.Add("NO INPUT YET");
             MemoryList_s.Add("0000:00000000");
             MemoryList_s.Add("0004:00000000");
@@ -144,7 +255,7 @@ namespace r1
             {
                 uint numBytesLoaded = await dataReader.LoadAsync((uint)size);
                 SourceText = dataReader.ReadString(numBytesLoaded);
-                RealSource=SourceText.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                RealSource=SourceText.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
                 for(int i = 1; i <= RealSource.Length; i++)
                 {
                     SourceList.Add(i.ToString("D4")+"|    "+RealSource[i-1]);
@@ -152,7 +263,37 @@ namespace r1
             }
             this.SourceListView.SelectedIndex = 0;
             WorkCompletedForSource();
+            LoadInstructions();
         }
+        private void LoadInstructions()
+        {
+            for (int i = 0; i < RealSource.Length; i++)
+            {
+                bool flag = false;
+                for (int j = 0; j < RealSource[i].Length; j++)
+                {
+                    if (!flag && RealSource[i][j] == ':')
+                    {
+                        flag = true;
+                    }
+                    else if (flag && MyIsDigit(RealSource[i][j]))
+                    {
+                        InstructionBlock[InstrPointer++] = (char)(((int)HexHash[RealSource[i][j]] << 4) | (int)HexHash[RealSource[i][j + 1]]);
+                        j++;
+                    }
+                    else if (RealSource[i][j] == '|')
+                    {
+                        break;
+                    }
+                }
+            }
+            SourceIsLoaded = true;
+        }
+        private bool MyIsDigit(char x)
+        {
+            return (x >= '0' && x <= '9') || (x >= 'A' && x <= 'F') || (x >= 'a' && x <= 'f');
+        }
+
         private Deferral RefreshCompletionDeferralForSource
         {
             get;
