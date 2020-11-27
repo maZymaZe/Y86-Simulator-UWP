@@ -38,24 +38,25 @@ namespace r1
 
         long[] RegisterValue = new long[16];
 
-        long F_predPC, f_SelectPC, f_pc, f_Split, f_icode, f_ifun, f_Align, f_imem_error, f_NeedvalC, f_Needregids, f_valP, f_valC, f_PredictPC;
-        string F_predPC_s, F_stat;
+        long F_predPC, f_SelectPC, f_pc, f_Split, f_icode, f_ifun, f_Align, f_NeedvalC, f_Needregids, f_valP, f_valC, f_PredictPC;
+        string F_predPC_s, F_stat, f_rA, f_rB;
+        bool f_imem_error=false;
 
 
-        string D_stat, d_stat, D_instr, d_instr,D_rA,d_rA,D_rB,d_rB;
-        long D_valC, d_valC, D_valP, d_valP, d_icode, d_ifun;
-        long d_rvalA, d_rvalB;
+        string D_stat, d_stat, D_instr, d_instr,D_rA,d_rA,D_rB,d_rB, d_dstE, d_dstM;
+        long D_valC, d_valC, D_valP, d_valP, d_icode, d_ifun, D_icode, D_ifun;
+        long d_rvalA, d_rvalB, d_valA, d_valB;
 
         string E_stat, e_stat, E_instr, e_instr, E_dstE, e_dstE, E_dstM, e_dstM, E_srcA, e_srcA, E_srcB, e_srcB;
-        long E_valA, e_valA, E_valB, e_valB, E_valC, e_valC, e_ALUfun, e_ALUA, e_ALUB, e_valE;
+        long E_valA, e_valA, E_valB, e_valB, E_valC, e_valC, e_ALUfun, e_ALUA, e_ALUB, e_valE, E_icode, e_icode, E_ifun, e_ifun;
         bool e_setCC, ZF, SF, OF, e_Cnd;
 
         string M_stat, m_stat, M_instr, m_instr,M_dstE,M_dstM,m_dstE,m_dstM;
-        long M_valE, m_valE, M_valA, m_valA, m_Addr;
-        bool m_dmem_error;
+        long M_valE, m_valE, M_valA, m_valA, m_Addr, M_icode, m_icode, M_ifun, m_ifun;
+        bool m_dmem_error, M_Cnd;
 
         string W_stat, w_stat, W_instr, w_instr,W_dstE,W_dstM;
-        long W_icode, W_valE, W_valM;
+        long W_icode, W_ifun, W_valE, W_valM;
 
         string[] StatCollection = new string[] {
             "AOK", "HLT", "ADR","INS"
@@ -213,11 +214,163 @@ namespace r1
                     while (TimeSinceLastUpdate > 1000 / this.SpeedSlider.Value)
                     {
                         TimeSinceLastUpdate -= (long)(1000 / this.SpeedSlider.Value);
-
-
+                        PipelineWork();
                     }
                 }
             }
+        }
+        private void PipelineWork()
+        {
+            Fetch();
+            Decode();
+            Execute();
+            Memory();
+            WriteBack();
+
+        }
+
+        private long Trans8Bytes(long index){
+            long ret=0;
+            for(int i=0;i<8;i++){
+                ret|=(long)(InstructionBlock[index+i]<<(i<<2));
+            }
+            return ret;            
+        }
+        private void Fetch()
+        {
+            if(M_icode==7 && M_ifun<=6 && M_ifun > 0 && !M_Cnd)
+            {
+                f_pc = M_valA;
+            }
+            else if(M_icode==9 && M_ifun==0)
+            {
+                f_pc = W_valM;
+            }
+            else
+            {
+                f_pc = F_predPC;
+            }
+            if (f_pc < 0 || f_pc > InstrPointer)
+            {
+                f_imem_error = true;
+            }
+            f_icode = InstructionBlock[f_pc];
+            f_ifun = f_icode & 0xf;
+            f_icode = (f_icode >> 4) & 0xf;
+
+            
+            if ((f_icode==0 || f_icode==1) && f_ifun==0)
+            {
+                f_rA = "NONE";f_rB = "NONE";f_valP = f_pc + 1;f_PredictPC = f_valP;
+            }
+            else if(f_icode==2&&f_ifun<=6&&f_ifun>=0)
+            {
+                f_rA = RegisterCollection[(InstructionBlock[f_pc + 1] >> 4) & 0xf];
+                f_rB = RegisterCollection[InstructionBlock[f_pc + 1] & 0xf];
+                f_valP = f_pc + 2; f_PredictPC = f_valP;
+            }
+            else if(f_icode==3&&f_ifun==0 && ((InstructionBlock[f_pc + 1] >> 4) & 0xf)==0xf)
+            {
+                f_rA = RegisterCollection[(InstructionBlock[f_pc + 1] >> 4) & 0xf];
+                f_rB = RegisterCollection[InstructionBlock[f_pc + 1] & 0xf];
+                f_valC = Trans8Bytes(f_pc + 2);
+                f_valP = f_pc + 10; f_PredictPC = f_valP;
+            }
+            else if((f_icode==4||f_icode==5)&&f_ifun==0)
+            {
+                f_rA = RegisterCollection[(InstructionBlock[f_pc + 1] >> 4) & 0xf];
+                f_rB = RegisterCollection[InstructionBlock[f_pc + 1] & 0xf];
+                f_valC = Trans8Bytes(f_pc + 2);
+                f_valP = f_pc + 10; f_PredictPC = f_valP;
+            }
+            else if(f_icode==6&&f_ifun>=0&&f_ifun<=3)
+            {
+                f_rA = RegisterCollection[(InstructionBlock[f_pc + 1] >> 4) & 0xf];
+                f_rB = RegisterCollection[InstructionBlock[f_pc + 1] & 0xf];
+                f_valP = f_pc + 2; f_PredictPC = f_valP;
+            }
+            else if((f_icode==7&&f_ifun>=0&&f_ifun<=6) || (f_icode == 8 && f_ifun == 0))
+            {
+                f_rA = "NONE";
+                f_rB = "NONE";
+                f_valC = Trans8Bytes(f_pc + 1);
+                f_valP = f_pc + 9; f_PredictPC = f_valC;
+            }
+            else if(f_icode==9&&f_ifun==0)
+            {
+                f_rA = "NONE"; f_rB = "NONE"; f_valP = f_pc + 1; f_PredictPC = f_valP;
+            }
+            else if((f_icode==10||f_icode==11)&&f_ifun==0&&(InstructionBlock[f_pc + 1] & 0xf)==0xf)
+            {
+                f_rA = RegisterCollection[(InstructionBlock[f_pc + 1] >> 4) & 0xf];
+                f_rB = RegisterCollection[InstructionBlock[f_pc + 1] & 0xf];
+                f_valP = f_pc + 2; f_PredictPC = f_valP;
+            }
+            else
+            {
+                //TODO:ICODEERROR
+            }
+            //TODO:GUI
+        }
+        private void Decode()
+        {
+            if(D_icode == 0||D_icode==1||D_icode==4||D_icode==7)
+            {
+                d_dstE = "NONE";d_dstM = "NONE";d_rA = D_rA;d_rB = D_rB;
+            }
+            else if(D_icode==2||D_icode==3)
+            {
+                d_dstE = D_rB; d_dstM = "NONE"; d_rA = D_rA; d_rB = "NONE"; 
+            }
+            else if(D_icode==5)
+            {
+                d_dstE = "NONE"; d_dstM = D_rA; d_rA = "NONE"; d_rB = D_rB; 
+            }
+            else if(D_icode==6)
+            {
+                d_dstE = D_rB; d_dstM = "NONE"; d_rA = D_rA; d_rB = D_rB; 
+            }
+            else if(D_icode==8)
+            {
+                d_dstE = "RSP"; d_dstM = "NONE"; d_rA = "NONE"; d_rB = "RSP";
+            }
+            else if(D_icode==9)
+            {
+                d_dstE = "RSP"; d_dstM = "NONE"; d_rA = "RSP"; d_rB = "RSP";
+            }
+            else if(D_icode==10)
+            {
+                d_dstE = "RSP"; d_dstM = "NONE"; d_rA = D_rA; d_rB = "RSP";
+            }
+            else if(D_icode==11)
+            {
+                d_dstE = "RSP"; d_dstM = D_rA; d_rA = "RSP"; d_rB = "RSP";
+            }
+            ReadRegister();
+            d_valB = d_rvalB;
+            if(D_icode==7||D_icode==8)
+            {
+                d_valA = D_valP;
+            }
+            else
+            {
+                d_valA = d_rvalA;
+            }
+            d_valC = D_valC;
+            d_icode = D_icode;
+            d_ifun = D_ifun;
+        }
+        private void Execute()
+        {
+
+        }
+        private void Memory()
+        {
+
+        }
+        private void WriteBack()
+        {
+
         }
         private void Preset()
         {
