@@ -52,8 +52,8 @@ namespace r1
         bool e_setCC, ZF, SF, OF, e_Cnd;
 
         string M_stat, m_stat, M_instr, m_instr,M_dstE,M_dstM,m_dstE,m_dstM;
-        long M_valE, m_valE, M_valA, m_valA, m_Addr, M_icode, m_icode, M_ifun, m_ifun;
-        bool m_dmem_error, M_Cnd;
+        long M_valE, m_valE, M_valA, m_valA, m_Addr, M_icode, m_icode, M_ifun, m_ifun, m_valM;
+        bool m_dmem_error, M_Cnd, m_write, m_read;
 
         string W_stat, w_stat, W_instr, w_instr,W_dstE,W_dstM;
         long W_icode, W_ifun, W_valE, W_valM;
@@ -96,10 +96,15 @@ namespace r1
 
         //****************************************************************************          REGISTER
         private void ReadRegister()
-        {   
+        {
             //TODO:None
+            
             d_rvalA = RegisterValue[(int)RegisterHash[d_rA]];
             d_rvalB = RegisterValue[(int)RegisterHash[d_rB]];
+            if (d_rA == "NONE")
+                d_rvalA = 0;
+            if (d_rB == "NONE")
+                d_rvalB = 0;
         }
         private void WriteRegister()
         {
@@ -222,9 +227,13 @@ namespace r1
         private void PipelineWork()
         {
             Fetch();
+
             Decode();
+
             Execute();
+
             Memory();
+
             WriteBack();
 
         }
@@ -357,20 +366,109 @@ namespace r1
                 d_valA = d_rvalA;
             }
             d_valC = D_valC;
+            if(D_icode==8||D_icode==10)
+            {
+                d_valC=-8;
+            }
+            if(D_icode==9||D_icode==11)
+            {
+                d_valC=8;
+            }
             d_icode = D_icode;
             d_ifun = D_ifun;
         }
         private void Execute()
         {
-
+            
+            if((E_icode==2||E_icode==7) && E_ifun>=1 && E_ifun<=6)
+            {
+                switch(E_ifun)
+                {
+                    case 1:
+                        e_Cnd = (SF ^ OF) | ZF;
+                        break;
+                    case 2:
+                        e_Cnd = SF ^ OF;
+                        break;
+                    case 3:
+                        e_Cnd = ZF;
+                        break;
+                    case 4:
+                        e_Cnd = !ZF;
+                        break;
+                    case 5:
+                        e_Cnd = !(SF ^ OF);
+                        break;
+                    case 6:
+                        e_Cnd = (!(SF ^ OF))&(!ZF);
+                        break;
+                }
+            }
+            if(E_icode==6)
+            {
+                e_setCC=true;
+                e_ALUfun=E_icode;
+            }
+            else
+            {
+                e_setCC=false;
+                e_ALUfun=0;
+            }
+            e_ALUB = E_valB;
+            if(E_icode<=2||E_icode==6)
+            {
+                e_ALUA = E_valA;
+            }
+            else
+            {
+                e_ALUA = E_valC;
+            }
+            Alu();
+            if(E_icode==2 && E_ifun>0 && !e_Cnd)
+            {
+                e_dstE = "NONE";
+            }
+            else
+            {
+                e_dstE = E_dstE;
+            }
+            e_dstM = E_dstM;
+            e_valA = E_valA;
+            e_stat = E_stat;
+            e_icode = E_icode;
         }
         private void Memory()
         {
-
+            if(M_icode==4||M_icode==8||M_icode==10)
+            {
+                DataEntry = M_valA;
+                m_Addr = M_valE;
+                MemoryWrite();
+            }
+            else if(M_icode==5)
+            {
+                DataExit = M_valE;
+                MemoryRead();
+            }
+            else if (M_icode == 9||M_icode==11)
+            {
+                DataExit = M_valA;
+                MemoryRead();
+            }
+            m_stat = M_stat;
+            //stat Error
+            m_icode = M_icode;
+            m_valE = M_valE;
+            m_valM = DataExit;
+            m_dstE = M_dstE;
+            m_dstM = M_dstM;
         }
         private void WriteBack()
         {
-
+            if(W_icode==2||W_icode==3||W_icode==5||W_icode==6||W_icode>=8)
+            {
+                WriteRegister();
+            }
         }
         private void Preset()
         {
