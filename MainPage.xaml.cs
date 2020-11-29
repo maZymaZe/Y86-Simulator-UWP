@@ -37,26 +37,31 @@ namespace r1
             R10 = 10, R11 = 11, R12 = 12, R13 = 13, R14 = 14, NONE = 15;
 
         long[] RegisterValue = new long[16];
+        long CLOCK;
 
         long F_predPC, f_SelectPC, f_pc, f_Split, f_icode, f_ifun, f_Align, f_NeedvalC, f_Needregids, f_valP, f_valC, f_PredictPC;
-        string F_predPC_s, F_stat, f_rA, f_rB;
-        bool f_imem_error=false;
+        string F_predPC_s, f_stat, f_rA, f_rB;
+        bool f_imem_error;
+        bool F_stall,F_bubble;
 
 
-        string D_stat, d_stat, D_instr, d_instr,D_rA,d_rA,D_rB,d_rB, d_dstE, d_dstM;
+        string D_stat, d_stat, D_instr, d_instr,D_rA,d_srcA,D_rB,d_srcB, d_dstE, d_dstM;
         long D_valC, d_valC, D_valP, d_valP, d_icode, d_ifun, D_icode, D_ifun;
         long d_rvalA, d_rvalB, d_valA, d_valB;
+        bool D_stall,D_bubble;
 
         string E_stat, e_stat, E_instr, e_instr, E_dstE, e_dstE, E_dstM, e_dstM, E_srcA, e_srcA, E_srcB, e_srcB;
         long E_valA, e_valA, E_valB, e_valB, E_valC, e_valC, e_ALUfun, e_ALUA, e_ALUB, e_valE, E_icode, e_icode, E_ifun, e_ifun;
-        bool e_setCC, ZF, SF, OF, e_Cnd;
+        bool e_setCC, ZF, SF, OF, e_Cnd, E_stall, E_bubble;
 
         string M_stat, m_stat, M_instr, m_instr,M_dstE,M_dstM,m_dstE,m_dstM;
         long M_valE, m_valE, M_valA, m_valA, m_Addr, M_icode, m_icode, M_ifun, m_ifun, m_valM;
-        bool m_dmem_error, M_Cnd, m_write, m_read;
+        bool m_dmem_error, M_Cnd, m_write, m_read, M_stall, M_bubble;
 
-        string W_stat, w_stat, W_instr, w_instr,W_dstE,W_dstM;
-        long W_icode, W_ifun, W_valE, W_valM;
+        string W_stat, W_instr,W_dstE,W_dstM;
+        long W_icode, W_ifun, W_valE, W_valM,w_icode,w_ifun;
+        bool W_stall,W_bubble;
+
 
         string[] StatCollection = new string[] {
             "AOK", "HLT", "ADR","INS"
@@ -76,7 +81,7 @@ namespace r1
             new string[] { "jmp","jle","jl","je","jne","jge","jg" },
             new string[] { "call" },
             new string[] { "ret" },
-             new string[] { "pushq" },
+            new string[] { "pushq" },
             new string[] { "popq" }
         };
 
@@ -99,11 +104,11 @@ namespace r1
         {
             //TODO:None
             
-            d_rvalA = RegisterValue[(int)RegisterHash[d_rA]];
-            d_rvalB = RegisterValue[(int)RegisterHash[d_rB]];
-            if (d_rA == "NONE")
+            d_rvalA = RegisterValue[(int)RegisterHash[d_srcA]];
+            d_rvalB = RegisterValue[(int)RegisterHash[d_srcB]];
+            if (d_srcA == "NONE")
                 d_rvalA = 0;
-            if (d_rB == "NONE")
+            if (d_srcB == "NONE")
                 d_rvalB = 0;
         }
         private void WriteRegister()
@@ -220,23 +225,95 @@ namespace r1
                     {
                         TimeSinceLastUpdate -= (long)(1000 / this.SpeedSlider.Value);
                         PipelineWork();
+                        GUIUpdate();
                     }
                 }
             }
         }
+
         private void PipelineWork()
         {
+            ControlLogic();
+            CLOcK++;
+            RegUpdate();
             Fetch();
-
             Decode();
-
             Execute();
-
             Memory();
-
             WriteBack();
+            Forward();
+        }
+        private void GUIUpdate()
+        {
+            this.Finstr.Text = FunctionCollection[f_icode][f_ifun];
+            F_predPC_s = F_predPC.ToString("H16");
+            this.DIinstr.Text= FunctionCollection[f_icode][f_ifun];
+            this.EIinstr.Text = FunctionCollection[d_icode][d_ifun];
+            this.DSinstr.Text = FunctionCollection[D_icode][D_ifun];
+            this.MIinstr.Text = FunctionCollection[e_icode][e_ifun];
+            this.ESinstr.Text = FunctionCollection[E_icode][E_ifun];
+            this.WIinstr.Text = FunctionCollection[m_icode][m_ifun];
+            this.MSinstr.Text = FunctionCollection[M_icode][M_ifun];
+            this.WSinstr.Text = FunctionCollection[W_icode][W_ifun];
+            
+        }
+
+        private void RegUpdate()
+        {
+            if(!F_stall && !F_bubble)
+            {
+                F_predPC=f_PredictPC;
+            }
+            
+            if(!D_stall && !D_bubble)
+            {
+                D_stat=f_stat;D_icode=f_icode;D_ifun=f_ifun;D_rA=f_rA;D_rB=f_rB;D_valC=f_valC;D_valP=f_valP;
+            }
+            else if(D_bubble)
+            {
+                D_stat="AOK";D_icode=1;D_ifun=0;D_rA="NONE";D_rB="NONE";
+            }
+
+            if(!E_stall && !E_bubble)
+            {
+                E_stat=d_stat;E_icode=d_icode;E_ifun=d_ifun;E_valC=d_valC;E_valA=d_valA;E_valB=d_valB;E_dstE=d_dstE;E_dstM=d_dstM;E_srcA=d_srcA;E_srcB=d_srcB;
+            }
+            else if(D_bubble)
+            {
+                E_stat="AOK";E_icode=1;E_ifun=0;E_dstE=E_dstM=E_srcA=E_srcB="NONE";
+            }
+
+            if(!M_stall && !M_bubble)
+            {
+                M_stat=e_stat;M_icode=e_icode;M_ifun=e_ifun;M_Cnd=e_Cnd;M_valE=e_valE;M_valA=e_valA;M_dstE=e_dstE;M_dstM=e_dstM;
+            }
+
+            if(!W_stall && !W_bubble)
+            {
+                W_stat=m_stat;W_icode=m_icode;W_valE=m_valE;W_valM=m_valM;W_dstE=m_dstE;W_dstM=m_dstM;
+            }
 
         }
+        private void ControlLogic()
+        {
+            F_stall= ( ((E_icode==5||E_icode==11) && (E_dstM==d_srcA || E_dstM==d_srcB))||(D_icode==9 || E_icode==9 || M_icode == 9) );
+            F_bubble=false;
+
+            D_stall= ((E_icode==5||E_icode==11) && (E_dstM==d_srcA || E_dstM==d_srcB));
+            D_bubble=( ( E_icode==7 && E_ifun>0 && !e_Cnd) || ( !((E_icode==5||E_icode==11) && (E_dstM==d_srcA || E_dstM==d_srcB)) && (D_icode==9 || E_icode==9 || M_icode == 9) ) );
+
+            E_stall=false;
+            E_bubble= ( E_icode==7 && E_ifun>0 && !e_Cnd) || ((E_icode==5||E_icode==11) && (E_dstM==d_srcA || E_dstM==d_srcB));
+
+            M_stall=false;
+            M_bubble=false;
+
+            W_stall=false;
+            W_bubble=false;
+        }
+        
+        
+
 
         private long Trans8Bytes(long index){
             long ret=0;
@@ -325,35 +402,35 @@ namespace r1
         {
             if(D_icode == 0||D_icode==1||D_icode==4||D_icode==7)
             {
-                d_dstE = "NONE";d_dstM = "NONE";d_rA = D_rA;d_rB = D_rB;
+                d_dstE = "NONE";d_dstM = "NONE";d_srcA = D_rA;d_srcB = D_rB;
             }
             else if(D_icode==2||D_icode==3)
             {
-                d_dstE = D_rB; d_dstM = "NONE"; d_rA = D_rA; d_rB = "NONE"; 
+                d_dstE = D_rB; d_dstM = "NONE"; d_srcA = D_rA; d_srcB = "NONE"; 
             }
             else if(D_icode==5)
             {
-                d_dstE = "NONE"; d_dstM = D_rA; d_rA = "NONE"; d_rB = D_rB; 
+                d_dstE = "NONE"; d_dstM = D_rA; d_srcA = "NONE"; d_srcB = D_rB; 
             }
             else if(D_icode==6)
             {
-                d_dstE = D_rB; d_dstM = "NONE"; d_rA = D_rA; d_rB = D_rB; 
+                d_dstE = D_rB; d_dstM = "NONE"; d_srcA = D_rA; d_srcB = D_rB; 
             }
             else if(D_icode==8)
             {
-                d_dstE = "RSP"; d_dstM = "NONE"; d_rA = "NONE"; d_rB = "RSP";
+                d_dstE = "RSP"; d_dstM = "NONE"; d_srcA = "NONE"; d_srcB = "RSP";
             }
             else if(D_icode==9)
             {
-                d_dstE = "RSP"; d_dstM = "NONE"; d_rA = "RSP"; d_rB = "RSP";
+                d_dstE = "RSP"; d_dstM = "NONE"; d_srcA = "RSP"; d_srcB = "RSP";
             }
             else if(D_icode==10)
             {
-                d_dstE = "RSP"; d_dstM = "NONE"; d_rA = D_rA; d_rB = "RSP";
+                d_dstE = "RSP"; d_dstM = "NONE"; d_srcA = D_rA; d_srcB = "RSP";
             }
             else if(D_icode==11)
             {
-                d_dstE = "RSP"; d_dstM = D_rA; d_rA = "RSP"; d_rB = "RSP";
+                d_dstE = "RSP"; d_dstM = D_rA; d_srcA = "RSP"; d_srcB = "RSP";
             }
             ReadRegister();
             d_valB = d_rvalB;
@@ -379,7 +456,6 @@ namespace r1
         }
         private void Execute()
         {
-            
             if((E_icode==2||E_icode==7) && E_ifun>=1 && E_ifun<=6)
             {
                 switch(E_ifun)
@@ -406,6 +482,7 @@ namespace r1
             }
             if(E_icode==6)
             {
+                //TODO: unexpect control
                 e_setCC=true;
                 e_ALUfun=E_icode;
             }
@@ -456,7 +533,7 @@ namespace r1
                 MemoryRead();
             }
             m_stat = M_stat;
-            //stat Error
+            //TODO:stat Error
             m_icode = M_icode;
             m_valE = M_valE;
             m_valM = DataExit;
@@ -470,6 +547,20 @@ namespace r1
                 WriteRegister();
             }
         }
+        private void Forward()
+        {
+            if (d_srcA == e_dstE && e_dstE != "NONE")
+                d_valA = e_valE;
+            else if (d_srcA == M_dstM && M_dstM != "NONE")
+                d_valA = m_valM;
+            else if (d_srcA == M_dstE && M_dstE != "NONE")
+                d_valA = M_valE;
+            else if (d_srcA == W_dstM && W_dstM != "NONE")
+                d_valA = W_valM;
+            else if (d_srcA == W_dstE && W_dstE != "NONE")
+                d_valA = W_valE;
+        }
+
         private void Preset()
         {
             SourceText = "NO INPUT YET";
