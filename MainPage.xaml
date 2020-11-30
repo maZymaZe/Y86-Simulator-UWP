@@ -137,8 +137,10 @@
                                 <AppBarButton x:Name="Reset" Icon="Redo" Label="Reset" Click="Reset_Click"/>
                                 <AppBarButton Icon="Previous" Label="Previous"/>
                                 <AppBarButton x:Name="PlayButtom" Icon="Play"  Label="Play" Click="PlayButtom_Click"/>
-                                <AppBarButton Icon="Next" Label="Next"/>
-                                <Slider x:Name="SpeedSlider" Width="80" Minimum="1" Maximum="50" StepFrequency="1" Value="20" Header="Speed(Hz)" />
+                                <AppBarButton x:Name="Next" Icon="Next" Label="Next" Click="Next_Click"  />
+
+
+                                <Slider x:Name="SpeedSlider" Width="80" Minimum="1" Maximum="50" StepFrequency="1" Value="20" Header="Speed(Hz)" ValueChanged="SpeedSlider_ValueChanged" />
 
                             </StackPanel>
                         </Border>
@@ -195,7 +197,7 @@
                                     <TextBox Text="State" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="1" Background="#FFD44848">
-                                    <TextBox x:Name="Fstat" Text="{x:Bind F_stat,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="Fstat" Text="{x:Bind f_stat,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="2" Background="#FFD44848">
                                     <TextBox x:Name="FpredPC" Text="{x:Bind F_predPC_s,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
@@ -364,7 +366,7 @@
                                     <TextBox x:Name="CStatus" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="2" Background="#FFEEFFDC">
-                                    <TextBox Text="by maZe and GeorgePlover" TextWrapping="Wrap" IsReadOnly="True" FontSize="3"/>
+                                    <TextBox Text="by maZe and GeorgePlover" TextWrapping="Wrap" IsReadOnly="True" FontSize="3" TextChanged="TextBox_TextChanged"/>
                                 </Border>
                             </Grid>
                         </Border>

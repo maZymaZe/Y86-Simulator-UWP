@@ -31,13 +31,16 @@ namespace r1
         string PlayButtomTag = "";
         Windows.Storage.StorageFile SourceFile;
         string SourceText;
+        DispatcherTimer Timer=new DispatcherTimer();
+
+
 
         //****************************************************************************
         const int RAX = 0, RCX = 1, RDX = 2, RBX = 3, RSP = 4, RBP = 5, RSI = 6, RDI = 7, R8 = 8, R9 = 9,
             R10 = 10, R11 = 11, R12 = 12, R13 = 13, R14 = 14, NONE = 15;
 
         long[] RegisterValue = new long[16];
-        long CLOCK;
+        long CLOCK=0;
 
         long F_predPC, f_SelectPC, f_pc, f_Split, f_icode, f_ifun, f_Align, f_NeedvalC, f_Needregids, f_valP, f_valC, f_PredictPC;
         string F_predPC_s, f_stat, f_rA, f_rB;
@@ -50,8 +53,25 @@ namespace r1
         long d_rvalA, d_rvalB, d_valA, d_valB;
         bool D_stall,D_bubble;
 
+        string ProgramStat;
+
+      
+
+        private void SpeedSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            this.Timer.Interval = new TimeSpan(0,0,0,0,(int)(1000/SpeedSlider.Value));
+        }
+
+        private void Next_Click(object sender, RoutedEventArgs e)
+        {
+            if (ProgramStat == "AOK") PipelineWork();
+        }
+
         string E_stat, e_stat, E_instr, e_instr, E_dstE, e_dstE, E_dstM, e_dstM, E_srcA, e_srcA, E_srcB, e_srcB;
         long E_valA, e_valA, E_valB, e_valB, E_valC, e_valC, e_ALUfun, e_ALUA, e_ALUB, e_valE, E_icode, e_icode, E_ifun, e_ifun;
+
+      
+
         bool e_setCC, ZF, SF, OF, e_Cnd, E_stall, E_bubble;
 
         string M_stat, m_stat, M_instr, m_instr,M_dstE,M_dstM,m_dstE,m_dstM;
@@ -197,44 +217,26 @@ namespace r1
                 tmp >>= 8;
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
         //****************************************************************************
         public MainPage()
         {
             this.InitializeComponent();
-            long TimeSinceLastUpdate = 0,Pretime;
+            this.Timer.Tick += new EventHandler<object>(this.Timer_Tick);
+
             Preset();
-            while (true)
-            {
-                Pretime = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
-                while (!IsPause&&SourceIsLoaded) {
-                    TimeSinceLastUpdate += (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000 - Pretime;
-                    Pretime = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
-                    while (TimeSinceLastUpdate > 1000 / this.SpeedSlider.Value)
-                    {
-                        TimeSinceLastUpdate -= (long)(1000 / this.SpeedSlider.Value);
-                        PipelineWork();
-                        GUIUpdate();
-                    }
-                }
-            }
+        }
+        private void Timer_Tick(object sender, object e)
+        { 
+            //TODO
         }
 
-        private void PipelineWork()
+
+
+
+            private void PipelineWork()
         {
             ControlLogic();
-            CLOcK++;
+            CLOCK++;
             RegUpdate();
             Fetch();
             Decode();
@@ -242,6 +244,7 @@ namespace r1
             Memory();
             WriteBack();
             Forward();
+            GUIUpdate();
         }
         private void GUIUpdate()
         {
@@ -685,6 +688,9 @@ namespace r1
             RealSource = null;
             WorkCompletedForSource();
             WorkCompletedForMemory();
+            CLOCK = 0;
+            IsPause = true;
+            Preset();
         }
         private void PlayButtom_Click(object sender, RoutedEventArgs e)
         {
@@ -698,7 +704,27 @@ namespace r1
                 this.PlayButtom.Icon = new SymbolIcon((Symbol)57602);
                 this.PlayButtom.Label = "Play";
             }
-
+           
         }
+      /*
+            long TimeSinceLastUpdate = 0, Pretime;
+
+            while (true)
+            {
+                Pretime = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
+                while (!IsPause && ISourceIsLoaded)
+                {
+                    TimeSinceLastUpdate += (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000 - Pretime;
+                    Pretime = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
+                    while (TimeSinceLastUpdate > 1000 / this.SpeedSlider.Value)
+                    {
+                        TimeSinceLastUpdate -= (long)(1000 / this.SpeedSlider.Value);
+                        PipelineWork();
+                        
+                    }
+                }
+            }
+      */
+        
     }
 }
