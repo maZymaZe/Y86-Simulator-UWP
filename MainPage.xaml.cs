@@ -64,7 +64,7 @@ namespace r1
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
-            if (ProgramStat == "AOK") PipelineWork();
+            if (ProgramStat == "AOK"&&SourceIsLoaded) PipelineWork();
         }
 
         string E_stat, e_stat, E_instr, e_instr, E_dstE, e_dstE, E_dstM, e_dstM, E_srcA, e_srcA, E_srcB, e_srcB;
@@ -228,12 +228,13 @@ namespace r1
         private void Timer_Tick(object sender, object e)
         { 
             //TODO
+            if(!IsPause&&SourceIsLoaded&&ProgramStat=="AOK") PipelineWork();
         }
 
 
 
 
-            private void PipelineWork()
+        private void PipelineWork()
         {
             ControlLogic();
             CLOCK++;

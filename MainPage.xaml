@@ -16,7 +16,7 @@
             <RowDefinition Height="55.5*"/>
             <RowDefinition Height="70*"/>
         </Grid.RowDefinitions>
-        <Border Background="#FF8FB1F6" Grid.Column="0" Grid.Row="0" Margin="5,5,5,5">
+        <Border Background="#FF8FB1F6" Grid.Column="1" Grid.Row="0" Margin="5,5,5,5">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
@@ -110,7 +110,7 @@
                 </Border>
             </Grid>
         </Border>
-        <Border Grid.Row="0" Grid.Column="1" Background="#FFE7F89F" Margin="5,5,5,5">
+        <Border Grid.Row="0" Grid.Column="0" Background="#FFE7F89F" Margin="5,5,5,5">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="70*"/>
@@ -366,7 +366,7 @@
                                     <TextBox x:Name="CStatus" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="2" Background="#FFEEFFDC">
-                                    <TextBox Text="by maZe and GeorgePlover" TextWrapping="Wrap" IsReadOnly="True" FontSize="3" TextChanged="TextBox_TextChanged"/>
+                                    <TextBox Text="by maZe and GeorgePlover" TextWrapping="Wrap" IsReadOnly="True" FontSize="3"/>
                                 </Border>
                             </Grid>
                         </Border>
