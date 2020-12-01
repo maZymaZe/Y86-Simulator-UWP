@@ -222,7 +222,6 @@ namespace r1
         {
             this.InitializeComponent();
             this.Timer.Tick += new EventHandler<object>(this.Timer_Tick);
-
             Preset();
         }
         private void Timer_Tick(object sender, object e)
@@ -261,7 +260,23 @@ namespace r1
             this.WSinstr.Text = FunctionCollection[W_icode][W_ifun];
             
         }
+        private void ControlLogic()
+        {
+            F_stall = (((E_icode == 5 || E_icode == 11) && (E_dstM == d_srcA || E_dstM == d_srcB)) || (D_icode == 9 || E_icode == 9 || M_icode == 9));
+            F_bubble = false;
 
+            D_stall = ((E_icode == 5 || E_icode == 11) && (E_dstM == d_srcA || E_dstM == d_srcB));
+            D_bubble = ((E_icode == 7 && E_ifun > 0 && !e_Cnd) || (!((E_icode == 5 || E_icode == 11) && (E_dstM == d_srcA || E_dstM == d_srcB)) && (D_icode == 9 || E_icode == 9 || M_icode == 9)));
+
+            E_stall = false;
+            E_bubble = (E_icode == 7 && E_ifun > 0 && !e_Cnd) || ((E_icode == 5 || E_icode == 11) && (E_dstM == d_srcA || E_dstM == d_srcB));
+
+            M_stall = false;
+            M_bubble = false;
+
+            W_stall = false;
+            W_bubble = false;
+        }
         private void RegUpdate()
         {
             if(!F_stall && !F_bubble)
@@ -298,27 +313,6 @@ namespace r1
             }
 
         }
-        private void ControlLogic()
-        {
-            F_stall= ( ((E_icode==5||E_icode==11) && (E_dstM==d_srcA || E_dstM==d_srcB))||(D_icode==9 || E_icode==9 || M_icode == 9) );
-            F_bubble=false;
-
-            D_stall= ((E_icode==5||E_icode==11) && (E_dstM==d_srcA || E_dstM==d_srcB));
-            D_bubble=( ( E_icode==7 && E_ifun>0 && !e_Cnd) || ( !((E_icode==5||E_icode==11) && (E_dstM==d_srcA || E_dstM==d_srcB)) && (D_icode==9 || E_icode==9 || M_icode == 9) ) );
-
-            E_stall=false;
-            E_bubble= ( E_icode==7 && E_ifun>0 && !e_Cnd) || ((E_icode==5||E_icode==11) && (E_dstM==d_srcA || E_dstM==d_srcB));
-
-            M_stall=false;
-            M_bubble=false;
-
-            W_stall=false;
-            W_bubble=false;
-        }
-        
-        
-
-
         private long Trans8Bytes(long index){
             long ret=0;
             for(int i=0;i<8;i++){
@@ -400,7 +394,6 @@ namespace r1
             {
                 //TODO:ICODEERROR
             }
-            //TODO:GUI
         }
         private void Decode()
         {
@@ -564,7 +557,6 @@ namespace r1
             else if (d_srcA == W_dstE && W_dstE != "NONE")
                 d_valA = W_valE;
         }
-
         private void Preset()
         {
             SourceText = "NO INPUT YET";
@@ -634,6 +626,12 @@ namespace r1
                 }
             }
             SourceIsLoaded = true;
+            SourceInit();
+        }
+        private void SourceInit()
+        {
+            ProgramStat = "AOK";
+            //TODO
         }
         private bool MyIsDigit(char x)
         {
@@ -704,28 +702,7 @@ namespace r1
             {
                 this.PlayButtom.Icon = new SymbolIcon((Symbol)57602);
                 this.PlayButtom.Label = "Play";
-            }
-           
+            } 
         }
-      /*
-            long TimeSinceLastUpdate = 0, Pretime;
-
-            while (true)
-            {
-                Pretime = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
-                while (!IsPause && ISourceIsLoaded)
-                {
-                    TimeSinceLastUpdate += (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000 - Pretime;
-                    Pretime = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
-                    while (TimeSinceLastUpdate > 1000 / this.SpeedSlider.Value)
-                    {
-                        TimeSinceLastUpdate -= (long)(1000 / this.SpeedSlider.Value);
-                        PipelineWork();
-                        
-                    }
-                }
-            }
-      */
-        
     }
 }
