@@ -338,7 +338,7 @@
                                     <TextBox Text="Status" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Background="#FF95FF94">
-                                    <TextBox x:Name="CStatus" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="CStatus" Text="{x:Bind ProgramStat}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="2" Background="#FFEEFFDC">
                                     <TextBox Text="by maZe and GeorgePlover" TextWrapping="Wrap" IsReadOnly="True" FontSize="3"/>

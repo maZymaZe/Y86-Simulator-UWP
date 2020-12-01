@@ -230,6 +230,13 @@ namespace r1
         { 
             //TODO
             if(!IsPause&&SourceIsLoaded&&ProgramStat=="AOK") PipelineWork();
+            else
+            {
+                this.PlayButtom.Icon = new SymbolIcon((Symbol)57602);
+                this.PlayButtom.Label = "Play";
+                Timer.Stop();
+                IsPause = true;
+            }
         }
 
 
@@ -276,6 +283,7 @@ namespace r1
             this.Hr12.Text = (RegisterValue[12]).ToString("X16");
             this.Hr13.Text = (RegisterValue[13]).ToString("X16");
             this.Hr14.Text = (RegisterValue[14]).ToString("X16");
+            Bindings.Update();
         }
         private void ControlLogic()
         {
@@ -645,6 +653,7 @@ namespace r1
         }
         private void LoadInstructions()
         {
+            MachineCodeTest = "";
             for (int i = 0; i < RealSource.Length; i++)
             {
                 bool flag = false,addrloadflag=false;
@@ -762,7 +771,7 @@ namespace r1
             WorkCompletedForMemory();
             CLOCK = 0;
             IsPause = true;
-            Preset();
+            Preset();     
         }
         private void PlayButtom_Click(object sender, RoutedEventArgs e)
         {
@@ -770,11 +779,13 @@ namespace r1
             if (!IsPause) { 
             this.PlayButtom.Icon = new SymbolIcon((Symbol)57603);
                 this.PlayButtom.Label = "Pause";
+                Timer.Start();
             }
             else
             {
                 this.PlayButtom.Icon = new SymbolIcon((Symbol)57602);
                 this.PlayButtom.Label = "Play";
+                Timer.Stop();
             } 
         }
     }
