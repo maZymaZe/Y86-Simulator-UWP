@@ -642,6 +642,7 @@
             </Grid>
         </Border>
         <Border Grid.Row="1" Grid.Column="1" Background="#FF9DF39F" Margin="5,5,5,5">
+            <TextBox x:Name="TestOutput" Text="TextBox" TextWrapping="Wrap"/>
         </Border>
         <StackPanel Margin="0,0,465,5" Grid.ColumnSpan="2"/>
     </Grid>

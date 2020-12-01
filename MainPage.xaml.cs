@@ -32,6 +32,7 @@ namespace r1
         Windows.Storage.StorageFile SourceFile;
         string SourceText;
         DispatcherTimer Timer=new DispatcherTimer();
+        string MachineCodeTest ="";
 
 
 
@@ -114,7 +115,6 @@ namespace r1
         };
 
         char[] MemoryBlock = new char[1 << 20];
-        char[] InstructionBlock = new char[1 << 20];
         long InstrPointer=0;
         long DataEntry, DataExit;
         //****************************************************************************
@@ -147,7 +147,7 @@ namespace r1
                 e_valE=e_ALUA+e_ALUB;
                     break;
                 case 1:
-                e_valE =e_ALUA-e_ALUB;
+                e_valE =e_ALUB-e_ALUA;
                     break;
                 case 2:
                 e_valE=e_ALUA&e_ALUB;
@@ -222,6 +222,8 @@ namespace r1
         {
             this.InitializeComponent();
             this.Timer.Tick += new EventHandler<object>(this.Timer_Tick);
+            this.MemoryListView.ItemsSource = MemoryList_s;
+            this.SourceListView.ItemsSource = SourceList;
             Preset();
         }
         private void Timer_Tick(object sender, object e)
@@ -235,7 +237,7 @@ namespace r1
 
         private void PipelineWork()
         {
-            ControlLogic();
+            
             CLOCK++;
             RegUpdate();
             Fetch();
@@ -244,12 +246,13 @@ namespace r1
             Memory();
             WriteBack();
             Forward();
+            ControlLogic();
             GUIUpdate();
         }
         private void GUIUpdate()
         {
             this.Finstr.Text = FunctionCollection[f_icode][f_ifun];
-            F_predPC_s = F_predPC.ToString("H16");
+            F_predPC_s = F_predPC.ToString("X16");
             this.DIinstr.Text= FunctionCollection[f_icode][f_ifun];
             this.EIinstr.Text = FunctionCollection[d_icode][d_ifun];
             this.DSinstr.Text = FunctionCollection[D_icode][D_ifun];
@@ -258,21 +261,21 @@ namespace r1
             this.WIinstr.Text = FunctionCollection[m_icode][m_ifun];
             this.MSinstr.Text = FunctionCollection[M_icode][M_ifun];
             this.WSinstr.Text = FunctionCollection[W_icode][W_ifun];
-            this.Hrax.Text = (RegisterValue[0]).ToString("H16");
-            this.Hrcx.Text = (RegisterValue[1]).ToString("H16");
-            this.Hrdx.Text = (RegisterValue[2]).ToString("H16");
-            this.Hrbx.Text = (RegisterValue[3]).ToString("H16");
-            this.Hrsp.Text = (RegisterValue[4]).ToString("H16");
-            this.Hrbp.Text = (RegisterValue[5]).ToString("H16");
-            this.Hrsi.Text = (RegisterValue[6]).ToString("H16");
-            this.Hrdi.Text = (RegisterValue[7]).ToString("H16");
-            this.Hr8.Text = (RegisterValue[8]).ToString("H16");
-            this.Hr9.Text = (RegisterValue[9]).ToString("H16");
-            this.Hr10.Text = (RegisterValue[10]).ToString("H16");
-            this.Hr11.Text = (RegisterValue[11]).ToString("H16");
-            this.Hr12.Text = (RegisterValue[12]).ToString("H16");
-            this.Hr13.Text = (RegisterValue[13]).ToString("H16");
-            this.Hr14.Text = (RegisterValue[14]).ToString("H16");
+            this.Hrax.Text = (RegisterValue[0]).ToString("X16");
+            this.Hrcx.Text = (RegisterValue[1]).ToString("X16");
+            this.Hrdx.Text = (RegisterValue[2]).ToString("X16");
+            this.Hrbx.Text = (RegisterValue[3]).ToString("X16");
+            this.Hrsp.Text = (RegisterValue[4]).ToString("X16");
+            this.Hrbp.Text = (RegisterValue[5]).ToString("X16");
+            this.Hrsi.Text = (RegisterValue[6]).ToString("X16");
+            this.Hrdi.Text = (RegisterValue[7]).ToString("X16");
+            this.Hr8.Text = (RegisterValue[8]).ToString("X16");
+            this.Hr9.Text = (RegisterValue[9]).ToString("X16");
+            this.Hr10.Text = (RegisterValue[10]).ToString("X16");
+            this.Hr11.Text = (RegisterValue[11]).ToString("X16");
+            this.Hr12.Text = (RegisterValue[12]).ToString("X16");
+            this.Hr13.Text = (RegisterValue[13]).ToString("X16");
+            this.Hr14.Text = (RegisterValue[14]).ToString("X16");
         }
         private void ControlLogic()
         {
@@ -311,7 +314,7 @@ namespace r1
             {
                 E_stat=d_stat;E_icode=d_icode;E_ifun=d_ifun;E_valC=d_valC;E_valA=d_valA;E_valB=d_valB;E_dstE=d_dstE;E_dstM=d_dstM;E_srcA=d_srcA;E_srcB=d_srcB;
             }
-            else if(D_bubble)
+            else if(E_bubble)
             {
                 E_stat="AOK";E_icode=1;E_ifun=0;E_dstE=E_dstM=E_srcA=E_srcB="NONE";
             }
@@ -320,17 +323,25 @@ namespace r1
             {
                 M_stat=e_stat;M_icode=e_icode;M_ifun=e_ifun;M_Cnd=e_Cnd;M_valE=e_valE;M_valA=e_valA;M_dstE=e_dstE;M_dstM=e_dstM;
             }
+            else if(M_bubble)
+            {
+                M_stat = "AOK"; M_icode = 1; M_ifun = 0; M_Cnd = false; M_dstE = M_dstM = "NONE";
+            }
 
             if(!W_stall && !W_bubble)
             {
-                W_stat=m_stat;W_icode=m_icode;W_valE=m_valE;W_valM=m_valM;W_dstE=m_dstE;W_dstM=m_dstM;
+                W_stat=m_stat;W_icode=m_icode;W_ifun = m_ifun; W_valE=m_valE;W_valM=m_valM;W_dstE=m_dstE;W_dstM=m_dstM;
+            }
+            else if(W_bubble)
+            {
+                W_stat = "AOK"; W_icode = 1; W_dstE = W_dstM = "NONE";
             }
 
         }
         private long Trans8Bytes(long index){
             long ret=0;
             for(int i=0;i<8;i++){
-                ret|=(long)(InstructionBlock[index+i]<<(i<<2));
+                ret|=(long)(MemoryBlock[index+i]<<(i<<3));
             }
             return ret;            
         }
@@ -340,7 +351,7 @@ namespace r1
             {
                 f_pc = M_valA;
             }
-            else if(M_icode==9 && M_ifun==0)
+            else if(W_icode==9 && W_ifun==0)
             {
                 f_pc = W_valM;
             }
@@ -352,7 +363,7 @@ namespace r1
             {
                 f_imem_error = true;
             }
-            f_icode = InstructionBlock[f_pc];
+            f_icode = MemoryBlock[f_pc];
             f_ifun = f_icode & 0xf;
             f_icode = (f_icode >> 4) & 0xf;
 
@@ -363,28 +374,28 @@ namespace r1
             }
             else if(f_icode==2&&f_ifun<=6&&f_ifun>=0)
             {
-                f_rA = RegisterCollection[(InstructionBlock[f_pc + 1] >> 4) & 0xf];
-                f_rB = RegisterCollection[InstructionBlock[f_pc + 1] & 0xf];
+                f_rA = RegisterCollection[(MemoryBlock[f_pc + 1] >> 4) & 0xf];
+                f_rB = RegisterCollection[MemoryBlock[f_pc + 1] & 0xf];
                 f_valP = f_pc + 2; f_PredictPC = f_valP;
             }
-            else if(f_icode==3&&f_ifun==0 && ((InstructionBlock[f_pc + 1] >> 4) & 0xf)==0xf)
+            else if(f_icode==3&&f_ifun==0 && ((MemoryBlock[f_pc + 1] >> 4) & 0xf)==0xf)
             {
-                f_rA = RegisterCollection[(InstructionBlock[f_pc + 1] >> 4) & 0xf];
-                f_rB = RegisterCollection[InstructionBlock[f_pc + 1] & 0xf];
+                f_rA = RegisterCollection[(MemoryBlock[f_pc + 1] >> 4) & 0xf];
+                f_rB = RegisterCollection[MemoryBlock[f_pc + 1] & 0xf];
                 f_valC = Trans8Bytes(f_pc + 2);
                 f_valP = f_pc + 10; f_PredictPC = f_valP;
             }
             else if((f_icode==4||f_icode==5)&&f_ifun==0)
             {
-                f_rA = RegisterCollection[(InstructionBlock[f_pc + 1] >> 4) & 0xf];
-                f_rB = RegisterCollection[InstructionBlock[f_pc + 1] & 0xf];
+                f_rA = RegisterCollection[(MemoryBlock[f_pc + 1] >> 4) & 0xf];
+                f_rB = RegisterCollection[MemoryBlock[f_pc + 1] & 0xf];
                 f_valC = Trans8Bytes(f_pc + 2);
                 f_valP = f_pc + 10; f_PredictPC = f_valP;
             }
             else if(f_icode==6&&f_ifun>=0&&f_ifun<=3)
             {
-                f_rA = RegisterCollection[(InstructionBlock[f_pc + 1] >> 4) & 0xf];
-                f_rB = RegisterCollection[InstructionBlock[f_pc + 1] & 0xf];
+                f_rA = RegisterCollection[(MemoryBlock[f_pc + 1] >> 4) & 0xf];
+                f_rB = RegisterCollection[MemoryBlock[f_pc + 1] & 0xf];
                 f_valP = f_pc + 2; f_PredictPC = f_valP;
             }
             else if((f_icode==7&&f_ifun>=0&&f_ifun<=6) || (f_icode == 8 && f_ifun == 0))
@@ -398,10 +409,10 @@ namespace r1
             {
                 f_rA = "NONE"; f_rB = "NONE"; f_valP = f_pc + 1; f_PredictPC = f_valP;
             }
-            else if((f_icode==10||f_icode==11)&&f_ifun==0&&(InstructionBlock[f_pc + 1] & 0xf)==0xf)
+            else if((f_icode==10||f_icode==11)&&f_ifun==0&&(MemoryBlock[f_pc + 1] & 0xf)==0xf)
             {
-                f_rA = RegisterCollection[(InstructionBlock[f_pc + 1] >> 4) & 0xf];
-                f_rB = RegisterCollection[InstructionBlock[f_pc + 1] & 0xf];
+                f_rA = RegisterCollection[(MemoryBlock[f_pc + 1] >> 4) & 0xf];
+                f_rB = RegisterCollection[MemoryBlock[f_pc + 1] & 0xf];
                 f_valP = f_pc + 2; f_PredictPC = f_valP;
             }
             else
@@ -467,6 +478,7 @@ namespace r1
             }
             d_icode = D_icode;
             d_ifun = D_ifun;
+            d_stat = D_stat;
         }
         private void Execute()
         {
@@ -498,7 +510,7 @@ namespace r1
             {
                 //TODO: unexpect control
                 e_setCC=true;
-                e_ALUfun=E_icode;
+                e_ALUfun=E_ifun;
             }
             else
             {
@@ -527,6 +539,7 @@ namespace r1
             e_valA = E_valA;
             e_stat = E_stat;
             e_icode = E_icode;
+            e_ifun = E_ifun;
         }
         private void Memory()
         {
@@ -538,12 +551,12 @@ namespace r1
             }
             else if(M_icode==5)
             {
-                DataExit = M_valE;
+                m_Addr = M_valE;
                 MemoryRead();
             }
             else if (M_icode == 9||M_icode==11)
             {
-                DataExit = M_valA;
+                m_Addr = M_valA;
                 MemoryRead();
             }
             m_stat = M_stat;
@@ -553,6 +566,8 @@ namespace r1
             m_valM = DataExit;
             m_dstE = M_dstE;
             m_dstM = M_dstM;
+            m_ifun = M_ifun;
+            m_stat = M_stat;
         }
         private void WriteBack()
         {
@@ -577,25 +592,29 @@ namespace r1
                 d_valA = W_valM;
             else if (d_srcA == W_dstE && W_dstE != "NONE")
                 d_valA = W_valE;
+
+            if (d_srcB == e_dstE && e_dstE != "NONE")
+                d_valB = e_valE;
+            else if (d_srcB == M_dstM && M_dstM != "NONE")
+                d_valB = m_valM;
+            else if (d_srcB == M_dstE && M_dstE != "NONE")
+                d_valB = M_valE;
+            else if (d_srcB == W_dstM && W_dstM != "NONE")
+                d_valB = W_valM;
+            else if (d_srcB == W_dstE && W_dstE != "NONE")
+                d_valB = W_valE;
         }
         private void Preset()
         {
+            //TODO
             SourceText = "NO INPUT YET";
             DataContext = this;
-            this.MemoryListView.ItemsSource = MemoryList_s;
-            this.SourceListView.ItemsSource = SourceList;
+            
             SourceIsLoaded = false;
             SourceList.Add("NO INPUT YET");
-            MemoryList_s.Add("0000:00000000");
-            MemoryList_s.Add("0004:00000000");
-            MemoryList_s.Add("0008:00000000");
-            MemoryList_s.Add("000c:00000000");
-            MemoryList_s.Add("0010:00000000");
-            MemoryList_s.Add("0014:00000000");
-            MemoryList_s.Add("0018:00000000");
-            MemoryList_s.Add("001c:00000000");
-            MemoryList_s.Add("0020:00000000");
-            MemoryList_s.Add("0024:00000000");
+            WorkCompletedForMemory();
+            WorkCompletedForSource();
+            
         }
         private async void OpenFileButton_Click(object sender, RoutedEventArgs e)
         {
@@ -628,24 +647,39 @@ namespace r1
         {
             for (int i = 0; i < RealSource.Length; i++)
             {
-                bool flag = false;
+                bool flag = false,addrloadflag=false;
+                long target=0;
                 for (int j = 0; j < RealSource[i].Length; j++)
                 {
-                    if (!flag && RealSource[i][j] == ':')
+                    if (!addrloadflag && RealSource[i][j] == 'x')
+                    {
+                        addrloadflag = true;
+                    }
+                    else if (addrloadflag&&!flag&&MyIsDigit(RealSource[i][j]))
+                    {
+                        target = target * 16 + (int)HexHash[RealSource[i][j]];
+                    }
+                    else if (!flag && RealSource[i][j] == ':'&&addrloadflag)
                     {
                         flag = true;
+                        addrloadflag = false;
+                        InstrPointer = target;
                     }
                     else if (flag && MyIsDigit(RealSource[i][j]))
                     {
-                        InstructionBlock[InstrPointer++] = (char)(((int)HexHash[RealSource[i][j]] << 4) | (int)HexHash[RealSource[i][j + 1]]);
+                        MachineCodeTest += RealSource[i][j];
+                        MachineCodeTest += RealSource[i][j+1];
+                        MemoryBlock[InstrPointer++] = (char)(((int)HexHash[RealSource[i][j]] << 4) | (int)HexHash[RealSource[i][j + 1]]);
                         j++;
                     }
-                    else if (RealSource[i][j] == '|')
+                    
+                    if (RealSource[i][j] == '|')
                     {
                         break;
                     }
                 }
             }
+            this.TestOutput.Text = MachineCodeTest;
             SourceIsLoaded = true;
             SourceInit();
         }
@@ -662,9 +696,11 @@ namespace r1
                 RegisterValue[i] = 0;
             CLOCK = 0;
             F_predPC = 0;
-            F_predPC_s = F_predPC.ToString("H16");
-            F_stall = F_bubble = D_stall = D_bubble = E_stall = E_bubble = W_stall = W_bubble = M_stall = M_bubble = false;
+            F_predPC_s = F_predPC.ToString("X16");
+            F_stall =  D_stall =  E_stall =  W_stall =  M_stall =  false;
             ZF = SF = OF = e_setCC = e_Cnd = false;
+            F_bubble = D_bubble = E_bubble = W_bubble = M_bubble = true;
+            GUIUpdate();
             //ProgramStat = "AOK";
 
 
