@@ -258,7 +258,21 @@ namespace r1
             this.WIinstr.Text = FunctionCollection[m_icode][m_ifun];
             this.MSinstr.Text = FunctionCollection[M_icode][M_ifun];
             this.WSinstr.Text = FunctionCollection[W_icode][W_ifun];
-            
+            this.Hrax.Text = (RegisterValue[0]).ToString("H16");
+            this.Hrcx.Text = (RegisterValue[1]).ToString("H16");
+            this.Hrdx.Text = (RegisterValue[2]).ToString("H16");
+            this.Hrbx.Text = (RegisterValue[3]).ToString("H16");
+            this.Hrsp.Text = (RegisterValue[4]).ToString("H16");
+            this.Hrbp.Text = (RegisterValue[5]).ToString("H16");
+            this.Hrsi.Text = (RegisterValue[6]).ToString("H16");
+            this.Hrdi.Text = (RegisterValue[7]).ToString("H16");
+            this.Hr8.Text = (RegisterValue[8]).ToString("H16");
+            this.Hr9.Text = (RegisterValue[9]).ToString("H16");
+            this.Hr10.Text = (RegisterValue[10]).ToString("H16");
+            this.Hr11.Text = (RegisterValue[11]).ToString("H16");
+            this.Hr12.Text = (RegisterValue[12]).ToString("H16");
+            this.Hr13.Text = (RegisterValue[13]).ToString("H16");
+            this.Hr14.Text = (RegisterValue[14]).ToString("H16");
         }
         private void ControlLogic()
         {
@@ -394,6 +408,9 @@ namespace r1
             {
                 //TODO:ICODEERROR
             }
+
+            if (f_icode == 0 && f_ifun == 0)
+                f_stat = "HLT";
         }
         private void Decode()
         {
@@ -543,6 +560,10 @@ namespace r1
             {
                 WriteRegister();
             }
+            if(W_stat == "HLT")
+            {
+                ProgramStat = "HLT";
+            }
         }
         private void Forward()
         {
@@ -631,6 +652,22 @@ namespace r1
         private void SourceInit()
         {
             ProgramStat = "AOK";
+            D_stat = "AOK"; D_icode = 1; D_ifun = 0; D_rA = "NONE"; D_rB = "NONE";
+            E_stat = "AOK"; E_icode = 1; E_ifun = 0; E_dstE = E_dstM = E_srcA = E_srcB = "NONE";
+            M_stat = "AOK"; M_icode = 1; M_ifun = 0; M_Cnd = false;M_dstE =  M_dstM = "NONE";
+            W_stat = "AOK"; W_icode = 1; W_dstE = W_dstM = "NONE";
+            f_PredictPC = 0;
+
+            for (int i = 0; i < 16; i++)
+                RegisterValue[i] = 0;
+            CLOCK = 0;
+            F_predPC = 0;
+            F_predPC_s = F_predPC.ToString("H16");
+            F_stall = F_bubble = D_stall = D_bubble = E_stall = E_bubble = W_stall = W_bubble = M_stall = M_bubble = false;
+            ZF = SF = OF = e_setCC = e_Cnd = false;
+            //ProgramStat = "AOK";
+
+
             //TODO
         }
         private bool MyIsDigit(char x)
