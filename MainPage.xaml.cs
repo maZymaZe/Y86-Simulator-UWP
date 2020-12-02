@@ -62,8 +62,6 @@ namespace r1
 
         long E_valA, e_valA, E_valB, e_valB, E_valC, e_valC, e_ALUfun, e_ALUA, e_ALUB, e_valE, E_icode, e_icode, E_ifun, e_ifun;
 
-      
-
         bool e_setCC, ZF, SF, OF, e_Cnd, E_stall, E_bubble;
 
         string M_stat, m_stat, M_instr, m_instr,M_dstE,M_dstM,m_dstE,m_dstM;
@@ -223,15 +221,13 @@ namespace r1
             if(!IsPause&&SourceIsLoaded&&ProgramStat=="AOK") PipelineWork();
             else
             {
+                GUIUpdate();
                 this.PlayButtom.Icon = new SymbolIcon((Symbol)57602);
                 this.PlayButtom.Label = "Play";
                 Timer.Stop();
                 IsPause = true;
             }
         }
-
-
-
 
         private void PipelineWork()
         {
@@ -248,37 +244,19 @@ namespace r1
             GUIUpdate();
         }
         private void GUIUpdate()
-        {
-            if (ProgramStat == "INS")
-            {
-                //TODO
-                return;
-            }
-            this.Finstr.Text = FunctionCollection[f_icode][f_ifun];
+        { 
             F_predPC_s = F_predPC.ToString("X16");
-            this.DIinstr.Text= FunctionCollection[f_icode][f_ifun];
-            this.EIinstr.Text = FunctionCollection[d_icode][d_ifun];
-            this.DSinstr.Text = FunctionCollection[D_icode][D_ifun];
-            this.MIinstr.Text = FunctionCollection[e_icode][e_ifun];
-            this.ESinstr.Text = FunctionCollection[E_icode][E_ifun];
-            this.WIinstr.Text = FunctionCollection[m_icode][m_ifun];
-            this.MSinstr.Text = FunctionCollection[M_icode][M_ifun];
-            this.WSinstr.Text = FunctionCollection[W_icode][W_ifun];
-            this.Hrax.Content = (RegisterValue[0]).ToString("X16");
-            this.Hrcx.Content = (RegisterValue[1]).ToString("X16");
-            this.Hrdx.Content = (RegisterValue[2]).ToString("X16");
-            this.Hrbx.Content = (RegisterValue[3]).ToString("X16");
-            this.Hrsp.Content = (RegisterValue[4]).ToString("X16");
-            this.Hrbp.Content = (RegisterValue[5]).ToString("X16");
-            this.Hrsi.Content = (RegisterValue[6]).ToString("X16");
-            this.Hrdi.Content = (RegisterValue[7]).ToString("X16");
-            this.Hr8.Content = (RegisterValue[8]).ToString("X16");
-            this.Hr9.Content = (RegisterValue[9]).ToString("X16");
-            this.Hr10.Content = (RegisterValue[10]).ToString("X16");
-            this.Hr11.Content = (RegisterValue[11]).ToString("X16");
-            this.Hr12.Content = (RegisterValue[12]).ToString("X16");
-            this.Hr13.Content = (RegisterValue[13]).ToString("X16");
-            this.Hr14.Content = (RegisterValue[14]).ToString("X16");
+            this.Finstr.Text = (f_icode<FunctionCollection.Length && f_ifun<FunctionCollection[f_icode].Length) ? FunctionCollection[f_icode][f_ifun] : "UKI";
+            this.DIinstr.Text = (f_icode < FunctionCollection.Length && f_ifun < FunctionCollection[f_icode].Length) ? FunctionCollection[f_icode][f_ifun] : "UKI";
+            this.EIinstr.Text = (d_icode < FunctionCollection.Length && d_ifun < FunctionCollection[d_icode].Length) ? FunctionCollection[d_icode][d_ifun] : "UKI";
+            this.DSinstr.Text = (D_icode < FunctionCollection.Length && D_ifun < FunctionCollection[D_icode].Length) ? FunctionCollection[D_icode][D_ifun] : "UKI";
+            this.MIinstr.Text = (e_icode < FunctionCollection.Length && e_ifun < FunctionCollection[e_icode].Length) ? FunctionCollection[e_icode][e_ifun] : "UKI";
+            this.ESinstr.Text = (E_icode < FunctionCollection.Length && E_ifun < FunctionCollection[E_icode].Length) ? FunctionCollection[E_icode][E_ifun] : "UKI";
+            this.WIinstr.Text = (m_icode < FunctionCollection.Length && m_ifun < FunctionCollection[m_icode].Length) ? FunctionCollection[m_icode][m_ifun] : "UKI";
+            this.MSinstr.Text = (M_icode < FunctionCollection.Length && M_ifun < FunctionCollection[M_icode].Length) ? FunctionCollection[M_icode][M_ifun] : "UKI";
+            this.WSinstr.Text = (W_icode < FunctionCollection.Length && W_ifun < FunctionCollection[W_icode].Length) ? FunctionCollection[W_icode][W_ifun] : "UKI";
+            ToggleButton[] registers = new ToggleButton[15] { Hrax, Hrcx, Hrdx, Hrbx, Hrsp, Hrbp, Hrsi, Hrdi, Hr8, Hr9, Hr10, Hr11, Hr12, Hr13, Hr14 };
+            for(int i=0;i<15;i++)registers[i].Content= (RegisterValue[i]).ToString("X16");
             Bindings.Update();
             if (LineHash.Contains(F_predPC)){
                 this.SourceListView.SelectedIndex = (int)LineHash[F_predPC];
@@ -759,13 +737,13 @@ namespace r1
         {
             //Do some work to show new Content! Once the work is done, call RefreshCompletionDeferral.Complete()
             this.RefreshCompletionDeferralForSource = args.GetDeferral();
-           // this.DoWork();
+          
         }
         private void MemoryViewer_RefreshRequested(RefreshContainer sender, RefreshRequestedEventArgs args)
         {
             //Do some work to show new Content! Once the work is done, call RefreshCompletionDeferral.Complete()
             this.RefreshCompletionDeferralForMemory = args.GetDeferral();
-            // this.DoWork();
+
         }
 
         private void WorkCompletedForSource()

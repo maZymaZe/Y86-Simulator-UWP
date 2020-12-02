@@ -44,14 +44,14 @@
                 </Border>
                 <Border  Grid.Column="1" Background="#FF9AFCF0" >
                     <StackPanel>
-                        <ToggleButton Content="HEX" Height="34.6" Width="203" IsEnabled="False" Margin="2,2,2,2"/>
-                        <ToggleButton x:Name="Hrax" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
-                        <ToggleButton x:Name="Hrcx" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
-                        <ToggleButton x:Name="Hrdx" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
-                        <ToggleButton x:Name="Hrbx" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
-                        <ToggleButton x:Name="Hrsp" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
-                        <ToggleButton x:Name="Hrbp" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
-                        <ToggleButton x:Name="Hrsi" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton Content="HEX" Height="30.6" Width="203" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hrax" Content="" Height="30.6" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hrcx" Content="" Height="30.6" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hrdx" Content="" Height="30.6" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hrbx" Content="" Height="30.6" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hrsp" Content="" Height="30.6" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hrbp" Content="" Height="30.6" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hrsi" Content="" Height="30.6" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
                        
 
                     </StackPanel>
@@ -71,14 +71,14 @@
                 </Border>
                 <Border Grid.Column="3" Background="#FF9AFCF0" >
                     <StackPanel>
-                        <ToggleButton x:Name="Hrdi" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
-                        <ToggleButton x:Name="Hr8" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
-                        <ToggleButton x:Name="Hr9" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
-                        <ToggleButton x:Name="Hr10" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
-                        <ToggleButton x:Name="Hr11" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
-                        <ToggleButton x:Name="Hr12" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
-                        <ToggleButton x:Name="Hr13" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
-                        <ToggleButton x:Name="Hr14" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hrdi" Content="" Height="30.6" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hr8" Content="" Height="30.6" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hr9" Content="" Height="30.6" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hr10" Content="" Height="30.6" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hr11" Content="" Height="30.6" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hr12" Content="" Height="30.6" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hr13" Content="" Height="30.6" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hr14" Content="" Height="30.6" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
                     </StackPanel>
                 </Border>
               
