@@ -44,14 +44,15 @@
                 </Border>
                 <Border  Grid.Column="1" Background="#FF9AFCF0" >
                     <StackPanel>
-                        <TextBox Text="HEX" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hrax" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hrcx" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hrdx" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hrbx" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hrsp" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hrbp" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hrsi" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
+                        <ToggleButton Content="HEX" Height="34.6" Width="203" IsEnabled="False" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hrax" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hrcx" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hrdx" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hrbx" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hrsp" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hrbp" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hrsi" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                       
 
                     </StackPanel>
                 </Border>
@@ -70,16 +71,14 @@
                 </Border>
                 <Border Grid.Column="3" Background="#FF9AFCF0" >
                     <StackPanel>
-                        <TextBox x:Name="Hrdi" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hr8" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hr9" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hr10" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hr11" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hr12" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hr13" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
-                        <TextBox x:Name="Hr14" Text="" TextWrapping="Wrap" Height="34.6" IsReadOnly="True" TextAlignment="Center"/>
-
-
+                        <ToggleButton x:Name="Hrdi" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hr8" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hr9" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hr10" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hr11" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hr12" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hr13" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
+                        <ToggleButton x:Name="Hr14" Content="" Height="30" Width="200" IsEnabled="True" Margin="2,2,2,2"/>
                     </StackPanel>
                 </Border>
               
@@ -110,7 +109,8 @@
                             <StackPanel Orientation="Horizontal">
                                 <AppBarButton x:Name="OpenFileBottom" Icon="OpenFile"  Label="OpenFile" Click="OpenFileButton_Click"/>
                                 <AppBarButton x:Name="Reset" Icon="Redo" Label="Reset" Click="Reset_Click"/>
-                                <AppBarButton Icon="Previous" Label="Previous"/>
+                                <AppBarButton x:Name="Refresh" Icon="Refresh" Label="Refresh" Click="Refresh_Click"/>
+                                <AppBarButton x:Name="PreviousBottom" Icon="Previous" Label="Previous" Click="PreviousBottom_Click"/>
                                 <AppBarButton x:Name="PlayButtom" Icon="Play"  Label="Play" Click="PlayButtom_Click"/>
                                 <AppBarButton x:Name="Next" Icon="Next" Label="Next" Click="Next_Click"  />
 
@@ -172,10 +172,10 @@
                                     <TextBox Text="State" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="1" Background="#FFD44848">
-                                    <TextBox x:Name="Fstat" Text="{x:Bind f_stat,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="Fstat" Text="{x:Bind f_stat}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="2" Background="#FFD44848">
-                                    <TextBox x:Name="FpredPC" Text="{x:Bind F_predPC_s,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="FpredPC" Text="{x:Bind F_predPC_s}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="3" Background="#FFD44848">
                                     <TextBox x:Name="Finstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
@@ -225,16 +225,16 @@
                                     <TextBox Text="SF" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="0" >
-                                    <TextBox x:Name="CCLOCK" Text="{x:Bind CLOCK,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="CCLOCK" Text="{x:Bind CLOCK}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="1" >
-                                    <TextBox x:Name="CZF" Text="{x:Bind ZF,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" Height="25" VerticalAlignment="Top"/>
+                                    <TextBox x:Name="CZF" Text="{x:Bind ZF}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" Height="25" VerticalAlignment="Top"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="2" >
-                                    <TextBox x:Name="COF" Text="{x:Bind OF,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="COF" Text="{x:Bind OF}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="3" >
-                                    <TextBox x:Name="CSF" Text="{x:Bind SF,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="CSF" Text="{x:Bind SF}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                             </Grid>
                         </Border>
@@ -287,43 +287,43 @@
                                     <TextBox Text="State" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="1" >
-                                    <TextBox x:Name="DSstat" Text="{x:Bind D_stat,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="DSstat" Text="{x:Bind D_stat}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="2" >
                                     <TextBox x:Name="DSinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="3" >
-                                    <TextBox x:Name="DSrA" Text="{x:Bind D_rA,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="DSrA" Text="{x:Bind D_rA}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="4" >
-                                    <TextBox x:Name="DSrB" Text="{x:Bind D_rB,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="DSrB" Text="{x:Bind D_rB}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="5" >
-                                    <TextBox x:Name="DSvalC" Text="{x:Bind D_valC,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="DSvalC" Text="{x:Bind D_valC}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="6" >
-                                    <TextBox x:Name="DSvalP" Text="{x:Bind D_valP,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="DSvalP" Text="{x:Bind D_valP}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="2" Grid.Column="0" >
                                     <TextBox Text="Input" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="2" Grid.Column="1" >
-                                    <TextBox x:Name="DIstat" Text="{x:Bind f_stat,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="DIstat" Text="{x:Bind f_stat}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="2" Grid.Column="2" >
                                     <TextBox x:Name="DIinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="2" Grid.Column="3" >
-                                    <TextBox x:Name="DIrA" Text="{x:Bind f_rA,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="DIrA" Text="{x:Bind f_rA}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="2" Grid.Column="4" >
-                                    <TextBox x:Name="DIrB" Text="{x:Bind f_rB,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="DIrB" Text="{x:Bind f_rB}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="2" Grid.Column="5" >
-                                    <TextBox x:Name="DIvalC" Text="{x:Bind f_valC,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="DIvalC" Text="{x:Bind f_valC}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="2" Grid.Column="6" >
-                                    <TextBox x:Name="DIvalP" Text="{x:Bind f_valP,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="DIvalP" Text="{x:Bind f_valP}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                             </Grid>
                         </Border>
@@ -400,61 +400,61 @@
                             <TextBox Text="State" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="1" >
-                            <TextBox x:Name="ESstat" Text="{x:Bind E_stat,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="ESstat" Text="{x:Bind E_stat}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="2"  >
                             <TextBox x:Name="ESinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="3" >
-                            <TextBox x:Name="ESvalC" Text="{x:Bind E_valC,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="ESvalC" Text="{x:Bind E_valC}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="4"  >
-                            <TextBox x:Name="ESvalA" Text="{x:Bind E_valA,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="ESvalA" Text="{x:Bind E_valA}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="5" >
-                            <TextBox x:Name="ESvalB" Text="{x:Bind E_valB,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="ESvalB" Text="{x:Bind E_valB}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="6" >
-                            <TextBox x:Name="ESdstE" Text="{x:Bind E_dstE,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                            <TextBox x:Name="ESdstE" Text="{x:Bind E_dstE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
                         </Border>
                         <Border Grid.Row="1" Grid.Column="7" >
-                            <TextBox x:Name="ESdstM" Text="{x:Bind E_dstM,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="ESdstM" Text="{x:Bind E_dstM}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="8" >
-                            <TextBox x:Name="ESsrcA" Text="{x:Bind E_srcA,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                            <TextBox x:Name="ESsrcA" Text="{x:Bind E_srcA}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
                         </Border>
                         <Border Grid.Row="1" Grid.Column="9" >
-                            <TextBox x:Name="ESsrcB" Text="{x:Bind E_srcB,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="ESsrcB" Text="{x:Bind E_srcB}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="0" >
                             <TextBox Text="Input" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="1" >
-                            <TextBox x:Name="EIstat" Text="{x:Bind d_stat,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="EIstat" Text="{x:Bind d_stat}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="2"  >
                             <TextBox x:Name="EIinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="3" >
-                            <TextBox x:Name="EIvalC" Text="{x:Bind d_valC,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="EIvalC" Text="{x:Bind d_valC}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="4"  >
-                            <TextBox x:Name="EIvalA" Text="{x:Bind d_valA,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="EIvalA" Text="{x:Bind d_valA}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="5" >
-                            <TextBox x:Name="EIvalB" Text="{x:Bind d_valB,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="EIvalB" Text="{x:Bind d_valB}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="6" >
-                            <TextBox x:Name="EIdstE" Text="{x:Bind d_dstE,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                            <TextBox x:Name="EIdstE" Text="{x:Bind d_dstE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
                         </Border>
                         <Border Grid.Row="2" Grid.Column="7" >
-                            <TextBox x:Name="EIdstM" Text="{x:Bind d_dstM,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                            <TextBox x:Name="EIdstM" Text="{x:Bind d_dstM}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
                         </Border>
                         <Border Grid.Row="2" Grid.Column="8" >
-                            <TextBox x:Name="EIsrcA" Text="{x:Bind d_srcA,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                            <TextBox x:Name="EIsrcA" Text="{x:Bind d_srcA}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
                         </Border>
                         <Border Grid.Row="2" Grid.Column="9" >
-                            <TextBox x:Name="EIsrcB" Text="{x:Bind d_srcB,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="EIsrcB" Text="{x:Bind d_srcB}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                     </Grid>
                 </Border>
@@ -505,50 +505,50 @@
                             <TextBox Text="State" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="1" >
-                            <TextBox x:Name="MSstat" Text="{x:Bind M_stat,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                            <TextBox x:Name="MSstat" Text="{x:Bind M_stat}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
                         </Border>
                         <Border Grid.Row="1" Grid.Column="2"  >
                             <TextBox x:Name="MSinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="3" >
-                            <TextBox x:Name="MScnd" Text="{x:Bind M_Cnd,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="MScnd" Text="{x:Bind M_Cnd}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="4"  >
-                            <TextBox x:Name="MSvalE" Text="{x:Bind M_valE,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="MSvalE" Text="{x:Bind M_valE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="5" >
-                            <TextBox x:Name="MSvalA" Text="{x:Bind M_valA,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="MSvalA" Text="{x:Bind M_valA}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="6" >
-                            <TextBox x:Name="MSdstE" Text="{x:Bind M_dstE,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                            <TextBox x:Name="MSdstE" Text="{x:Bind M_dstE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
                         </Border>
                         <Border Grid.Row="1" Grid.Column="7" >
-                            <TextBox x:Name="MSdstM" Text="{x:Bind M_dstM,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="MSdstM" Text="{x:Bind M_dstM}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
 
                         <Border Grid.Row="2" Grid.Column="0" >
                             <TextBox Text="Input" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="1" >
-                            <TextBox x:Name="MIstat" Text="{x:Bind d_stat,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="MIstat" Text="{x:Bind d_stat}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="2"  >
                             <TextBox x:Name="MIinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="3" >
-                            <TextBox x:Name="MIcnd" Text="{x:Bind e_Cnd,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="MIcnd" Text="{x:Bind e_Cnd}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="4"  >
-                            <TextBox x:Name="MIvalE" Text="{x:Bind e_valE,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="MIvalE" Text="{x:Bind e_valE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="5" >
-                            <TextBox x:Name="MIvalA" Text="{x:Bind e_valA,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="MIvalA" Text="{x:Bind e_valA}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="6" >
-                            <TextBox x:Name="MIdstE" Text="{x:Bind e_dstE,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                            <TextBox x:Name="MIdstE" Text="{x:Bind e_dstE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
                         </Border>
                         <Border Grid.Row="2" Grid.Column="7" >
-                            <TextBox x:Name="MIdstM" Text="{x:Bind e_dstM,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                            <TextBox x:Name="MIdstM" Text="{x:Bind e_dstM}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
                         </Border>
 
                     </Grid>
@@ -596,44 +596,44 @@
                             <TextBox Text="State" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="1" >
-                            <TextBox x:Name="WSstat" Text="{x:Bind W_stat,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                            <TextBox x:Name="WSstat" Text="{x:Bind W_stat}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
                         </Border>
                         <Border Grid.Row="1" Grid.Column="2"  >
                             <TextBox x:Name="WSinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="3"  >
-                            <TextBox x:Name="WSvalE" Text="{x:Bind W_valE,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="WSvalE" Text="{x:Bind W_valE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="4" >
-                            <TextBox x:Name="WSvalM" Text="{x:Bind W_valM,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="WSvalM" Text="{x:Bind W_valM}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="1" Grid.Column="5" >
-                            <TextBox x:Name="WSdstE" Text="{x:Bind W_dstE,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                            <TextBox x:Name="WSdstE" Text="{x:Bind W_dstE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
                         </Border>
                         <Border Grid.Row="1" Grid.Column="6" >
-                            <TextBox x:Name="WSdstM" Text="{x:Bind W_dstM,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="WSdstM" Text="{x:Bind W_dstM}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
 
                         <Border Grid.Row="2" Grid.Column="0" >
                             <TextBox Text="Input" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="1" >
-                            <TextBox x:Name="WIstat" Text="{x:Bind m_stat,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="WIstat" Text="{x:Bind m_stat}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="2"  >
                             <TextBox x:Name="WIinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="3"  >
-                            <TextBox x:Name="WIvalE" Text="{x:Bind m_valE,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="WIvalE" Text="{x:Bind m_valE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="4" >
-                            <TextBox x:Name="WIvalM" Text="{x:Bind m_valM,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                            <TextBox x:Name="WIvalM" Text="{x:Bind m_valM}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                         </Border>
                         <Border Grid.Row="2" Grid.Column="5" >
-                            <TextBox x:Name="WIdstE" Text="{x:Bind m_dstE,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                            <TextBox x:Name="WIdstE" Text="{x:Bind m_dstE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
                         </Border>
                         <Border Grid.Row="2" Grid.Column="6" >
-                            <TextBox x:Name="WIdstM" Text="{x:Bind m_dstM,Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
+                            <TextBox x:Name="WIdstM" Text="{x:Bind m_dstM}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
                         </Border>
 
                     </Grid>

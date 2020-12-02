@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -26,13 +27,12 @@ namespace r1
     {
         ObservableCollection<string> SourceList = new ObservableCollection<string>();
         ObservableCollection<string> MemoryList_s = new ObservableCollection<string>();
-        bool IsPause = false,SourceIsLoaded=false;
+        bool IsPause = false, SourceIsLoaded = false;
         string[] RealSource;
-        string PlayButtomTag = "";
         Windows.Storage.StorageFile SourceFile;
         string SourceText;
-        DispatcherTimer Timer=new DispatcherTimer();
-        string MachineCodeTest ="";
+        DispatcherTimer Timer = new DispatcherTimer();
+        string MachineCodeTest = "";
 
 
 
@@ -41,34 +41,25 @@ namespace r1
             R10 = 10, R11 = 11, R12 = 12, R13 = 13, R14 = 14, NONE = 15;
 
         long[] RegisterValue = new long[16];
-        long CLOCK=0;
+        long CLOCK = 0;
 
         long F_predPC, f_SelectPC, f_pc, f_Split, f_icode, f_ifun, f_Align, f_NeedvalC, f_Needregids, f_valP, f_valC, f_PredictPC;
         string F_predPC_s, f_stat, f_rA, f_rB;
         bool f_imem_error;
-        bool F_stall,F_bubble;
+        bool F_stall, F_bubble;
 
 
-        string D_stat, d_stat, D_instr, d_instr,D_rA,d_srcA,D_rB,d_srcB, d_dstE, d_dstM;
+        string D_stat, d_stat, D_instr, d_instr, D_rA, d_srcA, D_rB, d_srcB, d_dstE, d_dstM;
         long D_valC, d_valC, D_valP, d_valP, d_icode, d_ifun, D_icode, D_ifun;
         long d_rvalA, d_rvalB, d_valA, d_valB;
-        bool D_stall,D_bubble;
+        bool D_stall, D_bubble;
 
-        string ProgramStat;
-
-      
-
-        private void SpeedSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
-        {
-            this.Timer.Interval = new TimeSpan(0,0,0,0,(int)(1000/SpeedSlider.Value));
-        }
-
-        private void Next_Click(object sender, RoutedEventArgs e)
-        {
-            if (ProgramStat == "AOK"&&SourceIsLoaded) PipelineWork();
-        }
+        string ProgramStat, INSMessage;
 
         string E_stat, e_stat, E_instr, e_instr, E_dstE, e_dstE, E_dstM, e_dstM, E_srcA, e_srcA, E_srcB, e_srcB;
+
+        SolidColorBrush RegisterHighlight = new SolidColorBrush(Windows.UI.Color.FromArgb(1, 120, 133, 116));
+
         long E_valA, e_valA, E_valB, e_valB, E_valC, e_valC, e_ALUfun, e_ALUA, e_ALUB, e_valE, E_icode, e_icode, E_ifun, e_ifun;
 
       
@@ -113,8 +104,10 @@ namespace r1
         {
             { '0',0},{'1',1 },{'2',2},{'3',3},{'4',4},{'5',5},{'6',6},{'7',7},{'8',8},{'9',9},{'A',10},{'a',10},{'b',11},{'B',11},{'C',12},{'c',12},{'D',13},{'d',13},{'E',14},{'e',14},{'F',15},{'f',15}
         };
+        Hashtable LineHash = new Hashtable();
 
         char[] MemoryBlock = new char[1 << 20];
+        char[] MemoryBlockCopy = new char[1 << 20];
         long InstrPointer=0;
         long DataEntry, DataExit;
         //****************************************************************************
@@ -133,8 +126,9 @@ namespace r1
         }
         private void WriteRegister()
         {
-            if (W_dstM != "None") { RegisterValue[(int)RegisterHash[W_dstM]] = W_valM; }
-            if(W_dstE != "None"){ RegisterValue[(int)RegisterHash[W_dstE]] = W_valE; }
+            if(W_dstE != "NONE"){ RegisterValue[(int)RegisterHash[W_dstE]] = W_valE; }
+            if (W_dstM != "NONE") { RegisterValue[(int)RegisterHash[W_dstM]] = W_valM; }
+            RegisterChange();
         }
 
         //****************************************************************************
@@ -160,16 +154,13 @@ namespace r1
             {
                 ZF = (e_valE == 0);
                 SF = (e_valE < 0);
-                if (e_ALUA >= 0 && e_ALUB >= 0 && e_valE < 0)
-                {
-                    OF = true;
-                }else if (e_ALUA < 0 && e_ALUB < 0 && e_valE >= 0)
-                {
-                    OF = true;
+
+                if (e_ALUfun != 1) { 
+                    OF = (e_ALUA < 0 && e_ALUB < 0 && e_valE >= 0)||(e_ALUA >= 0 && e_ALUB >= 0 && e_valE < 0);
                 }
                 else
                 {
-                    OF = false;
+                    OF = (e_ALUB >= e_ALUA && e_valE < 0) || (e_ALUB <= e_ALUA && e_valE > 0);
                 }
             }
         }
@@ -202,7 +193,7 @@ namespace r1
         private long Get8Bytes(long addr)
         {
             long ret = 0;
-            for(int i = 0; i < 8; i++)
+            for(int i = 7; i >= 0; i--)
             {
                 ret = (ret << 8) + (long)MemoryBlock[addr + i];
             }
@@ -211,7 +202,7 @@ namespace r1
         private void Write8Bytes(long addr)
         {
             long tmp = DataEntry;
-            for(int i = 7; i >= 0; i--)
+            for(int i=0;i<8;i++)
             {
                 MemoryBlock[addr + i] = (char)(tmp & 0xff);
                 tmp >>= 8;
@@ -258,6 +249,11 @@ namespace r1
         }
         private void GUIUpdate()
         {
+            if (ProgramStat == "INS")
+            {
+                //TODO
+                return;
+            }
             this.Finstr.Text = FunctionCollection[f_icode][f_ifun];
             F_predPC_s = F_predPC.ToString("X16");
             this.DIinstr.Text= FunctionCollection[f_icode][f_ifun];
@@ -268,33 +264,37 @@ namespace r1
             this.WIinstr.Text = FunctionCollection[m_icode][m_ifun];
             this.MSinstr.Text = FunctionCollection[M_icode][M_ifun];
             this.WSinstr.Text = FunctionCollection[W_icode][W_ifun];
-            this.Hrax.Text = (RegisterValue[0]).ToString("X16");
-            this.Hrcx.Text = (RegisterValue[1]).ToString("X16");
-            this.Hrdx.Text = (RegisterValue[2]).ToString("X16");
-            this.Hrbx.Text = (RegisterValue[3]).ToString("X16");
-            this.Hrsp.Text = (RegisterValue[4]).ToString("X16");
-            this.Hrbp.Text = (RegisterValue[5]).ToString("X16");
-            this.Hrsi.Text = (RegisterValue[6]).ToString("X16");
-            this.Hrdi.Text = (RegisterValue[7]).ToString("X16");
-            this.Hr8.Text = (RegisterValue[8]).ToString("X16");
-            this.Hr9.Text = (RegisterValue[9]).ToString("X16");
-            this.Hr10.Text = (RegisterValue[10]).ToString("X16");
-            this.Hr11.Text = (RegisterValue[11]).ToString("X16");
-            this.Hr12.Text = (RegisterValue[12]).ToString("X16");
-            this.Hr13.Text = (RegisterValue[13]).ToString("X16");
-            this.Hr14.Text = (RegisterValue[14]).ToString("X16");
+            this.Hrax.Content = (RegisterValue[0]).ToString("X16");
+            this.Hrcx.Content = (RegisterValue[1]).ToString("X16");
+            this.Hrdx.Content = (RegisterValue[2]).ToString("X16");
+            this.Hrbx.Content = (RegisterValue[3]).ToString("X16");
+            this.Hrsp.Content = (RegisterValue[4]).ToString("X16");
+            this.Hrbp.Content = (RegisterValue[5]).ToString("X16");
+            this.Hrsi.Content = (RegisterValue[6]).ToString("X16");
+            this.Hrdi.Content = (RegisterValue[7]).ToString("X16");
+            this.Hr8.Content = (RegisterValue[8]).ToString("X16");
+            this.Hr9.Content = (RegisterValue[9]).ToString("X16");
+            this.Hr10.Content = (RegisterValue[10]).ToString("X16");
+            this.Hr11.Content = (RegisterValue[11]).ToString("X16");
+            this.Hr12.Content = (RegisterValue[12]).ToString("X16");
+            this.Hr13.Content = (RegisterValue[13]).ToString("X16");
+            this.Hr14.Content = (RegisterValue[14]).ToString("X16");
             Bindings.Update();
+            if (LineHash.Contains(F_predPC)){
+                this.SourceListView.SelectedIndex = (int)LineHash[F_predPC];
+                SourceListView.ScrollIntoView(SourceListView.SelectedItem);
+            }
         }
         private void ControlLogic()
         {
-            F_stall = (((E_icode == 5 || E_icode == 11) && (E_dstM == d_srcA || E_dstM == d_srcB)) || (D_icode == 9 || E_icode == 9 || M_icode == 9));
+            F_stall = (((E_icode == 5 || E_icode == 11) && (E_dstM == d_srcA || E_dstM == d_srcB)) || (D_icode == 9 || E_icode == 9 || M_icode == 9) || (D_icode == 0 || E_icode == 0 || M_icode == 0));
             F_bubble = false;
 
             D_stall = ((E_icode == 5 || E_icode == 11) && (E_dstM == d_srcA || E_dstM == d_srcB));
-            D_bubble = ((E_icode == 7 && E_ifun > 0 && !e_Cnd) || (!((E_icode == 5 || E_icode == 11) && (E_dstM == d_srcA || E_dstM == d_srcB)) && (D_icode == 9 || E_icode == 9 || M_icode == 9)));
+            D_bubble = ((E_icode == 7 && E_ifun > 0 && !e_Cnd) || (!((E_icode == 5 || E_icode == 11) && (E_dstM == d_srcA || E_dstM == d_srcB)) && (D_icode == 9 || E_icode == 9 || M_icode == 9)) || (D_icode == 0 || E_icode == 0 || M_icode == 0));
 
             E_stall = false;
-            E_bubble = (E_icode == 7 && E_ifun > 0 && !e_Cnd) || ((E_icode == 5 || E_icode == 11) && (E_dstM == d_srcA || E_dstM == d_srcB));
+            E_bubble = (E_icode == 7 && E_ifun > 0 && !e_Cnd) || ((E_icode == 5 || E_icode == 11) && (E_dstM == d_srcA || E_dstM == d_srcB)) ;
 
             M_stall = false;
             M_bubble = false;
@@ -349,7 +349,7 @@ namespace r1
         private long Trans8Bytes(long index){
             long ret=0;
             for(int i=0;i<8;i++){
-                ret|=(long)(MemoryBlock[index+i]<<(i<<3));
+                ret+=(long)((long)(MemoryBlock[index+i])<<(i*8));
             }
             return ret;            
         }
@@ -425,11 +425,15 @@ namespace r1
             }
             else
             {
+                ProgramStat="INS";
+                INSMessage="Unexpeted Instruction:"+f_icode.ToString("X16")+f_ifun.ToString("X16")+"\r\n";
                 //TODO:ICODEERROR
             }
 
             if (f_icode == 0 && f_ifun == 0)
                 f_stat = "HLT";
+            else
+                f_stat = "AOK";
         }
         private void Decode()
         {
@@ -617,7 +621,7 @@ namespace r1
             //TODO
             SourceText = "NO INPUT YET";
             DataContext = this;
-            
+            Timer.Start();
             SourceIsLoaded = false;
             SourceList.Add("NO INPUT YET");
             WorkCompletedForMemory();
@@ -642,10 +646,10 @@ namespace r1
                 uint numBytesLoaded = await dataReader.LoadAsync((uint)size);
                 SourceText = dataReader.ReadString(numBytesLoaded);
                 RealSource=SourceText.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-                for(int i = 1; i <= RealSource.Length; i++)
+             /*   for(int i = 1; i <= RealSource.Length; i++)
                 {
                     SourceList.Add(i.ToString("D4")+"|    "+RealSource[i-1]);
-                }
+                }*/
             }
             this.SourceListView.SelectedIndex = 0;
             WorkCompletedForSource();
@@ -654,10 +658,14 @@ namespace r1
         private void LoadInstructions()
         {
             MachineCodeTest = "";
+            MemoryBlockCopy = new char[1 << 20];
+            int cnt = 0;
+            LineHash.Clear();
             for (int i = 0; i < RealSource.Length; i++)
             {
-                bool flag = false,addrloadflag=false;
+                bool flag = false,addrloadflag=false,ValidLineFlag=false;
                 long target=0;
+                int pos=0;
                 for (int j = 0; j < RealSource[i].Length; j++)
                 {
                     if (!addrloadflag && RealSource[i][j] == 'x')
@@ -676,16 +684,24 @@ namespace r1
                     }
                     else if (flag && MyIsDigit(RealSource[i][j]))
                     {
+                        ValidLineFlag = true;
                         MachineCodeTest += RealSource[i][j];
                         MachineCodeTest += RealSource[i][j+1];
-                        MemoryBlock[InstrPointer++] = (char)(((int)HexHash[RealSource[i][j]] << 4) | (int)HexHash[RealSource[i][j + 1]]);
+                        MemoryBlockCopy[InstrPointer++] = (char)(((int)HexHash[RealSource[i][j]] << 4) | (int)HexHash[RealSource[i][j + 1]]);
                         j++;
                     }
                     
                     if (RealSource[i][j] == '|')
                     {
+                        pos = j;
                         break;
                     }
+                }
+                if (flag&&ValidLineFlag)
+                {
+                    SourceList.Add(cnt.ToString("D4") + "|    " +RealSource[i].Substring(0,pos));
+                    LineHash.Add(target,cnt);
+                    cnt++;
                 }
             }
             this.TestOutput.Text = MachineCodeTest;
@@ -694,12 +710,21 @@ namespace r1
         }
         private void SourceInit()
         {
-            ProgramStat = "AOK";
-            D_stat = "AOK"; D_icode = 1; D_ifun = 0; D_rA = "NONE"; D_rB = "NONE";
-            E_stat = "AOK"; E_icode = 1; E_ifun = 0; E_dstE = E_dstM = E_srcA = E_srcB = "NONE";
-            M_stat = "AOK"; M_icode = 1; M_ifun = 0; M_Cnd = false;M_dstE =  M_dstM = "NONE";
-            W_stat = "AOK"; W_icode = 1; W_dstE = W_dstM = "NONE";
+            MemoryBlock = (char[])MemoryBlockCopy.Clone();
+            ProgramStat = "AOK"; INSMessage="";
+            f_stat=D_stat = "AOK"; f_icode=D_icode = 1; f_ifun=D_ifun = 0; f_rA=D_rA = "NONE"; f_rB=D_rB = "NONE";
+            d_stat=E_stat = "AOK"; d_icode=E_icode = 1; d_ifun=E_ifun = 0; d_dstE = d_dstM = d_srcA = d_srcB = E_dstE = E_dstM = E_srcA = E_srcB = "NONE";
+            e_stat=M_stat = "AOK"; e_icode=M_icode = 1; e_ifun=M_ifun = 0; e_Cnd=M_Cnd = false;e_dstE = e_dstM =M_dstE =  M_dstM = "NONE";
+            m_stat=W_stat = "AOK"; m_icode=W_icode = 1; m_ifun=W_ifun=w_ifun=0; m_dstE = m_dstM = W_dstE = W_dstM = "NONE";
             f_PredictPC = 0;
+
+            f_valP= f_valC = 0;
+            D_valC = d_valC = D_valP = d_valP = 0;
+            E_valA = e_valA = E_valB = e_valB = E_valC = e_valC = 0;
+            M_valE = m_valE = M_valA = m_valA = 0;
+            W_valE = W_valM = 0;
+
+
 
             for (int i = 0; i < 16; i++)
                 RegisterValue[i] = 0;
@@ -788,5 +813,45 @@ namespace r1
                 Timer.Stop();
             } 
         }
+
+        private void SpeedSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            this.Timer.Interval = new TimeSpan(0, 0, 0, 0, (int)(1000 / SpeedSlider.Value));
+        }
+
+        private void Next_Click(object sender, RoutedEventArgs e)
+        {
+            if (ProgramStat == "AOK" && SourceIsLoaded) PipelineWork();
+        }
+
+        private void PreviousBottom_Click(object sender, RoutedEventArgs e)
+        {
+            if (CLOCK == 0) return;  
+            long t = CLOCK - 1;
+            SourceInit();
+            for(int i = 0; i < t; i++)
+            {
+                PipelineWork();
+            }
+        }
+
+        private void Refresh_Click(object sender, RoutedEventArgs e)
+        {
+            if (CLOCK == 0) return;
+            SourceInit();
+        }
+        private void RegisterChange()
+        {
+            ToggleButton[] registers = new ToggleButton[15] { Hrax, Hrcx, Hrdx, Hrbx, Hrsp, Hrbp, Hrsi, Hrdi, Hr8, Hr9, Hr10, Hr11, Hr12, Hr13, Hr14 };
+            for (int i = 0; i < 15; i++) registers[i].IsChecked = false;
+            if(W_dstE!="NONE")
+            registers[(int)RegisterHash[W_dstE]].IsChecked=true;
+            if (W_dstM != "NONE")
+                registers[(int)RegisterHash[W_dstM]].IsChecked = true;
+
+
+        }
     }
+
 }
+
