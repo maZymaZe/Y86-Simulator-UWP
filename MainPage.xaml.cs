@@ -42,6 +42,7 @@ namespace r1
 
         long[] RegisterValue = new long[16];
         long CLOCK = 0;
+        long PenaltyCnt = 0;
 
         long F_predPC, f_SelectPC, f_pc, f_Split, f_icode, f_ifun, f_Align, f_NeedvalC, f_Needregids, f_valP, f_valC, f_PredictPC;
         string F_predPC_s, f_stat, f_rA, f_rB;
@@ -63,6 +64,7 @@ namespace r1
         long E_valA, e_valA, E_valB, e_valB, E_valC, e_valC, e_ALUfun, e_ALUA, e_ALUB, e_valE, E_icode, e_icode, E_ifun, e_ifun;
 
         bool e_setCC, ZF, SF, OF, e_Cnd, E_stall, E_bubble;
+        double CPI;
 
         string M_stat, m_stat, M_instr, m_instr,M_dstE,M_dstM,m_dstE,m_dstM;
         long M_valE, m_valE, M_valA, m_valA, m_Addr, M_icode, m_icode, M_ifun, m_ifun, m_valM;
@@ -234,6 +236,13 @@ namespace r1
             
             CLOCK++;
             RegUpdate();
+            //catch exception
+            if(W_stat!="AOK")
+            {
+                ProgramStat = W_stat;
+                GUIUpdate();
+                return;
+            }
             Fetch();
             Decode();
             Execute();
@@ -246,6 +255,7 @@ namespace r1
         private void GUIUpdate()
         { 
             F_predPC_s = F_predPC.ToString("X16");
+            CPI = (CLOCK-PenaltyCnt>0)?1.0 *  CLOCK/(CLOCK - PenaltyCnt):1.0 ;
             this.Finstr.Text = (f_icode<FunctionCollection.Length && f_ifun<FunctionCollection[f_icode].Length) ? FunctionCollection[f_icode][f_ifun] : "UKI";
             this.DIinstr.Text = (f_icode < FunctionCollection.Length && f_ifun < FunctionCollection[f_icode].Length) ? FunctionCollection[f_icode][f_ifun] : "UKI";
             this.EIinstr.Text = (d_icode < FunctionCollection.Length && d_ifun < FunctionCollection[d_icode].Length) ? FunctionCollection[d_icode][d_ifun] : "UKI";
@@ -258,7 +268,7 @@ namespace r1
             ToggleButton[] registers = new ToggleButton[15] { Hrax, Hrcx, Hrdx, Hrbx, Hrsp, Hrbp, Hrsi, Hrdi, Hr8, Hr9, Hr10, Hr11, Hr12, Hr13, Hr14 };
             for(int i=0;i<15;i++)registers[i].Content= (RegisterValue[i]).ToString("X16");
             Bindings.Update();
-            if (LineHash.Contains(F_predPC)){
+            if (SourceIsLoaded&&LineHash.Contains(F_predPC)){
                 this.SourceListView.SelectedIndex = (int)LineHash[F_predPC];
                 SourceListView.ScrollIntoView(SourceListView.SelectedItem);
             }
@@ -272,10 +282,12 @@ namespace r1
             D_bubble = ((E_icode == 7 && E_ifun > 0 && !e_Cnd) || (!((E_icode == 5 || E_icode == 11) && (E_dstM == d_srcA || E_dstM == d_srcB)) && (D_icode == 9 || E_icode == 9 || M_icode == 9)) || (D_icode == 0 || E_icode == 0 || M_icode == 0));
 
             E_stall = false;
-            E_bubble = (E_icode == 7 && E_ifun > 0 && !e_Cnd) || ((E_icode == 5 || E_icode == 11) && (E_dstM == d_srcA || E_dstM == d_srcB)) ;
+            E_bubble = (E_icode == 7 && E_ifun > 0 && !e_Cnd) || ((E_icode == 5 || E_icode == 11) && (E_dstM == d_srcA || E_dstM == d_srcB)) || (m_stat!="AOK");
 
             M_stall = false;
-            M_bubble = false;
+            M_bubble = (m_stat != "AOK");
+
+            PenaltyCnt += (E_bubble ? 1 : 0) + (D_bubble ? 1 : 0) + (M_bubble ? 1 : 0);
 
             W_stall = false;
             W_bubble = false;
@@ -325,6 +337,11 @@ namespace r1
 
         }
         private long Trans8Bytes(long index){
+            if(!AddrIsLigal(index))
+            {
+                f_stat = "ADR";
+                return 0;
+            }
             long ret=0;
             for(int i=0;i<8;i++){
                 ret+=(long)((long)(MemoryBlock[index+i])<<(i*8));
@@ -333,6 +350,7 @@ namespace r1
         }
         private void Fetch()
         {
+            f_stat = "AOK";
             if(M_icode==7 && M_ifun<=6 && M_ifun > 0 && !M_Cnd)
             {
                 f_pc = M_valA;
@@ -362,12 +380,16 @@ namespace r1
             {
                 f_rA = RegisterCollection[(MemoryBlock[f_pc + 1] >> 4) & 0xf];
                 f_rB = RegisterCollection[MemoryBlock[f_pc + 1] & 0xf];
+                if (f_rA == "NONE" || f_rB == "NONE")
+                    f_stat = "INS";
                 f_valP = f_pc + 2; f_PredictPC = f_valP;
             }
             else if(f_icode==3&&f_ifun==0 && ((MemoryBlock[f_pc + 1] >> 4) & 0xf)==0xf)
             {
                 f_rA = RegisterCollection[(MemoryBlock[f_pc + 1] >> 4) & 0xf];
                 f_rB = RegisterCollection[MemoryBlock[f_pc + 1] & 0xf];
+                if (f_rB == "NONE")
+                    f_stat = "INS";
                 f_valC = Trans8Bytes(f_pc + 2);
                 f_valP = f_pc + 10; f_PredictPC = f_valP;
             }
@@ -375,6 +397,8 @@ namespace r1
             {
                 f_rA = RegisterCollection[(MemoryBlock[f_pc + 1] >> 4) & 0xf];
                 f_rB = RegisterCollection[MemoryBlock[f_pc + 1] & 0xf];
+                if (f_rA == "NONE" || f_rB == "NONE")
+                    f_stat = "INS";
                 f_valC = Trans8Bytes(f_pc + 2);
                 f_valP = f_pc + 10; f_PredictPC = f_valP;
             }
@@ -382,6 +406,8 @@ namespace r1
             {
                 f_rA = RegisterCollection[(MemoryBlock[f_pc + 1] >> 4) & 0xf];
                 f_rB = RegisterCollection[MemoryBlock[f_pc + 1] & 0xf];
+                if (f_rA == "NONE" || f_rB == "NONE")
+                    f_stat = "INS";
                 f_valP = f_pc + 2; f_PredictPC = f_valP;
             }
             else if((f_icode==7&&f_ifun>=0&&f_ifun<=6) || (f_icode == 8 && f_ifun == 0))
@@ -399,19 +425,21 @@ namespace r1
             {
                 f_rA = RegisterCollection[(MemoryBlock[f_pc + 1] >> 4) & 0xf];
                 f_rB = RegisterCollection[MemoryBlock[f_pc + 1] & 0xf];
+                if (f_rA == "NONE")
+                    f_stat = "INS";
                 f_valP = f_pc + 2; f_PredictPC = f_valP;
             }
             else
             {
-                ProgramStat="INS";
+                f_stat = "INS";
+                //ProgramStat="INS";
                 INSMessage="Unexpeted Instruction:"+f_icode.ToString("X16")+f_ifun.ToString("X16")+"\r\n";
                 //TODO:ICODEERROR
             }
 
             if (f_icode == 0 && f_ifun == 0)
                 f_stat = "HLT";
-            else
-                f_stat = "AOK";
+            
         }
         private void Decode()
         {
@@ -550,6 +578,9 @@ namespace r1
                 MemoryRead();
             }
             m_stat = M_stat;
+            if (m_dmem_error)
+                m_stat = "ADR";
+
             //TODO:stat Error
             m_icode = M_icode;
             m_valE = M_valE;
@@ -557,7 +588,7 @@ namespace r1
             m_dstE = M_dstE;
             m_dstM = M_dstM;
             m_ifun = M_ifun;
-            m_stat = M_stat;
+            
         }
         private void WriteBack()
         {
@@ -611,11 +642,10 @@ namespace r1
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
             picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
             picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
-              //TODO:FIX THIS
-            picker.FileTypeFilter.Add(".txt");
+              //TODO:FIX THIS        
             picker.FileTypeFilter.Add(".yo");
-            picker.FileTypeFilter.Add(".cpp");
             SourceFile = await picker.PickSingleFileAsync();
+            if (SourceFile == null) return;
             var stream = await SourceFile.OpenAsync(Windows.Storage.FileAccessMode.Read);
             ulong size = stream.Size;
             SourceList.Clear();
@@ -695,18 +725,22 @@ namespace r1
             e_stat=M_stat = "AOK"; e_icode=M_icode = 1; e_ifun=M_ifun = 0; e_Cnd=M_Cnd = false;e_dstE = e_dstM =M_dstE =  M_dstM = "NONE";
             m_stat=W_stat = "AOK"; m_icode=W_icode = 1; m_ifun=W_ifun=w_ifun=0; m_dstE = m_dstM = W_dstE = W_dstM = "NONE";
             f_PredictPC = 0;
+            F_predPC = 0;
+            F_predPC_s = F_predPC.ToString("X16");
+
 
             f_valP= f_valC = 0;
-            D_valC = d_valC = D_valP = d_valP = 0;
+            D_valC = d_valC = D_valP = d_valP = d_valA = d_valB;
             E_valA = e_valA = E_valB = e_valB = E_valC = e_valC = 0;
-            M_valE = m_valE = M_valA = m_valA = 0;
+            M_valE = m_valE = M_valA = m_valA = m_valM = 0;
             W_valE = W_valM = 0;
-
+            m_dmem_error = false;
 
 
             for (int i = 0; i < 16; i++)
                 RegisterValue[i] = 0;
             CLOCK = 0;
+            PenaltyCnt = 0;
             F_predPC = 0;
             F_predPC_s = F_predPC.ToString("X16");
             F_stall =  D_stall =  E_stall =  W_stall =  M_stall =  false;
@@ -770,6 +804,7 @@ namespace r1
             SourceText = null;
             SourceList.Clear();
             RealSource = null;
+            SourceIsLoaded = false;
             WorkCompletedForSource();
             WorkCompletedForMemory();
             CLOCK = 0;

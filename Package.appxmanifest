@@ -9,7 +9,7 @@
   <Identity
     Name="872767c5-b2f0-407c-95db-aca436d08354"
     Publisher="CN=LENOVO"
-    Version="1.0.0.0" />
+    Version="1.0.2.0" />
 
   <mp:PhoneIdentity PhoneProductId="872767c5-b2f0-407c-95db-aca436d08354" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

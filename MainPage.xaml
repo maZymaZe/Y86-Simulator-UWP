@@ -181,7 +181,7 @@
                                     <TextBox x:Name="Finstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="1" Grid.Column="4" Background="#FFD44848">
-                                    <TextBox x:Name="FCPI" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                    <TextBox x:Name="FCPI" Text="{x:Bind CPI}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                 </Border>
                                 <Border Grid.Row="0" Grid.Column="0" Background="#FFD44848">
                                     <TextBox Text="FECTH" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
