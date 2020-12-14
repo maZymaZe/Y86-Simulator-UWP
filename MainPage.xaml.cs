@@ -216,6 +216,7 @@ namespace r1
             this.MemoryListView.ItemsSource = MemoryList_s;
             this.SourceListView.ItemsSource = SourceList;
             Preset();
+            
         }
         private void Timer_Tick(object sender, object e)
         { 
@@ -635,7 +636,8 @@ namespace r1
             SourceList.Add("NO INPUT YET");
             WorkCompletedForMemory();
             WorkCompletedForSource();
-            
+            this.DocsPageNavi.IsEnabled = true;
+
         }
         private async void OpenFileButton_Click(object sender, RoutedEventArgs e)
         {
@@ -818,12 +820,14 @@ namespace r1
             this.PlayButtom.Icon = new SymbolIcon((Symbol)57603);
                 this.PlayButtom.Label = "Pause";
                 Timer.Start();
+                this.DocsPageNavi.IsEnabled = false;
             }
             else
             {
                 this.PlayButtom.Icon = new SymbolIcon((Symbol)57602);
                 this.PlayButtom.Label = "Play";
                 Timer.Stop();
+                this.DocsPageNavi.IsEnabled = true;
             } 
         }
 
@@ -864,6 +868,39 @@ namespace r1
 
 
         }
+
+        private void NavigationView_SelectionChanged(object sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            /* NOTE: for this function to work, every NavigationView must follow the same naming convention: nvSample# (i.e. nvSample3),
+            and every corresponding content frame must follow the same naming convention: contentFrame# (i.e. contentFrame3) */
+
+            // Get the sample number
+           
+            if (args.IsSettingsSelected)
+            {
+              //  contentFrame.Navigate(typeof(SampleSettingsPage));
+            }
+            else
+            {
+                Frame rootFrame = Window.Current.Content as Frame;
+                var selectedItem = (NavigationViewItem)args.SelectedItem;
+                string selectedItemTag = ((string)selectedItem.Tag);
+                if (selectedItemTag == "MainPage")
+                {
+                   rootFrame.Navigate(typeof(MainPage));
+                   
+                }
+                else if (selectedItemTag == "DocsPage")
+                { 
+                    rootFrame.Navigate(typeof(DocsPage));
+                   
+                }
+            }
+        }
+
+
+
+
     }
 
 }
