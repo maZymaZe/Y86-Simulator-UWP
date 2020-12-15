@@ -16,7 +16,16 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1800*"/>
         </Grid.ColumnDefinitions>
-        
+        <muxc:NavigationView x:Name="Navi"  Height="auto" Width="auto" 
+                        PaneDisplayMode="LeftCompact"
+                        IsTabStop="False"
+                        SelectionChanged="NavigationView_SelectionChanged" IsPaneOpen="False"     
+                        >
+            <muxc:NavigationView.MenuItems>
+                <muxc:NavigationViewItem x:Name="SimulatorPageNavi" Content="Simulator" Icon="Play"  Tag="MainPage"  ToolTipService.ToolTip="here is the y86 simulator page"/>
+                <muxc:NavigationViewItem x:Name="DocsPageNavi" Content="Docs" Icon="Document"  Tag="DocsPage"  ToolTipService.ToolTip="here is the document page"/>
+            </muxc:NavigationView.MenuItems>
+        </muxc:NavigationView>
 
 
         <Border Grid.Column="0">
@@ -59,7 +68,7 @@
                     </Border>
                     <Border  Grid.Column="1" Background="#FF9AFCF0" >
                         <StackPanel>
-                            <ToggleButton Content="HEX" Height="30.6" Width="203" IsEnabled="True" Margin="2,2,2,2"/>
+                            <Button x:Name="HTOD" Content="HEX" Height="30.6" Width="203" IsEnabled="True" Margin="2,2,2,2" Click="HTOD_Click"/>
                             <ToggleButton x:Name="Hrax" Content="" Height="30.6" Width="190" IsEnabled="True" Margin="2,2,2,2"/>
                             <ToggleButton x:Name="Hrcx" Content="" Height="30.6" Width="190" IsEnabled="True" Margin="2,2,2,2"/>
                             <ToggleButton x:Name="Hrdx" Content="" Height="30.6" Width="190" IsEnabled="True" Margin="2,2,2,2"/>
@@ -314,10 +323,10 @@
                                         <TextBox x:Name="DSrB" Text="{x:Bind D_rB}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                     </Border>
                                     <Border Grid.Row="1" Grid.Column="5" >
-                                        <TextBox x:Name="DSvalC" Text="{x:Bind D_valC}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                        <TextBox x:Name="DSvalC" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                     </Border>
                                     <Border Grid.Row="1" Grid.Column="6" >
-                                        <TextBox x:Name="DSvalP" Text="{x:Bind D_valP}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                        <TextBox x:Name="DSvalP" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                     </Border>
                                     <Border Grid.Row="2" Grid.Column="0" >
                                         <TextBox Text="Input" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
@@ -335,10 +344,10 @@
                                         <TextBox x:Name="DIrB" Text="{x:Bind f_rB}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                     </Border>
                                     <Border Grid.Row="2" Grid.Column="5" >
-                                        <TextBox x:Name="DIvalC" Text="{x:Bind f_valC}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                        <TextBox x:Name="DIvalC" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                     </Border>
                                     <Border Grid.Row="2" Grid.Column="6" >
-                                        <TextBox x:Name="DIvalP" Text="{x:Bind f_valP}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                        <TextBox x:Name="DIvalP" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                                     </Border>
                                 </Grid>
                             </Border>
@@ -421,13 +430,13 @@
                                 <TextBox x:Name="ESinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="1" Grid.Column="3" >
-                                <TextBox x:Name="ESvalC" Text="{x:Bind E_valC}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                <TextBox x:Name="ESvalC" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="1" Grid.Column="4"  >
-                                <TextBox x:Name="ESvalA" Text="{x:Bind E_valA}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                <TextBox x:Name="ESvalA" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="1" Grid.Column="5" >
-                                <TextBox x:Name="ESvalB" Text="{x:Bind E_valB}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                <TextBox x:Name="ESvalB" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="1" Grid.Column="6" >
                                 <TextBox x:Name="ESdstE" Text="{x:Bind E_dstE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
@@ -451,13 +460,13 @@
                                 <TextBox x:Name="EIinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="2" Grid.Column="3" >
-                                <TextBox x:Name="EIvalC" Text="{x:Bind d_valC}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                <TextBox x:Name="EIvalC" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="2" Grid.Column="4"  >
-                                <TextBox x:Name="EIvalA" Text="{x:Bind d_valA}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                <TextBox x:Name="EIvalA" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="2" Grid.Column="5" >
-                                <TextBox x:Name="EIvalB" Text="{x:Bind d_valB}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                <TextBox x:Name="EIvalB" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="2" Grid.Column="6" >
                                 <TextBox x:Name="EIdstE" Text="{x:Bind d_dstE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
@@ -529,10 +538,10 @@
                                 <TextBox x:Name="MScnd" Text="{x:Bind M_Cnd}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="1" Grid.Column="4"  >
-                                <TextBox x:Name="MSvalE" Text="{x:Bind M_valE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                <TextBox x:Name="MSvalE" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="1" Grid.Column="5" >
-                                <TextBox x:Name="MSvalA" Text="{x:Bind M_valA}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                <TextBox x:Name="MSvalA" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="1" Grid.Column="6" >
                                 <TextBox x:Name="MSdstE" Text="{x:Bind M_dstE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
@@ -554,10 +563,10 @@
                                 <TextBox x:Name="MIcnd" Text="{x:Bind e_Cnd}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="2" Grid.Column="4"  >
-                                <TextBox x:Name="MIvalE" Text="{x:Bind e_valE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                <TextBox x:Name="MIvalE" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="2" Grid.Column="5" >
-                                <TextBox x:Name="MIvalA" Text="{x:Bind e_valA}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                <TextBox x:Name="MIvalA" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="2" Grid.Column="6" >
                                 <TextBox x:Name="MIdstE" Text="{x:Bind e_dstE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
@@ -617,10 +626,10 @@
                                 <TextBox x:Name="WSinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="1" Grid.Column="3"  >
-                                <TextBox x:Name="WSvalE" Text="{x:Bind W_valE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                <TextBox x:Name="WSvalE" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="1" Grid.Column="4" >
-                                <TextBox x:Name="WSvalM" Text="{x:Bind W_valM}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                <TextBox x:Name="WSvalM" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="1" Grid.Column="5" >
                                 <TextBox x:Name="WSdstE" Text="{x:Bind W_dstE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
@@ -639,10 +648,10 @@
                                 <TextBox x:Name="WIinstr" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="2" Grid.Column="3"  >
-                                <TextBox x:Name="WIvalE" Text="{x:Bind m_valE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                <TextBox x:Name="WIvalE" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="2" Grid.Column="4" >
-                                <TextBox x:Name="WIvalM" Text="{x:Bind m_valM}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
+                                <TextBox x:Name="WIvalM" Text="" TextWrapping="Wrap" IsReadOnly="True" FontSize="10"/>
                             </Border>
                             <Border Grid.Row="2" Grid.Column="5" >
                                 <TextBox x:Name="WIdstE" Text="{x:Bind m_dstE}" TextWrapping="Wrap" IsReadOnly="True" FontSize="10" />
@@ -657,23 +666,26 @@
                 </Grid>
             </Border>
             <Border Grid.Row="1" Grid.Column="2" Background="#FF9DF39F" Margin="5,5,5,5">
-                <TextBox x:Name="TestOutput" Text="TextBox" TextWrapping="Wrap"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="4*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBox x:Name="TestOutput" Text="TextBox" TextWrapping="Wrap" Grid.Row="0"/>
+                        <Border Grid.Row="1">
+                            <StackPanel Orientation="Horizontal">
+                                <AppBarButton x:Name="ThemeSwitch" Content="Theme switch" Click="ThemeSwitch_Click"  />
+                                <AppBarButton x:Name="EndSwitch" Content="little-endian now" Click="EndSwitch_Click" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                
             </Border>
             <StackPanel Margin="0,0,465,5" Grid.ColumnSpan="2"/>
         </Grid>
         </Border>
 
-        <muxc:NavigationView x:Name="Navi"  Height="auto" Width="auto" 
-                        PaneDisplayMode="LeftCompact"
-                        IsTabStop="False"
-                        SelectionChanged="NavigationView_SelectionChanged" IsPaneOpen="False"     
-                        >
-            <muxc:NavigationView.MenuItems>
-                <muxc:NavigationViewItem x:Name="SimulatorPageNavi" Content="Simulator" Icon="Play"  Tag="MainPage"  ToolTipService.ToolTip="here is the y86 simulator page"/>
-                <muxc:NavigationViewItem x:Name="DocsPageNavi" Content="Docs" Icon="Document"  Tag="DocsPage"  ToolTipService.ToolTip="here is the document page"/>
-            </muxc:NavigationView.MenuItems>
-            <Frame x:Name="contentFrame"/>
-        </muxc:NavigationView>
+      
 
 
 

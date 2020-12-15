@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
 using System.Windows;
+using Windows.UI.ViewManagement;
+using Windows.Storage;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -59,7 +61,10 @@ namespace r1
 
         string E_stat, e_stat, E_instr, e_instr, E_dstE, e_dstE, E_dstM, e_dstM, E_srcA, e_srcA, E_srcB, e_srcB;
 
+      
         SolidColorBrush RegisterHighlight = new SolidColorBrush(Windows.UI.Color.FromArgb(1, 120, 133, 116));
+
+        
 
         long E_valA, e_valA, E_valB, e_valB, E_valC, e_valC, e_ALUfun, e_ALUA, e_ALUB, e_valE, E_icode, e_icode, E_ifun, e_ifun;
 
@@ -74,6 +79,8 @@ namespace r1
         long W_icode, W_ifun, W_valE, W_valM,w_icode,w_ifun;
         bool W_stall,W_bubble;
 
+        bool Themeflag = true,HDflag=true,Endflag=true;
+        string XorD = "X16";
 
         string[] StatCollection = new string[] {
             "AOK", "HLT", "ADR","INS"
@@ -94,7 +101,8 @@ namespace r1
             new string[] { "call" },
             new string[] { "ret" },
             new string[] { "pushq" },
-            new string[] { "popq" }
+            new string[] { "popq" },
+            new string[] { "iaddq" }
         };
 
         Hashtable RegisterHash = new Hashtable() {
@@ -193,30 +201,57 @@ namespace r1
         private long Get8Bytes(long addr)
         {
             long ret = 0;
-            for(int i = 7; i >= 0; i--)
+            if(Endflag)
             {
-                ret = (ret << 8) + (long)MemoryBlock[addr + i];
+                for(int i = 7; i >= 0; i--)
+                {
+                    ret = (ret << 8) + (long)MemoryBlock[addr + i];
+                }
+            }
+            else
+            {
+                for(int i = 0; i <= 7; i++)
+                {
+                    ret = (ret << 8) + (long)MemoryBlock[addr + i];
+                }
             }
             return ret;
         }
         private void Write8Bytes(long addr)
         {
             long tmp = DataEntry;
-            for(int i=0;i<8;i++)
+            if(Endflag)
             {
-                MemoryBlock[addr + i] = (char)(tmp & 0xff);
-                tmp >>= 8;
+                for(int i=0;i<8;i++)
+                {
+                    MemoryBlock[addr + i] = (char)(tmp & 0xff);
+                    tmp >>= 8;
+                }
+            }
+            else
+            {
+                for(int i=0;i<8;i++)
+                {
+                    MemoryBlock[addr + i] = (char)(tmp & 0xff);
+                    tmp >>= 8;
+                }
             }
         }
         //****************************************************************************
         public MainPage()
         {
             this.InitializeComponent();
+            ApplicationView.PreferredLaunchViewSize = new Size(1920, 1080);
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             this.Timer.Tick += new EventHandler<object>(this.Timer_Tick);
             this.MemoryListView.ItemsSource = MemoryList_s;
             this.SourceListView.ItemsSource = SourceList;
-            Preset();
-            
+
+            FrameworkElement root = (FrameworkElement)Window.Current.Content;
+            root.RequestedTheme = AppSettings.Theme;
+          
+
+            Preset();           
         }
         private void Timer_Tick(object sender, object e)
         { 
@@ -229,12 +264,13 @@ namespace r1
                 this.PlayButtom.Label = "Play";
                 Timer.Stop();
                 IsPause = true;
+                this.DocsPageNavi.IsEnabled = true;
             }
         }
 
         private void PipelineWork()
         {
-            
+            this.EndSwitch.IsEnabled = false;
             CLOCK++;
             RegUpdate();
             //catch exception
@@ -267,7 +303,28 @@ namespace r1
             this.MSinstr.Text = (M_icode < FunctionCollection.Length && M_ifun < FunctionCollection[M_icode].Length) ? FunctionCollection[M_icode][M_ifun] : "UKI";
             this.WSinstr.Text = (W_icode < FunctionCollection.Length && W_ifun < FunctionCollection[W_icode].Length) ? FunctionCollection[W_icode][W_ifun] : "UKI";
             ToggleButton[] registers = new ToggleButton[15] { Hrax, Hrcx, Hrdx, Hrbx, Hrsp, Hrbp, Hrsi, Hrdi, Hr8, Hr9, Hr10, Hr11, Hr12, Hr13, Hr14 };
-            for(int i=0;i<15;i++)registers[i].Content= (RegisterValue[i]).ToString("X16");
+            for(int i=0;i<15;i++)registers[i].Content= (RegisterValue[i]).ToString(XorD);
+
+            this.DSvalC.Text = D_valC.ToString(XorD);
+            this.DSvalP.Text = D_valP.ToString(XorD);
+            this.DIvalC.Text = f_valC.ToString(XorD);
+            this.DIvalP.Text = f_valP.ToString(XorD);
+            this.ESvalC.Text = E_valC.ToString(XorD);
+            this.ESvalA.Text = E_valA.ToString(XorD);
+            this.ESvalB.Text = E_valB.ToString(XorD);
+            this.EIvalC.Text = d_valC.ToString(XorD);
+            this.EIvalA.Text = d_valA.ToString(XorD);
+            this.EIvalB.Text = d_valB.ToString(XorD);
+            this.MSvalA.Text = M_valA.ToString(XorD);
+            this.MSvalE.Text = M_valE.ToString(XorD);
+            this.MIvalA.Text = e_valA.ToString(XorD);
+            this.MIvalE.Text = e_valE.ToString(XorD);
+            this.WSvalM.Text = W_valM.ToString(XorD);
+            this.WSvalE.Text = W_valE.ToString(XorD);
+            this.WIvalM.Text = m_valM.ToString(XorD);
+            this.WIvalE.Text = m_valE.ToString(XorD);
+
+
             Bindings.Update();
             if (SourceIsLoaded&&LineHash.Contains(F_predPC)){
                 this.SourceListView.SelectedIndex = (int)LineHash[F_predPC];
@@ -343,11 +400,7 @@ namespace r1
                 f_stat = "ADR";
                 return 0;
             }
-            long ret=0;
-            for(int i=0;i<8;i++){
-                ret+=(long)((long)(MemoryBlock[index+i])<<(i*8));
-            }
-            return ret;            
+            return Get8Bytes(index);            
         }
         private void Fetch()
         {
@@ -430,6 +483,15 @@ namespace r1
                     f_stat = "INS";
                 f_valP = f_pc + 2; f_PredictPC = f_valP;
             }
+            else if(f_icode==12 && f_ifun==0 && ((MemoryBlock[f_pc + 1] >> 4) & 0xf)==0xf)
+            {
+                f_rA = RegisterCollection[(MemoryBlock[f_pc + 1] >> 4) & 0xf];
+                f_rB = RegisterCollection[MemoryBlock[f_pc + 1] & 0xf];
+                if (f_rB == "NONE")
+                    f_stat = "INS";
+                f_valC = Trans8Bytes(f_pc + 2);
+                f_valP = f_pc + 10; f_PredictPC = f_valP;
+            }
             else
             {
                 f_stat = "INS";
@@ -476,6 +538,10 @@ namespace r1
             {
                 d_dstE = "RSP"; d_dstM = D_rA; d_srcA = "RSP"; d_srcB = "RSP";
             }
+            else if(D_icode==12)
+            {
+                d_dstE = D_rB; d_dstM = "NONE"; d_srcA = "NONE"; d_srcB = D_rB;
+            }
             ReadRegister();
             d_valB = d_rvalB;
             if(D_icode==7||D_icode==8)
@@ -501,7 +567,7 @@ namespace r1
         }
         private void Execute()
         {
-            if((E_icode==2||E_icode==7) && E_ifun>=1 && E_ifun<=6)
+            if((E_icode==2||E_icode==7) && E_ifun>=1 && E_ifun<=6)//set_condition
             {
                 switch(E_ifun)
                 {
@@ -525,7 +591,7 @@ namespace r1
                         break;
                 }
             }
-            if(E_icode==6)
+            if(E_icode==6 || E_icode==12)
             {
                 //TODO: unexpect control
                 e_setCC=true;
@@ -582,7 +648,7 @@ namespace r1
             if (m_dmem_error)
                 m_stat = "ADR";
 
-            //TODO:stat Error
+            
             m_icode = M_icode;
             m_valE = M_valE;
             m_valM = DataExit;
@@ -800,9 +866,25 @@ namespace r1
                 this.RefreshCompletionDeferralForMemory = null;
             }
         }
+        private void HTOD_Click(object sender, RoutedEventArgs e)
+        {
+            HDflag = !HDflag;
+            if (HDflag)
+            {
+                XorD = "X16";
+                this.HTOD.Content = "HEX";
+            }
+            else
+            {
+                XorD = "";
+                this.HTOD.Content = "DEC";
+            }
+            GUIUpdate();
+        }
 
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
+            this.EndSwitch.IsEnabled = true;
             SourceText = null;
             SourceList.Clear();
             RealSource = null;
@@ -856,6 +938,7 @@ namespace r1
         {
             if (CLOCK == 0) return;
             SourceInit();
+            this.EndSwitch.IsEnabled = true;
         }
         private void RegisterChange()
         {
@@ -897,11 +980,80 @@ namespace r1
                 }
             }
         }
+        private void EndSwitch_Click(object sender, RoutedEventArgs e)
+        {
+            Endflag = !Endflag;
+            if (Endflag == true)
+            {
+                this.EndSwitch.Content = "little-endian now";
+            }
+            else
+            {
+                this.EndSwitch.Content = "big-endian now";
+            }
+        }
 
-
-
+        private void ThemeSwitch_Click(object sender, RoutedEventArgs e)
+        {
+            FrameworkElement window = (FrameworkElement)Window.Current.Content;
+            Themeflag = !Themeflag;
+            if (Themeflag)
+            {
+                AppSettings.Theme = AppSettings.NONDEFLTHEME;
+                window.RequestedTheme = AppSettings.NONDEFLTHEME;
+            }
+            else
+            {
+                AppSettings.Theme = AppSettings.DEFAULTTHEME;
+                window.RequestedTheme = AppSettings.DEFAULTTHEME;
+            }
+        }
 
     }
+    class AppSettings
+    {
+        public const ElementTheme DEFAULTTHEME = ElementTheme.Light;
+        public const ElementTheme NONDEFLTHEME = ElementTheme.Dark;
 
+        const string KEY_THEME = "appColourMode";
+        static ApplicationDataContainer LOCALSETTINGS = ApplicationData.Current.LocalSettings;
+
+        /// <summary>
+        /// Gets or sets the current app colour setting from memory (light or dark mode).
+        /// </summary>
+        public static ElementTheme Theme
+        {
+            get
+            {
+                // Never set: default theme
+                if (LOCALSETTINGS.Values[KEY_THEME] == null)
+                {
+                    LOCALSETTINGS.Values[KEY_THEME] = (int)DEFAULTTHEME;
+                    return DEFAULTTHEME;
+                }
+                // Previously set to default theme
+                else if ((int)LOCALSETTINGS.Values[KEY_THEME] == (int)DEFAULTTHEME)
+                    return DEFAULTTHEME;
+                // Previously set to non-default theme
+                else
+                    return NONDEFLTHEME;
+            }
+            set
+            {
+                // Error check
+                if (value == ElementTheme.Default)
+                    throw new System.Exception("Only set the theme to light or dark mode!");
+                // Never set
+                else if (LOCALSETTINGS.Values[KEY_THEME] == null)
+                    LOCALSETTINGS.Values[KEY_THEME] = (int)value;
+                // No change
+                else if ((int)value == (int)LOCALSETTINGS.Values[KEY_THEME])
+                    return;
+                // Change
+                else
+                    LOCALSETTINGS.Values[KEY_THEME] = (int)value;
+            }
+        }
+    }
 }
 
