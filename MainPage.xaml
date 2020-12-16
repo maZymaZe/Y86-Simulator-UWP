@@ -67,7 +67,7 @@
 
                     </Border>
                     <Border  Grid.Column="1" Background="#FF9AFCF0" >
-                        <StackPanel>
+                        <StackPanel x:Name="RegisterSp1">
                             <Button x:Name="HTOD" Content="HEX" Height="30.6" Width="203" IsEnabled="True" Margin="2,2,2,2" Click="HTOD_Click"/>
                             <ToggleButton x:Name="Hrax" Content="" Height="30.6" Width="190" IsEnabled="True" Margin="2,2,2,2"/>
                             <ToggleButton x:Name="Hrcx" Content="" Height="30.6" Width="190" IsEnabled="True" Margin="2,2,2,2"/>
