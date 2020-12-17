@@ -34,7 +34,7 @@ namespace r1
         Windows.Storage.StorageFile SourceFile;
         string SourceText;
         DispatcherTimer Timer = new DispatcherTimer();
-        string MachineCodeTest = "";
+        //string ShellText = "";
 
 
 
@@ -287,6 +287,7 @@ namespace r1
             if(W_stat!="AOK")
             {
                 ProgramStat = W_stat;
+                this.TestOutput.Text += ProgramStat + "\r\n";
                 GUIUpdate();
                 return;
             }
@@ -743,7 +744,7 @@ namespace r1
         }
         private void LoadInstructions()
         {
-            MachineCodeTest = "";
+            //MachineCodeTest = "";
             MemoryBlockCopy = new char[1 << 20];
             long cnt = 0;
             LineHash.Clear();
@@ -773,8 +774,8 @@ namespace r1
                     else if (flag && MyIsDigit(RealSource[i][j]))
                     {
                         ValidLineFlag = true;
-                        MachineCodeTest += RealSource[i][j];
-                        MachineCodeTest += RealSource[i][j+1];
+                       // MachineCodeTest += RealSource[i][j];
+                       // MachineCodeTest += RealSource[i][j+1];
                         MemoryBlockCopy[InstrPointer++] = (char)(((int)HexHash[RealSource[i][j]] << 4) | (int)HexHash[RealSource[i][j + 1]]);
                         j++;
                     }
@@ -793,7 +794,7 @@ namespace r1
                     cnt++;
                 }
             }
-            this.TestOutput.Text = MachineCodeTest;
+            this.TestOutput.Text = "File is loaded\r\n" ;
             SourceIsLoaded = true;
             SourceInit();
         }
@@ -844,6 +845,8 @@ namespace r1
             this.PlayButtom.Label = "Play";
             Timer.Stop();
             this.DocsPageNavi.IsEnabled = true;
+            F_predPC_s = F_predPC.ToString("X16");
+            this.TestOutput.Text += "Break at " + F_predPC_s + "\r\n";
         }
 
         private Deferral RefreshCompletionDeferralForSource
@@ -899,7 +902,8 @@ namespace r1
             WorkCompletedForMemory();
             CLOCK = 0;
             IsPause = true;
-            Preset();     
+            Preset();
+            this.TestOutput.Text = "Reset\r\n";
         }
 
           
@@ -912,6 +916,7 @@ namespace r1
                 this.PlayButtom.Label = "Pause";
                 Timer.Start();
                 this.DocsPageNavi.IsEnabled = false;
+                this.TestOutput.Text += "Play\r\n";
             }
             else
             {
@@ -919,6 +924,8 @@ namespace r1
                 this.PlayButtom.Label = "Play";
                 Timer.Stop();
                 this.DocsPageNavi.IsEnabled = true;
+                this.TestOutput.Text += "Pause\r\n";
+
             } 
         }
 
@@ -946,6 +953,7 @@ namespace r1
         private void Refresh_Click(object sender, RoutedEventArgs e)
         {
             if (CLOCK == 0) return;
+            this.TestOutput.Text = "Refresh\r\n";
             SourceInit();
             this.EndSwitch.IsEnabled = true;
         }
@@ -1028,12 +1036,13 @@ namespace r1
             if (this.SBPway.SelectedIndex==0)
             {
                 try { 
-                    long target = Convert.ToInt64(this.BreakpointSetBox.Text);
+                    long target = Convert.ToInt64(this.BreakpointSetBox.Text,16);
                     if (BreakPoints.Contains(target))
                     {
                         BreakPoints.Remove(target);
                         int len = SourceList[Convert.ToInt32(LineHash[target])].Length;
                         SourceList[Convert.ToInt32(LineHash[target])] = SourceList[Convert.ToInt32(LineHash[target])].Substring(0, len - 11);
+                        this.TestOutput.Text += "Delete Breakpoint at 0x" + target.ToString("X16") + "\r\n";
                         WorkCompletedForSource();
                     }
                 }
@@ -1053,6 +1062,7 @@ namespace r1
                         BreakPoints.Remove(target);
                         int len = SourceList[Convert.ToInt32(LineHash[target])].Length;
                         SourceList[Convert.ToInt32(LineHash[target])] = SourceList[Convert.ToInt32(LineHash[target])].Substring(0, len - 11);
+                        this.TestOutput.Text += "Delete Breakpoint at 0x" + target.ToString("X16") + "\r\n";
                         WorkCompletedForSource();
                     }
                 }
@@ -1069,6 +1079,7 @@ namespace r1
                         BreakPoints.Remove(target);
                         int len = SourceList[Convert.ToInt32(LineHash[target])].Length;
                         SourceList[Convert.ToInt32(LineHash[target])]= SourceList[Convert.ToInt32(LineHash[target])].Substring(0,len-11);
+                        this.TestOutput.Text += "Delete Breakpoint at 0x" + target.ToString("X16") + "\r\n";
                         WorkCompletedForSource();
                     }
                 }
@@ -1084,11 +1095,12 @@ namespace r1
             {
                 try
                 {
-                    long target = Convert.ToInt64(this.BreakpointSetBox.Text);
+                    long target = Convert.ToInt64(this.BreakpointSetBox.Text,16);
                     if (!BreakPoints.Contains(target))
                     {
                         BreakPoints.Add(target);
                         SourceList[Convert.ToInt32(LineHash[target])] += "--BreakHere";
+                        this.TestOutput.Text += "Set Breakpoint at 0x" + target.ToString("X16") + "\r\n";
                         WorkCompletedForSource();
                     }
                 }
@@ -1107,6 +1119,7 @@ namespace r1
                     {
                         BreakPoints.Add(target);
                         SourceList[Convert.ToInt32(LineHash[target])] += "--BreakHere";
+                        this.TestOutput.Text += "Set Breakpoint at 0x" + target.ToString("X16") + "\r\n";
                         WorkCompletedForSource();
                     }
                 }
@@ -1122,6 +1135,7 @@ namespace r1
                     {
                         BreakPoints.Add(target);
                         SourceList[Convert.ToInt32(LineHash[target])] += "--BreakHere";
+                        this.TestOutput.Text += "Set Breakpoint at 0x" + target.ToString("X16") + "\r\n";
                         WorkCompletedForSource();
                     }
                 }
