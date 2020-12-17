@@ -1,21 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
-using System.Windows;
-using Windows.UI.ViewManagement;
 using Windows.Storage;
 using Windows.Media.Playback;
 using Windows.Media.Core;
@@ -29,73 +19,59 @@ namespace r1
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        StorageFile SourceFile;
+        string SourceText;
         ObservableCollection<string> SourceList = new ObservableCollection<string>();
         ObservableCollection<string> MemoryList_s = new ObservableCollection<string>();
-        bool IsPause = false, SourceIsLoaded = false;
+        char[] MemoryBlock = new char[1 << 20];
+        char[] MemoryBlockCopy = new char[1 << 20];
         string[] RealSource;
-        Windows.Storage.StorageFile SourceFile;
-        string SourceText;
+
+        long MaxAddr,InstrPointer = 0,DataEntry, DataExit;
+
+        bool IsPause = false, SourceIsLoaded = false;
+        bool Endflag = true, UndoFlag = false;
+        string XorD = "X16";
+
         DispatcherTimer Timer = new DispatcherTimer();
-        //string ShellText = "";
-        long MaxAddr;
-
         MediaPlayer MusicPlayer = new MediaPlayer();
-
-
-        //****************************************************************************
-        const int RAX = 0, RCX = 1, RDX = 2, RBX = 3, RSP = 4, RBP = 5, RSI = 6, RDI = 7, R8 = 8, R9 = 9,
-            R10 = 10, R11 = 11, R12 = 12, R13 = 13, R14 = 14, NONE = 15;
 
         long[] RegisterValue = new long[16];
         long CLOCK = 0;
         long PenaltyCnt = 0;
 
-        long F_predPC, f_SelectPC, f_pc, f_Split, f_icode, f_ifun, f_Align, f_NeedvalC, f_Needregids, f_valP, f_valC, f_PredictPC;
+        string ProgramStat;
+        double CPI;
+
+        long F_predPC, f_pc, f_icode, f_ifun, f_valP, f_valC, f_PredictPC;
         string F_predPC_s, f_stat, f_rA, f_rB;
-        bool f_imem_error;
         bool F_stall, F_bubble;
 
-
-        string D_stat, d_stat, D_instr, d_instr, D_rA, d_srcA, D_rB, d_srcB, d_dstE, d_dstM;
-        long D_valC, d_valC, D_valP, d_valP, d_icode, d_ifun, D_icode, D_ifun;
+        string D_stat, d_stat, D_rA, d_srcA, D_rB, d_srcB, d_dstE, d_dstM;
+        long D_valC, d_valC, D_valP, d_icode, d_ifun, D_icode, D_ifun;
         long d_rvalA, d_rvalB, d_valA, d_valB;
         bool D_stall, D_bubble;
 
-        string ProgramStat, INSMessage;
-
-        string E_stat, e_stat, E_instr, e_instr, E_dstE, e_dstE, E_dstM, e_dstM, E_srcA, e_srcA, E_srcB, e_srcB;
-
-      
-        SolidColorBrush RegisterHighlight = new SolidColorBrush(Windows.UI.Color.FromArgb(1, 120, 133, 116));
-
-        
-
-        long E_valA, e_valA, E_valB, e_valB, E_valC, e_valC, e_ALUfun, e_ALUA, e_ALUB, e_valE, E_icode, e_icode, E_ifun, e_ifun;
-
-       
-
+        string E_stat, e_stat, E_dstE, e_dstE, E_dstM, e_dstM, E_srcA, E_srcB;
+        long E_valA, e_valA, E_valB, E_valC, e_ALUfun, e_ALUA, e_ALUB, e_valE, E_icode, e_icode, E_ifun, e_ifun;
         bool e_setCC, ZF, SF, OF, e_Cnd, E_stall, E_bubble;
-        double CPI;
+     
+        string M_stat, m_stat,M_dstE,M_dstM,m_dstE,m_dstM;
+        long M_valE, m_valE, M_valA, m_Addr, M_icode, m_icode, M_ifun, m_ifun, m_valM;
+        bool m_dmem_error, M_Cnd, M_stall, M_bubble;
 
-        string M_stat, m_stat, M_instr, m_instr,M_dstE,M_dstM,m_dstE,m_dstM;
-        long M_valE, m_valE, M_valA, m_valA, m_Addr, M_icode, m_icode, M_ifun, m_ifun, m_valM;
-        bool m_dmem_error, M_Cnd, m_write, m_read, M_stall, M_bubble;
-
-        string W_stat, W_instr,W_dstE,W_dstM;
-        long W_icode, W_ifun, W_valE, W_valM,w_icode,w_ifun;
+        string W_stat,W_dstE,W_dstM;
+        long W_icode, W_ifun, W_valE, W_valM;
         bool W_stall,W_bubble;
 
-        bool Themeflag = true,HDflag=true,Endflag=true,UndoFlag=false;
-        string XorD = "X16";
-
-        string[] StatCollection = new string[] {
-            "AOK", "HLT", "ADR","INS"
-        };
-        string[] RegisterCollection = new string[]
+        Hashtable LineHash = new Hashtable();
+        Hashtable AddrHash = new Hashtable();
+        HashSet<long> BreakPoints = new HashSet<long>();
+        readonly string[] RegisterCollection = new string[]
        {
             "RAX","RCX","RDX","RBX","RSP","RBP","RSI","RDI","R8","R9","R10","R11","R12","R13","R14","NONE"
        };
-        string[][] FunctionCollection=new string[][]{
+        readonly string[][] FunctionCollection=new string[][]{
             new string[]{"halt"},
             new string[] { "nop" },
             new string[]{"rrmovq","cmovle","cmovl","cmove","cmovne","cmovge","cmovg"},
@@ -110,29 +86,19 @@ namespace r1
             new string[] { "popq" },
             new string[] { "iaddq" }
         };
-
-        Hashtable RegisterHash = new Hashtable() {
+        readonly Hashtable RegisterHash = new Hashtable() {
             {"RAX",0 },{"RCX",1},{"RDX",2},{"RBX",3},{"RSP",4},{"RBP",5},{"RSI",6},{"RDI",7},{"R8",8},{"R9",9},{"R10",10},{"R11",11},{"R12",12},{"R13",13},{"R14",14},{"NONE",15}
         };
-        Hashtable HexHash = new Hashtable()
+        readonly Hashtable HexHash = new Hashtable()
         {
             { '0',0},{'1',1 },{'2',2},{'3',3},{'4',4},{'5',5},{'6',6},{'7',7},{'8',8},{'9',9},{'A',10},{'a',10},{'b',11},{'B',11},{'C',12},{'c',12},{'D',13},{'d',13},{'E',14},{'e',14},{'F',15},{'f',15}
         };
-        Hashtable LineHash = new Hashtable();
-        Hashtable AddrHash = new Hashtable();
-        HashSet<long>  BreakPoints = new HashSet<long>();
-
-        char[] MemoryBlock = new char[1 << 20];
-        char[] MemoryBlockCopy = new char[1 << 20];
-        long InstrPointer=0;
-        long DataEntry, DataExit;
+       
         //****************************************************************************
 
         //****************************************************************************          REGISTER
         private void ReadRegister()
         {
-            //TODO:None
-            
             d_rvalA = RegisterValue[(int)RegisterHash[d_srcA]];
             d_rvalB = RegisterValue[(int)RegisterHash[d_srcB]];
             if (d_srcA == "NONE")
@@ -149,7 +115,6 @@ namespace r1
 
         //****************************************************************************
         //****************************************************************************         ALU
-
         private void Alu()
         {
             switch (e_ALUfun) { 
@@ -170,7 +135,6 @@ namespace r1
             {
                 ZF = (e_valE == 0);
                 SF = (e_valE < 0);
-
                 if (e_ALUfun != 1) { 
                     OF = (e_ALUA < 0 && e_ALUB < 0 && e_valE >= 0)||(e_ALUA >= 0 && e_ALUB >= 0 && e_valE < 0);
                 }
@@ -187,7 +151,6 @@ namespace r1
             if(addr+8>(1<<20) || addr<0)return false;
             return true;
         }
-        
         private void MemoryRead()
         {
             if(!AddrIsLigal(m_Addr))
@@ -251,21 +214,16 @@ namespace r1
         {
             this.InitializeComponent();
             MusicPlayer.Source = MediaSource.CreateFromUri(new Uri(@"ms-appx:///Assets/bgm.mp3"));
-            ApplicationView.PreferredLaunchViewSize = new Size(1920, 1080);
-            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             this.Timer.Tick += new EventHandler<object>(this.Timer_Tick);
             this.MemoryListView.ItemsSource = MemoryList_s;
             this.SourceListView.ItemsSource = SourceList;
 
             FrameworkElement root = (FrameworkElement)Window.Current.Content;
             root.RequestedTheme = AppSettings.Theme;
-          
-
             Preset();           
         }
         private void Timer_Tick(object sender, object e)
         { 
-            //TODO
             if(!IsPause&&SourceIsLoaded&&ProgramStat=="AOK") PipelineWork();
             else
             {
@@ -278,19 +236,16 @@ namespace r1
                 this.AboutPageNavi.IsEnabled = true;
             }
         }
-
         private void PipelineWork()
         {
 
             this.EndSwitch.IsEnabled = false;
             CLOCK++;
             RegUpdate();
-            //check_BreakPoints
             if(BreakPoints.Contains(F_predPC))
             {
                 StopPipe();
             }
-            //catch exception
             if(W_stat!="AOK")
             {
                 ProgramStat = W_stat;
@@ -311,7 +266,7 @@ namespace r1
         {
             if (UndoFlag) return;
             F_predPC_s = F_predPC.ToString("X16");
-            CPI = (CLOCK-PenaltyCnt>0)?1.0 *  CLOCK/(CLOCK - PenaltyCnt):1.0 ;
+            CPI = (CLOCK-4-PenaltyCnt>0)?1.0 * (CLOCK-4)/(CLOCK-4 - PenaltyCnt):1.0 ;
             this.Finstr.Text = (f_icode<FunctionCollection.Length && f_ifun<FunctionCollection[f_icode].Length) ? FunctionCollection[f_icode][f_ifun] : "UKI";
             this.DIinstr.Text = (f_icode < FunctionCollection.Length && f_ifun < FunctionCollection[f_icode].Length) ? FunctionCollection[f_icode][f_ifun] : "UKI";
             this.EIinstr.Text = (d_icode < FunctionCollection.Length && d_ifun < FunctionCollection[d_icode].Length) ? FunctionCollection[d_icode][d_ifun] : "UKI";
@@ -343,7 +298,6 @@ namespace r1
             this.WIvalM.Text = m_valM.ToString(XorD);
             this.WIvalE.Text = m_valE.ToString(XorD);
 
-
             Bindings.Update();
             if (SourceIsLoaded&&LineHash.Contains(F_predPC)){
                 this.SourceListView.SelectedIndex = Convert.ToInt32(LineHash[F_predPC]);
@@ -364,7 +318,7 @@ namespace r1
             M_stall = false;
             M_bubble = (m_stat != "AOK");
 
-            PenaltyCnt += (E_bubble ? 1 : 0) + (D_bubble ? 1 : 0) + (M_bubble ? 1 : 0);
+            PenaltyCnt += (E_bubble ? 1 : 0) | (D_bubble ? 1 : 0) | (M_bubble ? 1 : 0);
 
             W_stall = false;
             W_bubble = false;
@@ -435,10 +389,6 @@ namespace r1
             else
             {
                 f_pc = F_predPC;
-            }
-            if (f_pc < 0 || f_pc > InstrPointer)
-            {
-                f_imem_error = true;
             }
             f_icode = MemoryBlock[f_pc];
             f_ifun = f_icode & 0xf;
@@ -514,14 +464,10 @@ namespace r1
             else
             {
                 f_stat = "INS";
-                //ProgramStat="INS";
-                INSMessage="Unexpeted Instruction:"+f_icode.ToString("X16")+f_ifun.ToString("X16")+"\r\n";
-                //TODO:ICODEERROR
             }
 
             if (f_icode == 0 && f_ifun == 0)
                 f_stat = "HLT";
-            
         }
         private void Decode()
         {
@@ -586,7 +532,7 @@ namespace r1
         }
         private void Execute()
         {
-            if((E_icode==2||E_icode==7) && E_ifun>=1 && E_ifun<=6)//set_condition
+            if((E_icode==2||E_icode==7) && E_ifun>=1 && E_ifun<=6)
             {
                 switch(E_ifun)
                 {
@@ -612,7 +558,6 @@ namespace r1
             }
             if(E_icode==6 || E_icode==12)
             {
-                //TODO: unexpect control
                 e_setCC=true;
                 e_ALUfun=E_ifun;
             }
@@ -665,9 +610,7 @@ namespace r1
             }
             m_stat = M_stat;
             if (m_dmem_error)
-                m_stat = "ADR";
-
-            
+                m_stat = "ADR";         
             m_icode = M_icode;
             m_valE = M_valE;
             m_valM = DataExit;
@@ -713,7 +656,6 @@ namespace r1
         }
         private void Preset()
         {
-            //TODO
             SourceText = "NO INPUT YET";
             DataContext = this;
             Timer.Start();
@@ -722,18 +664,19 @@ namespace r1
             WorkCompletedForMemory();
             WorkCompletedForSource();
             this.DocsPageNavi.IsEnabled = true;
-
+            this.AboutPageNavi.IsEnabled = true;
         }
         private async void OpenFileButton_Click(object sender, RoutedEventArgs e)
         {
-            var picker = new Windows.Storage.Pickers.FileOpenPicker();
-            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
-            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
-              //TODO:FIX THIS        
+            var picker = new Windows.Storage.Pickers.FileOpenPicker
+            {
+                ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail,
+                SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary
+            };
             picker.FileTypeFilter.Add(".yo");
             SourceFile = await picker.PickSingleFileAsync();
             if (SourceFile == null) return;
-            var stream = await SourceFile.OpenAsync(Windows.Storage.FileAccessMode.Read);
+            var stream = await SourceFile.OpenAsync(FileAccessMode.Read);
             ulong size = stream.Size;
             SourceList.Clear();
             using (var dataReader = new Windows.Storage.Streams.DataReader(stream))
@@ -741,10 +684,6 @@ namespace r1
                 uint numBytesLoaded = await dataReader.LoadAsync((uint)size);
                 SourceText = dataReader.ReadString(numBytesLoaded);
                 RealSource=SourceText.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-             /*   for(int i = 1; i <= RealSource.Length; i++)
-                {
-                    SourceList.Add(i.ToString("D4")+"|    "+RealSource[i-1]);
-                }*/
             }
             this.SourceListView.SelectedIndex = 0;
             WorkCompletedForSource();
@@ -752,7 +691,6 @@ namespace r1
         }
         private void LoadInstructions()
         {
-            //MachineCodeTest = "";
             MemoryBlockCopy = new char[1 << 20];
             long cnt = 0;
             MaxAddr = 0;
@@ -784,8 +722,6 @@ namespace r1
                     else if (flag && MyIsDigit(RealSource[i][j]))
                     {
                         ValidLineFlag = true;
-                       // MachineCodeTest += RealSource[i][j];
-                       // MachineCodeTest += RealSource[i][j+1];
                         MemoryBlockCopy[InstrPointer++] = (char)(((int)HexHash[RealSource[i][j]] << 4) | (int)HexHash[RealSource[i][j + 1]]);
                         j++;
                     }
@@ -813,24 +749,20 @@ namespace r1
         private void SourceInit()
         {
             MemoryBlock = (char[])MemoryBlockCopy.Clone();
-            ProgramStat = "AOK"; INSMessage="";
+            ProgramStat = "AOK";
             f_stat=D_stat = "AOK"; f_icode=D_icode = 1; f_ifun=D_ifun = 0; f_rA=D_rA = "NONE"; f_rB=D_rB = "NONE";
             d_stat=E_stat = "AOK"; d_icode=E_icode = 1; d_ifun=E_ifun = 0; d_dstE = d_dstM = d_srcA = d_srcB = E_dstE = E_dstM = E_srcA = E_srcB = "NONE";
             e_stat=M_stat = "AOK"; e_icode=M_icode = 1; e_ifun=M_ifun = 0; e_Cnd=M_Cnd = false;e_dstE = e_dstM =M_dstE =  M_dstM = "NONE";
-            m_stat=W_stat = "AOK"; m_icode=W_icode = 1; m_ifun=W_ifun=w_ifun=0; m_dstE = m_dstM = W_dstE = W_dstM = "NONE";
+            m_stat=W_stat = "AOK"; m_icode=W_icode = 1; m_ifun=W_ifun=0; m_dstE = m_dstM = W_dstE = W_dstM = "NONE";
             f_PredictPC = 0;
             F_predPC = 0;
             F_predPC_s = F_predPC.ToString("X16");
-
-
             f_valP= f_valC = 0;
-            D_valC = d_valC = D_valP = d_valP = d_valA = d_valB;
-            E_valA = e_valA = E_valB = e_valB = E_valC = e_valC = 0;
-            M_valE = m_valE = M_valA = m_valA = m_valM = 0;
+            D_valC = d_valC = D_valP = d_valA = d_valB;
+            E_valA = e_valA = E_valB = E_valC = 0;
+            M_valE = m_valE = M_valA = m_valM = 0;
             W_valE = W_valM = 0;
             m_dmem_error = false;
-
-
             for (int i = 0; i < 16; i++)
                 RegisterValue[i] = 0;
             CLOCK = 0;
@@ -841,10 +773,6 @@ namespace r1
             ZF = SF = OF = e_setCC = e_Cnd = false;
             F_bubble = D_bubble = E_bubble = W_bubble = M_bubble = true;
             GUIUpdate();
-            //ProgramStat = "AOK";
-
-
-            //TODO
         }
         private void MemoryViewSetup()
         {
@@ -900,7 +828,6 @@ namespace r1
             this.RefreshCompletionDeferralForMemory = args.GetDeferral();
 
         }
-
         private void WorkCompletedForSource()
         {
             if (this.RefreshCompletionDeferralForSource != null)
@@ -919,7 +846,6 @@ namespace r1
                 this.RefreshCompletionDeferralForMemory = null;
             }
         }
-
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
             this.EndSwitch.IsEnabled = true;
@@ -934,9 +860,6 @@ namespace r1
             Preset();
             this.TestOutput.Text = "Reset\r\n";
         }
-
-          
-
         private void PlayButtom_Click(object sender, RoutedEventArgs e)
         {
             IsPause = !IsPause;
@@ -959,17 +882,14 @@ namespace r1
 
             } 
         }
-
         private void SpeedSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             this.Timer.Interval = new TimeSpan(0, 0, 0, 0, (int)(1000 / SpeedSlider.Value));
         }
-
         private void Next_Click(object sender, RoutedEventArgs e)
         {
             if (ProgramStat == "AOK" && SourceIsLoaded) PipelineWork();
         }
-
         private void PreviousBottom_Click(object sender, RoutedEventArgs e)
         {
             if (CLOCK == 0) return;  
@@ -983,7 +903,6 @@ namespace r1
             UndoFlag = false;
             GUIUpdate();
         }
-
         private void Refresh_Click(object sender, RoutedEventArgs e)
         {
             if (CLOCK == 0) return;
@@ -999,47 +918,33 @@ namespace r1
             registers[(int)RegisterHash[W_dstE]].IsChecked=true;
             if (W_dstM != "NONE")
                 registers[(int)RegisterHash[W_dstM]].IsChecked = true;
-
-
         }
-
         private void NavigationView_SelectionChanged(object sender, NavigationViewSelectionChangedEventArgs args)
         {
             /* NOTE: for this function to work, every NavigationView must follow the same naming convention: nvSample# (i.e. nvSample3),
             and every corresponding content frame must follow the same naming convention: contentFrame# (i.e. contentFrame3) */
-
             // Get the sample number
-
-            if (args.IsSettingsSelected)
+            Frame rootFrame = Window.Current.Content as Frame;
+            var selectedItem = (NavigationViewItem)args.SelectedItem;
+            string selectedItemTag = ((string)selectedItem.Tag);
+            if (selectedItemTag == "MainPage")
             {
-                //  contentFrame.Navigate(typeof(SampleSettingsPage));
+                rootFrame.Navigate(typeof(MainPage));
             }
-            else
+            else if (selectedItemTag == "DocsPage")
             {
-                Frame rootFrame = Window.Current.Content as Frame;
-                var selectedItem = (NavigationViewItem)args.SelectedItem;
-                string selectedItemTag = ((string)selectedItem.Tag);
-                if (selectedItemTag == "MainPage")
-                {
-                    rootFrame.Navigate(typeof(MainPage));
-
-                }
-                else if (selectedItemTag == "DocsPage")
-                {
-                    rootFrame.Navigate(typeof(DocsPage));
-                }
-                else if (selectedItemTag == "AboutPage")
-                {
-                    rootFrame.Navigate(typeof(AboutPage));
-                }
+                rootFrame.Navigate(typeof(DocsPage));
             }
+            else if (selectedItemTag == "AboutPage")
+            {
+                rootFrame.Navigate(typeof(AboutPage));
+            }  
         }
         private void EndSwitch_Toggled(object sender, RoutedEventArgs e)
         {
             if (this.EndSwitch.IsOn) Endflag = true;
             else Endflag = false;
         }
-
         private void ThemeSwitch_Toggled(object sender, RoutedEventArgs e)
         {
             FrameworkElement window = (FrameworkElement)Window.Current.Content;
@@ -1125,7 +1030,6 @@ namespace r1
                 finally { }
             }
         }
-
         private void SetBP_Click(object sender, RoutedEventArgs e)
         {
             if (this.SBPway.SelectedIndex == 0)
@@ -1200,7 +1104,6 @@ namespace r1
 
         const string KEY_THEME = "appColourMode";
         static ApplicationDataContainer LOCALSETTINGS = ApplicationData.Current.LocalSettings;
-
         /// <summary>
         /// Gets or sets the current app colour setting from memory (light or dark mode).
         /// </summary>
@@ -1239,4 +1142,3 @@ namespace r1
         }
     }
 }
-

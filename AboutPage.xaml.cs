@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -25,39 +13,28 @@ namespace r1
         public AboutPage()
         {
             this.InitializeComponent();
-            this.AboutContent.Text = "Y86 Simulator v2.0.0\r\ndeveloer:maze&george_plover\r\ncontacts:782618517maze@gmail.com&19307130237@fudan.edu.cn\r\n2020.12.17";
-          
+            this.AboutContent.Text = "Y86 Simulator v2.0.0\r\ndeveloer:maze&george_plover\r\ncontacts:782618517maze@gmail.com&19307130237@fudan.edu.cn\r\n2020.12.17";   
         }
         private void NavigationView_SelectionChanged(object sender, NavigationViewSelectionChangedEventArgs args)
         {
             /* NOTE: for this function to work, every NavigationView must follow the same naming convention: nvSample# (i.e. nvSample3),
             and every corresponding content frame must follow the same naming convention: contentFrame# (i.e. contentFrame3) */
-
             // Get the sample number
-
-            if (args.IsSettingsSelected)
+            Frame rootFrame = Window.Current.Content as Frame;
+            var selectedItem = (NavigationViewItem)args.SelectedItem;
+            string selectedItemTag = ((string)selectedItem.Tag);
+            if (selectedItemTag == "MainPage")
             {
-                //  contentFrame.Navigate(typeof(SampleSettingsPage));
+                rootFrame.Navigate(typeof(MainPage));
             }
-            else
+            else if (selectedItemTag == "DocsPage")
             {
-                Frame rootFrame = Window.Current.Content as Frame;
-                var selectedItem = (NavigationViewItem)args.SelectedItem;
-                string selectedItemTag = ((string)selectedItem.Tag);
-                if (selectedItemTag == "MainPage")
-                {
-                    rootFrame.Navigate(typeof(MainPage));
-
-                }
-                else if (selectedItemTag == "DocsPage")
-                {
-                    rootFrame.Navigate(typeof(DocsPage));
-                }
-                else if (selectedItemTag == "AboutPage")
-                {
-                    rootFrame.Navigate(typeof(AboutPage));
-                }
+                rootFrame.Navigate(typeof(DocsPage));
             }
+            else if (selectedItemTag == "AboutPage")
+            {
+                rootFrame.Navigate(typeof(AboutPage));
+            }            
         }
     }
 }
