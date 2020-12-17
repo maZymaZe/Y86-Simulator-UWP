@@ -17,6 +17,8 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using Windows.UI.ViewManagement;
 using Windows.Storage;
+using Windows.Media.Playback;
+using Windows.Media.Core;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -35,7 +37,9 @@ namespace r1
         string SourceText;
         DispatcherTimer Timer = new DispatcherTimer();
         //string ShellText = "";
+        long MaxAddr;
 
+        MediaPlayer MusicPlayer = new MediaPlayer();
 
 
         //****************************************************************************
@@ -68,7 +72,7 @@ namespace r1
 
         long E_valA, e_valA, E_valB, e_valB, E_valC, e_valC, e_ALUfun, e_ALUA, e_ALUB, e_valE, E_icode, e_icode, E_ifun, e_ifun;
 
-     
+       
 
         bool e_setCC, ZF, SF, OF, e_Cnd, E_stall, E_bubble;
         double CPI;
@@ -81,7 +85,7 @@ namespace r1
         long W_icode, W_ifun, W_valE, W_valM,w_icode,w_ifun;
         bool W_stall,W_bubble;
 
-        bool Themeflag = true,HDflag=true,Endflag=true;
+        bool Themeflag = true,HDflag=true,Endflag=true,UndoFlag=false;
         string XorD = "X16";
 
         string[] StatCollection = new string[] {
@@ -240,11 +244,13 @@ namespace r1
                     tmp >>= 8;
                 }
             }
+            MemoryViewSetup();
         }
         //****************************************************************************
         public MainPage()
         {
             this.InitializeComponent();
+            MusicPlayer.Source = MediaSource.CreateFromUri(new Uri(@"ms-appx:///Assets/bgm.mp3"));
             ApplicationView.PreferredLaunchViewSize = new Size(1920, 1080);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             this.Timer.Tick += new EventHandler<object>(this.Timer_Tick);
@@ -301,7 +307,8 @@ namespace r1
             GUIUpdate();
         }
         private void GUIUpdate()
-        { 
+        {
+            if (UndoFlag) return;
             F_predPC_s = F_predPC.ToString("X16");
             CPI = (CLOCK-PenaltyCnt>0)?1.0 *  CLOCK/(CLOCK - PenaltyCnt):1.0 ;
             this.Finstr.Text = (f_icode<FunctionCollection.Length && f_ifun<FunctionCollection[f_icode].Length) ? FunctionCollection[f_icode][f_ifun] : "UKI";
@@ -747,13 +754,14 @@ namespace r1
             //MachineCodeTest = "";
             MemoryBlockCopy = new char[1 << 20];
             long cnt = 0;
+            MaxAddr = 0;
             LineHash.Clear();
             AddrHash.Clear();
             BreakPoints.Clear();
             for (int i = 0; i < RealSource.Length; i++)
             {
                 bool flag = false,addrloadflag=false,ValidLineFlag=false;
-                long target=0;
+                long target=0;               
                 int pos=0;
                 for (int j = 0; j < RealSource[i].Length; j++)
                 {
@@ -770,6 +778,7 @@ namespace r1
                         flag = true;
                         addrloadflag = false;
                         InstrPointer = target;
+                        MaxAddr = MaxAddr < target ? target : MaxAddr;
                     }
                     else if (flag && MyIsDigit(RealSource[i][j]))
                     {
@@ -797,6 +806,8 @@ namespace r1
             this.TestOutput.Text = "File is loaded\r\n" ;
             SourceIsLoaded = true;
             SourceInit();
+            MaxAddr = MaxAddr / 4 * 4 + 32;
+            MemoryViewSetup();
         }
         private void SourceInit()
         {
@@ -833,6 +844,23 @@ namespace r1
 
 
             //TODO
+        }
+        private void MemoryViewSetup()
+        {
+            MemoryList_s.Clear();
+            long sz = MaxAddr/4;
+            string tmp;
+            for(int i = 0; i < sz; i++)
+            {
+                 tmp = ": ";
+                for(int j = 0; j < 4; j++)
+                {
+                    tmp += (Convert.ToInt32(MemoryBlock[i * 4 + j])).ToString("X2");
+                }
+                int hd = i * 4;
+                MemoryList_s.Add("0x" +hd.ToString("X")+ tmp);
+            }
+            WorkCompletedForMemory();
         }
         private bool MyIsDigit(char x)
         {
@@ -944,10 +972,13 @@ namespace r1
             if (CLOCK == 0) return;  
             long t = CLOCK - 1;
             SourceInit();
+            UndoFlag = true;
             for(int i = 0; i < t; i++)
             {
                 PipelineWork();
             }
+            UndoFlag = false;
+            GUIUpdate();
         }
 
         private void Refresh_Click(object sender, RoutedEventArgs e)
@@ -975,10 +1006,10 @@ namespace r1
             and every corresponding content frame must follow the same naming convention: contentFrame# (i.e. contentFrame3) */
 
             // Get the sample number
-           
+
             if (args.IsSettingsSelected)
             {
-              //  contentFrame.Navigate(typeof(SampleSettingsPage));
+                //  contentFrame.Navigate(typeof(SampleSettingsPage));
             }
             else
             {
@@ -987,13 +1018,16 @@ namespace r1
                 string selectedItemTag = ((string)selectedItem.Tag);
                 if (selectedItemTag == "MainPage")
                 {
-                   rootFrame.Navigate(typeof(MainPage));
-                   
+                    rootFrame.Navigate(typeof(MainPage));
+
                 }
                 else if (selectedItemTag == "DocsPage")
-                { 
+                {
                     rootFrame.Navigate(typeof(DocsPage));
-                   
+                }
+                else if (selectedItemTag == "AboutPage")
+                {
+                    rootFrame.Navigate(typeof(AboutPage));
                 }
             }
         }
@@ -1142,6 +1176,17 @@ namespace r1
                 catch (FormatException) { }
                 catch (OverflowException) { }
                 finally { }
+            }
+        }
+        private void MusicSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (this.MusicSwitch.IsOn)
+            {
+                MusicPlayer.Play();
+            }
+            else
+            {
+                MusicPlayer.Pause();
             }
         }
     }

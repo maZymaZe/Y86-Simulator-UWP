@@ -16,16 +16,6 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1800*"/>
         </Grid.ColumnDefinitions>
-        <muxc:NavigationView x:Name="Navi"  Height="auto" Width="auto" 
-                        PaneDisplayMode="LeftCompact"
-                        IsTabStop="False"
-                        SelectionChanged="NavigationView_SelectionChanged" IsPaneOpen="False"     
-                        >
-            <muxc:NavigationView.MenuItems>
-                <muxc:NavigationViewItem x:Name="SimulatorPageNavi" Content="Simulator" Icon="Play"  Tag="MainPage"  ToolTipService.ToolTip="here is the y86 simulator page"/>
-                <muxc:NavigationViewItem x:Name="DocsPageNavi" Content="Docs" Icon="Document"  Tag="DocsPage"  ToolTipService.ToolTip="here is the document page"/>
-            </muxc:NavigationView.MenuItems>
-        </muxc:NavigationView>
 
 
         <Border Grid.Column="0">
@@ -686,7 +676,7 @@
                         </Grid.RowDefinitions>
                         <TextBox x:Name="TestOutput" Text="TextBox" TextWrapping="Wrap" Grid.Row="0" IsReadOnly="True" Height="252" VerticalAlignment="Top"/>
                         <StackPanel Orientation="Horizontal" Grid.Row="1">
-                            <TextBox x:Name="BreakpointSetBox" IsReadOnly="False" Width="158" Margin="0,0,5,0"/>
+                            <TextBox x:Name="BreakpointSetBox" IsReadOnly="False" PlaceholderText="Set Breakpoint Here" Width="158" Margin="0,0,5,0"/>
                             <ComboBox x:Name="SBPway" PlaceholderText="select the method" Width="190" Margin="0,0,0,0">
                                 <x:String>By-Addr(in HEX like 1A)</x:String>
                                 <x:String>By-Click(the selected line)</x:String>
@@ -698,9 +688,10 @@
                         </StackPanel>
                         <Border Grid.Row="2">
                             <StackPanel Orientation="Horizontal">
-                                <ToggleSwitch x:Name="ThemeSwitch" Header="Theme" OffContent="NonDefalut" OnContent="Default" IsOn="True" Toggled="ThemeSwitch_Toggled" />
-                                <ToggleSwitch x:Name="EndSwitch" Header="endian" OffContent="big-endian" OnContent="little-endian" IsOn="True" Toggled="EndSwitch_Toggled" />
+                                <ToggleSwitch x:Name="ThemeSwitch" Header="Theme" OffContent="NonDefalut" OnContent="Default" IsOn="True" Toggled="ThemeSwitch_Toggled" Width="118" />
+                                <ToggleSwitch x:Name="EndSwitch" Header="endian" OffContent="big-endian" OnContent="little-endian" IsOn="True" Toggled="EndSwitch_Toggled" Width="150" />
                                 <ToggleSwitch x:Name="RadixSwitch" Header="Radix" OffContent="DEC" OnContent="HEX" IsOn="True" Toggled="RadixSwitch_Toggled" />
+                                <ToggleSwitch x:Name="MusicSwitch" Header="Music" OffContent="OFF" OnContent="ON" IsOn="False" Toggled="MusicSwitch_Toggled" />
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -710,9 +701,18 @@
             </Grid>
         </Border>
 
-
-
-
-
+        <muxc:NavigationView x:Name="Navi"  Height="auto" Width="auto" 
+                        PaneDisplayMode="LeftCompact"
+                        IsTabStop="False"
+                        SelectionChanged="NavigationView_SelectionChanged" IsPaneOpen="False" 
+                        IsBackButtonVisible="Collapsed"
+                        IsSettingsVisible="False"
+                        >
+            <muxc:NavigationView.MenuItems>
+                <muxc:NavigationViewItem x:Name="SimulatorPageNavi" Content="Simulator" Icon="Play"  Tag="MainPage"  ToolTipService.ToolTip="here is the y86 simulator page"/>
+                <muxc:NavigationViewItem x:Name="DocsPageNavi" Content="Docs" Icon="Document"  Tag="DocsPage"  ToolTipService.ToolTip="here is the document page"/>
+                <muxc:NavigationViewItem x:Name="AboutPageNavi" Content="About"  Tag="AboutPage"  ToolTipService.ToolTip="here is the about page" Icon="Like"/>
+            </muxc:NavigationView.MenuItems>
+        </muxc:NavigationView>
     </Grid>
 </Page>

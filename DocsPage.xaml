@@ -12,16 +12,19 @@
 
     <Grid>
         <TextBox />
+
         <muxc:NavigationView x:Name="Navi"  Height="auto" Width="auto" 
                         PaneDisplayMode="LeftCompact"
                         IsTabStop="False"
-                        SelectionChanged="NavigationView_SelectionChanged" IsBackButtonVisible="Collapsed"     
+                        SelectionChanged="NavigationView_SelectionChanged" IsPaneOpen="False" 
+                        IsBackButtonVisible="Collapsed"
+                        IsSettingsVisible="False"
                         >
             <muxc:NavigationView.MenuItems>
                 <muxc:NavigationViewItem x:Name="SimulatorPageNavi" Content="Simulator" Icon="Play"  Tag="MainPage"  ToolTipService.ToolTip="here is the y86 simulator page"/>
                 <muxc:NavigationViewItem x:Name="DocsPageNavi" Content="Docs" Icon="Document"  Tag="DocsPage"  ToolTipService.ToolTip="here is the document page"/>
+                <muxc:NavigationViewItem x:Name="AboutPageNavi" Content="About"  Tag="AboutPage"  ToolTipService.ToolTip="here is the about page" Icon="Like"/>
             </muxc:NavigationView.MenuItems>
-            <Frame x:Name="contentFrame"/>
         </muxc:NavigationView>
     </Grid>
 </Page>

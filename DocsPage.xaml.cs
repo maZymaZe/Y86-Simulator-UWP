@@ -51,10 +51,15 @@ namespace r1
                 if (selectedItemTag == "MainPage")
                 {
                     rootFrame.Navigate(typeof(MainPage));
+
                 }
                 else if (selectedItemTag == "DocsPage")
                 {
                     rootFrame.Navigate(typeof(DocsPage));
+                }
+                else if (selectedItemTag == "AboutPage")
+                {
+                    rootFrame.Navigate(typeof(AboutPage));
                 }
             }
         }
