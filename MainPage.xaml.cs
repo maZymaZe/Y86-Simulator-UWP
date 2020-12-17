@@ -68,6 +68,8 @@ namespace r1
 
         long E_valA, e_valA, E_valB, e_valB, E_valC, e_valC, e_ALUfun, e_ALUA, e_ALUB, e_valE, E_icode, e_icode, E_ifun, e_ifun;
 
+     
+
         bool e_setCC, ZF, SF, OF, e_Cnd, E_stall, E_bubble;
         double CPI;
 
@@ -113,6 +115,8 @@ namespace r1
             { '0',0},{'1',1 },{'2',2},{'3',3},{'4',4},{'5',5},{'6',6},{'7',7},{'8',8},{'9',9},{'A',10},{'a',10},{'b',11},{'B',11},{'C',12},{'c',12},{'D',13},{'d',13},{'E',14},{'e',14},{'F',15},{'f',15}
         };
         Hashtable LineHash = new Hashtable();
+        Hashtable AddrHash = new Hashtable();
+        HashSet<long>  BreakPoints = new HashSet<long>();
 
         char[] MemoryBlock = new char[1 << 20];
         char[] MemoryBlockCopy = new char[1 << 20];
@@ -270,9 +274,15 @@ namespace r1
 
         private void PipelineWork()
         {
+
             this.EndSwitch.IsEnabled = false;
             CLOCK++;
             RegUpdate();
+            //check_BreakPoints
+            if(BreakPoints.Contains(F_predPC))
+            {
+                StopPipe();
+            }
             //catch exception
             if(W_stat!="AOK")
             {
@@ -327,7 +337,7 @@ namespace r1
 
             Bindings.Update();
             if (SourceIsLoaded&&LineHash.Contains(F_predPC)){
-                this.SourceListView.SelectedIndex = (int)LineHash[F_predPC];
+                this.SourceListView.SelectedIndex = Convert.ToInt32(LineHash[F_predPC]);
                 SourceListView.ScrollIntoView(SourceListView.SelectedItem);
             }
         }
@@ -735,8 +745,10 @@ namespace r1
         {
             MachineCodeTest = "";
             MemoryBlockCopy = new char[1 << 20];
-            int cnt = 0;
+            long cnt = 0;
             LineHash.Clear();
+            AddrHash.Clear();
+            BreakPoints.Clear();
             for (int i = 0; i < RealSource.Length; i++)
             {
                 bool flag = false,addrloadflag=false,ValidLineFlag=false;
@@ -777,6 +789,7 @@ namespace r1
                 {
                     SourceList.Add(cnt.ToString("D4") + "|    " +RealSource[i].Substring(0,pos));
                     LineHash.Add(target,cnt);
+                    AddrHash.Add(cnt,target);
                     cnt++;
                 }
             }
@@ -824,6 +837,14 @@ namespace r1
         {
             return (x >= '0' && x <= '9') || (x >= 'A' && x <= 'F') || (x >= 'a' && x <= 'f');
         }
+        private void StopPipe()
+        {
+            IsPause = true;
+            this.PlayButtom.Icon = new SymbolIcon((Symbol)57602);
+            this.PlayButtom.Label = "Play";
+            Timer.Stop();
+            this.DocsPageNavi.IsEnabled = true;
+        }
 
         private Deferral RefreshCompletionDeferralForSource
         {
@@ -866,21 +887,6 @@ namespace r1
                 this.RefreshCompletionDeferralForMemory = null;
             }
         }
-        private void HTOD_Click(object sender, RoutedEventArgs e)
-        {
-            HDflag = !HDflag;
-            if (HDflag)
-            {
-                XorD = "X16";
-                this.HTOD.Content = "HEX";
-            }
-            else
-            {
-                XorD = "";
-                this.HTOD.Content = "DEC";
-            }
-            GUIUpdate();
-        }
 
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
@@ -895,6 +901,9 @@ namespace r1
             IsPause = true;
             Preset();     
         }
+
+          
+
         private void PlayButtom_Click(object sender, RoutedEventArgs e)
         {
             IsPause = !IsPause;
@@ -980,35 +989,147 @@ namespace r1
                 }
             }
         }
-        private void EndSwitch_Click(object sender, RoutedEventArgs e)
+        private void EndSwitch_Toggled(object sender, RoutedEventArgs e)
         {
-            Endflag = !Endflag;
-            if (Endflag == true)
-            {
-                this.EndSwitch.Content = "little-endian now";
-            }
-            else
-            {
-                this.EndSwitch.Content = "big-endian now";
-            }
+            if (this.EndSwitch.IsOn) Endflag = true;
+            else Endflag = false;
         }
 
-        private void ThemeSwitch_Click(object sender, RoutedEventArgs e)
+        private void ThemeSwitch_Toggled(object sender, RoutedEventArgs e)
         {
             FrameworkElement window = (FrameworkElement)Window.Current.Content;
-            Themeflag = !Themeflag;
-            if (Themeflag)
-            {
-                AppSettings.Theme = AppSettings.NONDEFLTHEME;
-                window.RequestedTheme = AppSettings.NONDEFLTHEME;
-            }
-            else
+            if (this.ThemeSwitch.IsOn)
             {
                 AppSettings.Theme = AppSettings.DEFAULTTHEME;
                 window.RequestedTheme = AppSettings.DEFAULTTHEME;
             }
+            else
+            {
+                AppSettings.Theme = AppSettings.NONDEFLTHEME;
+                window.RequestedTheme = AppSettings.NONDEFLTHEME;
+            }
+        }
+        private void RadixSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (this.RadixSwitch.IsOn)
+            {
+                XorD = "X16";
+                this.HTOD.Content = "HEX";
+            }
+            else
+            {
+                XorD = "";
+                this.HTOD.Content = "DEC";
+            }
+            GUIUpdate();
+        }
+        private void DelBP_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.SBPway.SelectedIndex==0)
+            {
+                try { 
+                    long target = Convert.ToInt64(this.BreakpointSetBox.Text);
+                    if (BreakPoints.Contains(target))
+                    {
+                        BreakPoints.Remove(target);
+                        int len = SourceList[Convert.ToInt32(LineHash[target])].Length;
+                        SourceList[Convert.ToInt32(LineHash[target])] = SourceList[Convert.ToInt32(LineHash[target])].Substring(0, len - 11);
+                        WorkCompletedForSource();
+                    }
+                }
+                catch (FormatException){}
+                catch (OverflowException){}
+                finally { }
+            }
+            else if (this.SBPway.SelectedIndex == 1)
+            {
+                if (SourceListView.SelectedIndex != -1)
+                {
+                    long target = SourceListView.SelectedIndex;
+                    if (!AddrHash.Contains(target)) return;
+                    target = (long)AddrHash[target];
+                    if (BreakPoints.Contains(target))
+                    {
+                        BreakPoints.Remove(target);
+                        int len = SourceList[Convert.ToInt32(LineHash[target])].Length;
+                        SourceList[Convert.ToInt32(LineHash[target])] = SourceList[Convert.ToInt32(LineHash[target])].Substring(0, len - 11);
+                        WorkCompletedForSource();
+                    }
+                }
+            }
+            else if (this.SBPway.SelectedIndex == 2)
+            {
+                try
+                {
+                    long target = Convert.ToInt64(this.BreakpointSetBox.Text);
+                    if (!AddrHash.Contains(target)) return;
+                    target = (long)AddrHash[target];
+                    if (BreakPoints.Contains(target))
+                    {
+                        BreakPoints.Remove(target);
+                        int len = SourceList[Convert.ToInt32(LineHash[target])].Length;
+                        SourceList[Convert.ToInt32(LineHash[target])]= SourceList[Convert.ToInt32(LineHash[target])].Substring(0,len-11);
+                        WorkCompletedForSource();
+                    }
+                }
+                catch (FormatException) { }
+                catch (OverflowException) { }
+                finally { }
+            }
         }
 
+        private void SetBP_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.SBPway.SelectedIndex == 0)
+            {
+                try
+                {
+                    long target = Convert.ToInt64(this.BreakpointSetBox.Text);
+                    if (!BreakPoints.Contains(target))
+                    {
+                        BreakPoints.Add(target);
+                        SourceList[Convert.ToInt32(LineHash[target])] += "--BreakHere";
+                        WorkCompletedForSource();
+                    }
+                }
+                catch (FormatException) { }
+                catch (OverflowException) { }
+                finally { }
+            }
+            else if (this.SBPway.SelectedIndex== 1)
+            {
+                if (SourceListView.SelectedIndex != -1)
+                {
+                    long target = SourceListView.SelectedIndex;
+                    if (!AddrHash.ContainsKey(target)) return;
+                    target = (long)AddrHash[target];
+                    if (!BreakPoints.Contains(target))
+                    {
+                        BreakPoints.Add(target);
+                        SourceList[Convert.ToInt32(LineHash[target])] += "--BreakHere";
+                        WorkCompletedForSource();
+                    }
+                }
+            }
+            else if (this.SBPway.SelectedIndex== 2)
+            {
+                try
+                {
+                    long target = Convert.ToInt64(this.BreakpointSetBox.Text);
+                    if (!AddrHash.ContainsKey((object)target)) return;
+                    target = (long)AddrHash[target];
+                    if (!BreakPoints.Contains(target))
+                    {
+                        BreakPoints.Add(target);
+                        SourceList[Convert.ToInt32(LineHash[target])] += "--BreakHere";
+                        WorkCompletedForSource();
+                    }
+                }
+                catch (FormatException) { }
+                catch (OverflowException) { }
+                finally { }
+            }
+        }
     }
     class AppSettings
     {
