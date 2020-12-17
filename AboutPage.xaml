@@ -11,7 +11,11 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3.7*"/>
+            <ColumnDefinition Width="100*"/>
+        </Grid.ColumnDefinitions>
+        <TextBox x:Name="AboutContent"  Grid.Column="1" FontSize="32" IsReadOnly="True" TextWrapping="Wrap"/>
         <muxc:NavigationView x:Name="Navi"  Height="auto" Width="auto" 
                         PaneDisplayMode="LeftCompact"
                         IsTabStop="False"

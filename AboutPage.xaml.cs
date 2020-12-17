@@ -25,6 +25,8 @@ namespace r1
         public AboutPage()
         {
             this.InitializeComponent();
+            this.AboutContent.Text = "Y86 Simulator v2.0.0\r\ndeveloer:maze&george_plover\r\ncontacts:782618517maze@gmail.com&19307130237@fudan.edu.cn\r\n2020.12.17";
+          
         }
         private void NavigationView_SelectionChanged(object sender, NavigationViewSelectionChangedEventArgs args)
         {

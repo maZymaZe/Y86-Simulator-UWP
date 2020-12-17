@@ -11,7 +11,11 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <TextBox />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3.7*"/>
+            <ColumnDefinition Width="100*"/>
+        </Grid.ColumnDefinitions>
+        <WebView Grid.Column="1" Source="https://www.luogu.com.cn/blog/George-Plover/ics-pj-y86-liu-shui-xian-mu-ni-qi-shi-yong-shuo-ming" />
 
         <muxc:NavigationView x:Name="Navi"  Height="auto" Width="auto" 
                         PaneDisplayMode="LeftCompact"

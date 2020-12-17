@@ -275,6 +275,7 @@ namespace r1
                 Timer.Stop();
                 IsPause = true;
                 this.DocsPageNavi.IsEnabled = true;
+                this.AboutPageNavi.IsEnabled = true;
             }
         }
 
@@ -944,6 +945,7 @@ namespace r1
                 this.PlayButtom.Label = "Pause";
                 Timer.Start();
                 this.DocsPageNavi.IsEnabled = false;
+                this.AboutPageNavi.IsEnabled = false;
                 this.TestOutput.Text += "Play\r\n";
             }
             else
@@ -952,6 +954,7 @@ namespace r1
                 this.PlayButtom.Label = "Play";
                 Timer.Stop();
                 this.DocsPageNavi.IsEnabled = true;
+                this.AboutPageNavi.IsEnabled = true;
                 this.TestOutput.Text += "Pause\r\n";
 
             } 
