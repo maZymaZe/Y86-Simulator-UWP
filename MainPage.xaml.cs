@@ -848,17 +848,43 @@ namespace r1
         }
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
+            ProgramStat = "AOK";
+            f_stat = D_stat = "AOK"; f_icode = D_icode = 1; f_ifun = D_ifun = 0; f_rA = D_rA = "NONE"; f_rB = D_rB = "NONE";
+            d_stat = E_stat = "AOK"; d_icode = E_icode = 1; d_ifun = E_ifun = 0; d_dstE = d_dstM = d_srcA = d_srcB = E_dstE = E_dstM = E_srcA = E_srcB = "NONE";
+            e_stat = M_stat = "AOK"; e_icode = M_icode = 1; e_ifun = M_ifun = 0; e_Cnd = M_Cnd = false; e_dstE = e_dstM = M_dstE = M_dstM = "NONE";
+            m_stat = W_stat = "AOK"; m_icode = W_icode = 1; m_ifun = W_ifun = 0; m_dstE = m_dstM = W_dstE = W_dstM = "NONE";
+            f_PredictPC = 0;
+            F_predPC = 0;
+            F_predPC_s = F_predPC.ToString("X16");
+            f_valP = f_valC = 0;
+            D_valC = d_valC = D_valP = d_valA = d_valB;
+            E_valA = e_valA = E_valB = E_valC = 0;
+            M_valE = m_valE = M_valA = m_valM = 0;
+            W_valE = W_valM = 0;
+            m_dmem_error = false;
+            for (int i = 0; i < 16; i++)
+                RegisterValue[i] = 0;
+            CLOCK = 0;
+            PenaltyCnt = 0;
+            F_predPC = 0;
+            F_predPC_s = F_predPC.ToString("X16");
+            F_stall = D_stall = E_stall = W_stall = M_stall = false;
+            ZF = SF = OF = e_setCC = e_Cnd = false;
+            F_bubble = D_bubble = E_bubble = W_bubble = M_bubble = true;
             this.EndSwitch.IsEnabled = true;
             SourceText = null;
             SourceList.Clear();
             RealSource = null;
             SourceIsLoaded = false;
+            MemoryBlock = null;
+            MemoryList_s.Clear();
             WorkCompletedForSource();
             WorkCompletedForMemory();
             CLOCK = 0;
             IsPause = true;
             Preset();
             this.TestOutput.Text = "Reset\r\n";
+            GUIUpdate();
         }
         private void PlayButtom_Click(object sender, RoutedEventArgs e)
         {
@@ -905,10 +931,10 @@ namespace r1
         }
         private void Refresh_Click(object sender, RoutedEventArgs e)
         {
-            if (CLOCK == 0) return;
-            this.TestOutput.Text = "Refresh\r\n";
-            SourceInit();
             this.EndSwitch.IsEnabled = true;
+            this.TestOutput.Text = "Refresh\r\n";
+            if (CLOCK == 0) return;
+            SourceInit();    
         }
         private void RegisterChange()
         {
